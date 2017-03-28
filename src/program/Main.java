@@ -6,13 +6,24 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.awt.*;
+
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../view/menuView.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Tower Defence");
         primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setMinHeight(400);
+        primaryStage.setMinWidth(600);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        primaryStage.setMaxHeight(height);
+        primaryStage.setMaxWidth(width);
+
         primaryStage.show();
     }
 

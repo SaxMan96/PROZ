@@ -16,7 +16,27 @@ import java.io.IOException;
  * Created by Mateusz on 2017-03-27.
  */
 public class GameController {
+/*
+    private Parent parent;
+    private Stage stage;
+    private Scene scene;
 
+    public GameController () {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(".." + File.separator + "view" + File.separator + "gameView.fxml"));
+        fxmlLoader.setController(this);
+        try {
+            parent = (Parent) fxmlLoader.load();
+            scene = new Scene(parent, 1000, 800);
+        } catch (IOException e) {
+            // manage the exception
+        }
+        this.stage = stage;
+        stage.setScene(scene);
+        stage.setMaxWidth(760);
+        stage.hide();
+        stage.show();
+    }
+*/
     @FXML Pane PausedPane;
     public void pressMenuButton(ActionEvent event)throws IOException{
         PausedPane.setVisible(!PausedPane.isVisible());
