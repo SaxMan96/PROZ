@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class MenuController {
     @FXML
     public void pressNewGameButton(ActionEvent event) throws IOException{
         System.out.println("New Game");
-        Parent root = FXMLLoader.load(getClass().getResource(".."+File.separator+"view" + File.separator + "gameView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource(".."+File.separator+"view" + File.separator + "upgradeView.fxml"));
         Scene gameScene = new Scene(root);
         Stage gameStage =(Stage)((Node) event.getSource()).getScene().getWindow();
         gameStage.setScene(gameScene);
@@ -25,16 +26,24 @@ public class MenuController {
         System.out.println("Continue Game");
     }
     @FXML
-    public void pressCreditsButton(ActionEvent event){
-        System.out.println("Credits");
+    Pane Credits;
+    public void pressCreditsButton (ActionEvent event)throws IOException{
+        Credits.setVisible(!Credits.isVisible());
+        //   = Credits.isVisible();
     }
+    @FXML
+    Pane Instructions;
+    public void pressInstructionsButton (ActionEvent event)throws IOException{
+        Instructions.setVisible(!Instructions.isVisible());
+        //  isGamePaused = Credits.isVisible();
+    }
+
     @FXML
     public void pressControlerButton(ActionEvent event){
         System.out.println("Control");
     }
     @FXML
     public void pressExitButton(ActionEvent event){
-        System.out.println("exit");
         System.exit(0);
     }
 }
