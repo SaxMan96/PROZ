@@ -1,33 +1,34 @@
 package program;
 
+import controller.Controller;
+import javafx.scene.layout.BorderPane;
+import model.Model;
+import view.View;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import javax.swing.plaf.basic.BasicBorders;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+
 
 public class Main extends Application {
 
+    public static Controller controller = new Controller();
+    public static Model model = new Model();
+    public static View view = new View();
+
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../view/menuView.fxml"));
-        primaryStage.setTitle("Tower Defence");
-        primaryStage.setScene(new Scene(root, 600, 400));
-        primaryStage.setMinHeight(400);
-        primaryStage.setMinWidth(600);
-
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double width = screenSize.getWidth();
-        double height = screenSize.getHeight();
-        primaryStage.setMaxHeight(height);
-        primaryStage.setMaxWidth(width);
-
-        primaryStage.show();
+    public void start( Stage stage ) throws IOException {
+        controller.init();
+        model.start();
+        view.start();
     }
-
-
     public static void main(String[] args) {
         launch(args);
     }
