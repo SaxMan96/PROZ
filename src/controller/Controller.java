@@ -1,44 +1,36 @@
 package controller;
 
+import javafx.application.Application;
+import javafx.stage.Stage;
 import model.Model;
-import program.Main;
 import view.View;
-
-import javax.swing.*;
-import javafx.event.ActionEvent;
 import java.io.IOException;
 
 /**
  * Created by Mateusz on 2017-03-31.
  */
-public class Controller
+public class Controller extends Application
 {
-    /*public void initialize(Stage primaryStage) throws IOException {
-        MenuController menuController = new MenuController();
-        menuController.initialize(primaryStage);
-    };*/
-    Model model;
-    View view;
-    MenuController menuController;
+    public static MenuController menuController;
+    public static Model model = new Model();
+    public static View view = new View();
 
-
-    public void init() throws IOException {
-        view = Main.view;
-        model = Main.model;
-        view.start();
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        model = new Model();
+        view = new View();
+        view.init(primaryStage);
         view.setStartView();
-        //model.setMenuModel();
     }
-    public void start(ActionEvent event) throws IOException{
-        view = Main.view;
-        model = Main.model;
-        view.start();
-        view.setView();
+
+    public void startGame() throws IOException {
         menuController = new MenuController();
-        menuController.set(event);
+        menuController.set();
     }
 
-
+    public static void main(String[] args) {
+        launch(args);
+    }
     /*Timer
     QueueEvent
 */

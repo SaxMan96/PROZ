@@ -1,6 +1,6 @@
 package model;
 
-import controller.Controller;
+import program.Main;
 
 /**
  * Created by Mateusz on 2017-03-31.
@@ -8,7 +8,7 @@ import controller.Controller;
 public class Model{
     Model model;
     public void init(){
-        model = Controller.model;
+        model = Main.model;
     }
     public void start(){
 
