@@ -30,9 +30,9 @@ public class UpgradeController {
     }
 
     @FXML
-    public void pressPLAYButton(ActionEvent event) throws IOException {
+    public void pressPLAYButton() throws IOException {
         gameController = new GameController();
-        gameController.set(event);
+        gameController.set();
     }
     @FXML
     public void pressBackToMENUButton() throws IOException {

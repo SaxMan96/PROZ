@@ -20,14 +20,14 @@ public class GameController {
         PausedPane.setVisible(!PausedPane.isVisible());
     }
     @FXML
-    public void pressQuitButton(ActionEvent event) throws IOException {
+    public void pressQuitButton() throws IOException {
         upgradeController = new UpgradeController();
         upgradeController.set();
     }
 
-    public void set(ActionEvent event) throws IOException {
+    public void set() throws IOException {
         view = Controller.view;
         model = Controller.model;
-        view.setGameView(event);
+        view.setGameView();
     }
 }
