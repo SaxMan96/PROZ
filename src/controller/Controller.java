@@ -11,14 +11,21 @@ import java.io.IOException;
  */
 public class Controller extends Application
 {
+    /*private final SoundManager sound;
+    private final Timer timer;*/
+
     public static MenuController menuController;
     public static Model model = new Model();
     public static View view = new View();
-
+    @Override
+    public void init() throws IOException {
+        model = new Model();
+        model.loadPlayers();
+        view = new View();
+    }
     @Override
     public void start(Stage primaryStage) throws Exception {
-        model = new Model();
-        view = new View();
+
         view.init(primaryStage);
         view.setStartView();
     }
@@ -26,6 +33,9 @@ public class Controller extends Application
     public void startGame() throws IOException {
         menuController = new MenuController();
         menuController.set();
+
+
+
     }
 
     public static void main(String[] args) {
