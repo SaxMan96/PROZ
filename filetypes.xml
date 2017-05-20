@@ -1,0 +1,9 @@
+<application>
+  <component name="FileTypeManager" version="17">
+    <extensionMap>
+      <mapping pattern="playerSyntax" type="PLAIN_TEXT" />
+      <mapping pattern="preferences" type="PLAIN_TEXT" />
+      <mapping pattern="preferencesSyntax" type="PLAIN_TEXT" />
+    </extensionMap>
+  </component>
+</application>
