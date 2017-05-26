@@ -1,17 +1,17 @@
 package view;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
+import controller.GameController;
+import controller.MenuController;
+import controller.UpgradeController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.Map;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -23,11 +23,15 @@ import java.io.IOException;
 
 public class View {
 
-    public static Stage Primarystage;
+    public static Stage PrimaryStage;
     public static Scene ActualScene;
     private static double Width;
     private static double Height;
-    private static Map gameMap;
+    /*private static Map map;
+
+    public static void setMap(Map map) {
+        View.map = map;
+    }*/
 
     public static double getWidth(){
         return Width;
@@ -37,55 +41,60 @@ public class View {
     }
 
     public void init(Stage stage){
-        Primarystage = stage;
+        PrimaryStage = stage;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Width = screenSize.getWidth();
         Height = screenSize.getHeight();
-        Primarystage.initStyle(StageStyle.UNDECORATED);
+        PrimaryStage.initStyle(StageStyle.UNDECORATED);
     }
-    public void setStartView() throws IOException {
-        //stage = new Stage();
-        Primarystage.setTitle("Tower Defence");
-        Primarystage.setMinHeight(400);
-        Primarystage.setMinWidth(600);
 
+    public MenuController setMenuView() throws IOException {
+        PrimaryStage.setTitle("Tower Defence");
 
-        Parent root = FXMLLoader.load(getClass().getResource(".." + File.separator + "view" + File.separator + "startView.fxml"));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(".." + File.separator + "view" + File.separator + "menuView.fxml"));
+        Parent root = loader.load();
+        MenuController controller = loader.getController();
+        ActualScene = new Scene(root);
+        PrimaryStage.setScene(ActualScene);
+
+        PrimaryStage.setMinHeight(Height);
+        PrimaryStage.setMinWidth(Width);
+
+        PrimaryStage.setMaximized(true);
+        PrimaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        PrimaryStage.setFullScreen(true);
+        PrimaryStage.setResizable(false);
+
+        PrimaryStage.setScene(ActualScene);
+        PrimaryStage.sizeToScene();
+        PrimaryStage.show();
+
+        return controller;
+    }
+    public UpgradeController setUpgradeView() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(".." + File.separator + "view" + File.separator + "upgradeView.fxml"));
+        Parent root = loader.load();
+        UpgradeController controller = loader.getController();
         ActualScene = new Scene(root);
 
-        Primarystage.setScene(ActualScene);
-        Primarystage.sizeToScene();
-        Primarystage.show();
+        PrimaryStage.setScene(ActualScene);
+        PrimaryStage.setFullScreen(true);
+
+        return controller;
     }
-    public void setMenuView() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(".." + File.separator + "view" + File.separator + "menuView.fxml"));
-        ActualScene.setRoot(root);
-        Primarystage.setScene(ActualScene);
+    public GameController setGameView() throws IOException{
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(".." + File.separator + "view" + File.separator + "gameView.fxml"));
+        StackPane root = loader.load();
+        GameController controller = loader.getController();
+        ActualScene = new Scene(root);
 
-        Primarystage.setMinHeight(Height);
-        Primarystage.setMinWidth(Width);
-        Primarystage.setMaximized(true);
-        Primarystage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        Primarystage.setFullScreen(true);
-        Primarystage.setResizable(false);
+        PrimaryStage.setScene(ActualScene);
+        PrimaryStage.setFullScreen(true);
 
-    }
-    public void setUpgradeView() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(".."+File.separator+"view" + File.separator + "upgradeView.fxml"));
-        ActualScene.setRoot(root);
-        Primarystage.setScene(ActualScene);
-    }
-    public void setGameView() throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource(".." + File.separator + "view" + File.separator + "gameView.fxml"));
-        ActualScene.setRoot(root);
-        Primarystage.setScene(ActualScene);
-
-    }
-
-    public void loadMap(Map m)
-    {
-        gameMap = m;
-
+        return controller;
     }
 
 }

@@ -1,15 +1,15 @@
 package controller;
 
+import Program.Program;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -18,21 +18,24 @@ import model.Model;
 import model.Player;
 import view.View;
 
+import java.beans.EventHandler;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class MenuController {
 
     public static Model model;
     public static View view;
-    UpgradeController upgradeController;
+    public static UpgradeController upgradeController;
+    private static boolean arePlayersSet = false;
 
-    public void set() throws IOException {
-    view = Controller.view;
-    model = Controller.model;
-    view.setMenuView();
-
-    }
+   /* public void set() throws IOException {
+        view = Program.view;
+        model = Program.model;
+        //view.setMenuView(Program.menuController);
+        view.setMenuView();
+    }*/
 
 
 /*    public void actionPerformed(ActionEvent e) {
@@ -51,33 +54,66 @@ public class MenuController {
 
     @FXML
     AnchorPane playerChoosePane;
-    public void pressNewGameButton() throws IOException{
-       /*upgradeController = new UpgradeController();
-       upgradeController.set();*/
+    public void pressPLAYButton() throws IOException{
+       showPlayersToChoose();
        playerChoosePane.setVisible(!playerChoosePane.isVisible());
-       // setPlayersToChoose();
-       // wywołanie z tego miejsca daje java.lang.reflect.InvocationTargetException
+
     }
     @FXML
-    public void setNewPlayer(){
-        model.setNewPlayer();
+    TextField newPlayerNameTextField;
+    public void setNewPlayer() throws IOException {
+        if (newPlayerNameTextField.getText().isEmpty())
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Empty Name");
+            alert.setHeaderText(null);
+            alert.setContentText("set player name");
+            alert.showAndWait();
+            return;
+        }
+        model.setNewPlayer(newPlayerNameTextField.getText());
+        upgradeController = view.setUpgradeView();
+        Program.setUpgradeController(upgradeController);
+        arePlayersSet = false;
     }
 
     @FXML
     VBox playerChooseVBox;
+    @FXML
+    Button newPlayerSelected;
     public void showPlayersToChoose(){
+        if(arePlayersSet)
+            return;
         VBox vbox = new VBox(14);
-        vbox.setStyle("-fx-background-color: gray; -fx-borders-color: black");
-        for(Pair pair: model.existingPlayers)
-            vbox.getChildren().add(new Button((String) pair.getValue()));
+        //vbox.setStyle("-fx-background-color: gray;");
+        vbox.setMaxWidth(2*newPlayerSelected.getWidth());
+        ArrayList<Button> buttons = new ArrayList<>();
+        Button button;
+        for(Pair pair: model.existingPlayers){
+            button = new Button((String) pair.getValue());
+
+            buttons.add(button);
+            vbox.getChildren().add(button);
+        }
         vbox.setAlignment(Pos.CENTER);
         VBox.setMargin(vbox, Insets.EMPTY);
         playerChooseVBox.getChildren().add(vbox);
+        arePlayersSet = true;
+        for(Button b: buttons){ b.setOnAction((event)->{
+                try {
+                    continueWithPlayerSelected(b.getText());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
-    @FXML
-    public void newGame() throws IOException {
-        upgradeController = new UpgradeController();
-        upgradeController.set();
+
+    private void continueWithPlayerSelected(String playerName) throws IOException {
+        model.setExistingPlayer(playerName);
+        upgradeController = view.setUpgradeView();
+        Program.setUpgradeController(upgradeController);
+        arePlayersSet = false;
     }
 
     @FXML
@@ -99,4 +135,4 @@ public class MenuController {
     }
 
 
-    }
+}

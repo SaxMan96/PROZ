@@ -1,6 +1,5 @@
 package model;
 
-import controller.Controller;
 import javafx.util.Pair;
 
 import java.io.*;
@@ -12,39 +11,93 @@ import java.util.Scanner;
  */
 public class Model{
 
-    private long isPlayed;
-    private long isPased;
+    private static long isPlayed;
+    private static long isPased;
 
-/*
-    private GameMap map;
-    private MapLoader mapLoader;
-    private CollisionDetector collisionDetector;
-    private BombCalculator bombCalculator;
-    static SoundManager sound;
-*/
-    public Player currentPlayer= new Player();
-    public ArrayList<Pair<String,String>> existingPlayers = new ArrayList<Pair<String, String>>();
+    private static Map map;
+    /*
+       private MapLoader mapLoader
+       private CollisionDetector collisionDetector;
+       private BombCalculator bombCalculator;
+       public static SoundManager sound;
+    */
+    public static Player currentPlayer;
+    public static ArrayList<Pair<String,String>> existingPlayers;
+
+    public Map getMap() {
+        return map;
+    }
     //                    Player, File
 
-    public void loadPlayers() throws IOException {
+
+    public void set() throws IOException {
+        map = new Map();
+        currentPlayer = new Player();
+        existingPlayers = new ArrayList<Pair<String, String>>();
+        loadPlayersFromFile();
+    }
+    public void loadPlayersFromFile() throws IOException {
         // File folder = new File("F:" + File.separator + "EiTI Infa" + File.separator + "Semestr 4" + File.separator + "PROZ - Programowanie Zdarzeniowe" + File.separator + "Project" + File.separator + "Players");
         File folder = new File("Players");
         File[] listOfFiles = folder.listFiles();
         for (File file : listOfFiles) {
-            if (file.isFile()) {
-                //BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("Players/player1.txt")));
+            if (file.isFile() && file.toString().contains("player")) {
                 Scanner scan = new Scanner(new File("Players"+File.separator+file.getName()));
-                //System.out.println(file.getName());
-                //System.out.println(scan.nextLine());
                 Pair<String,String> pair = new Pair(file.getName(),scan.nextLine());
                 existingPlayers.add(pair);
             }
         }
     }
-
-    public void setNewPlayer() {
-
+    public void setNewPlayer(String text){
+        currentPlayer.setName(text);
     }
+    public void setExistingPlayer(String playerName) throws IOException {
+        loadExactPlayer(findPlayerFileName(playerName));
+    }
+    public String findPlayerFileName(String playerName){
+        Pair p = null;
+        for(Pair pair: existingPlayers) {
+            if (pair.getValue() == playerName)
+            {
+                p = pair;
+                break;
+            }
+        }
+        return (String) p.getKey();
+    }
+    private void loadExactPlayer(String fileName) throws IOException {
+            try(BufferedReader br = new BufferedReader(new FileReader("Players"+File.separator+fileName))) {
+            String line;
+            line = br.readLine();
+            currentPlayer.setName(line);
+            line = br.readLine();
+            currentPlayer.setCoins(Integer.parseInt(line));
+            line = br.readLine();
+            currentPlayer.setBulletPower(Integer.parseInt(line));
+            line = br.readLine();
+            currentPlayer.setBulletSpeed(Integer.parseInt(line));
+            line = br.readLine();
+            currentPlayer.setBombRange(Integer.parseInt(line));
+            line = br.readLine();
+            currentPlayer.setBombPower(Integer.parseInt(line));
+            line = br.readLine();
+            currentPlayer.setHealthPoints(Integer.parseInt(line));
+            line = br.readLine();
+            currentPlayer.setAchievements(line);
+            line = br.readLine();
+            currentPlayer.setMissions(line);
+            }
+    }
+
+    public void loadMap(Integer mapNumber) throws IOException {
+        System.out.println("Map number: "+mapNumber+"(model.loadMap)");
+        map.load(mapNumber);
+    }
+
+    public void deleteCurrentPlayer() {
+        currentPlayer = null;
+    }
+
 }
 
 /*
