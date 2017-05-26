@@ -1,5 +1,0 @@
-<application>
-  <component name="CodeInsightSettings">
-    <EXCLUDED_PACKAGE NAME="javax.rmi.CORBA.Util" />
-  </component>
-</application>
