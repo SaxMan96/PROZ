@@ -9,3 +9,5 @@ Missions_Number;
 Achievements_Number;
 Game_Panel_Width;
 Game_Panel_Height;
+Enemy_Max_Health;
+Enemy_Speed;

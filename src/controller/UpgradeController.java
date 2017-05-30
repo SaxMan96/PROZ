@@ -96,7 +96,7 @@ public class UpgradeController {
 
     }
     private void setPlayerAchievements() {
-        System.out.println(model.currentPlayer.getName()+" achievments "+model.currentPlayer.achievements.toString());
+        //System.out.println(model.currentPlayer.getName()+" achievments "+model.currentPlayer.achievements.toString());
         Integer achievementNumber = 0;
         for(Integer val: model.currentPlayer.achievements){
             if(val == 1)
@@ -133,7 +133,6 @@ public class UpgradeController {
     @FXML TextField coinsTextField;
 
     private void setPlayerSkills() {
-        System.out.println("setting Skills");
         bulletPowerPoints.setText(model.currentPlayer.getBulletPower().toString());
         bulletSpeedPoints.setText(model.currentPlayer.getBulletSpeed().toString());
         bombRangePoints.setText(model.currentPlayer.getBombRange().toString());
@@ -165,6 +164,7 @@ public class UpgradeController {
         Program.setGameController(gameController);
         gameController.setMapNumber(mapSelected);
         gameController.drawMap();
+        gameController.gameLoopStart();
     }
     @FXML
     public void pressBackToMENUButton() throws IOException {

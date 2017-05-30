@@ -6,24 +6,29 @@ import java.util.ArrayList;
  * Created by Mateusz on 2017-05-02.
  */
 public class Player {
+
     private String name;
     private Integer coins;
+    private Integer points;
     private Integer bulletSpeed;
     private Integer bulletPower;
     private Integer bombRange;
     private Integer bombPower;
     private Integer healthPoints;
+    private Integer currentHealthPoints;
     public ArrayList<Integer> missions;
     public ArrayList<Integer> achievements;
 
     public Player(){
         name = "Steve";
         coins = 500;
+        points = 0;
         bulletPower = 1;
         bulletSpeed = 1;
         bombPower = 1;
         bombRange = 1;
         healthPoints = 1;
+        currentHealthPoints = healthPoints;
         missions = new ArrayList<>();
         achievements = new ArrayList<>();
 
@@ -35,7 +40,9 @@ public class Player {
 
     public String getName(){return name;}
     public void setName(String n){this.name = n;}
-
+    public Integer getPoints() {
+        return points;
+    }
     public ArrayList<Integer> getMissions(){return missions;}
     public void setMissions(String line) {
         /*missions = new ArrayList<>();
@@ -51,6 +58,15 @@ public class Player {
             achievements.clear();
         for (int col = 0; col < line.length(); col++)
             achievements.add(Character.getNumericValue(line.charAt(col)));
+    }
+
+
+    public Integer getCurrentHealthPoints() {
+        return currentHealthPoints;
+    }
+
+    public void increaseCurrentHealthPoints(Integer i){
+        currentHealthPoints += i;
     }
 
     public Integer getBulletSpeed() {
@@ -106,5 +122,9 @@ public class Player {
             missions.clear();
         if(achievements != null)
             achievements.clear();
+    }
+
+    public void gainPoints(Integer p) {
+        points += p;
     }
 }

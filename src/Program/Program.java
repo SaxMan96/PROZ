@@ -46,18 +46,23 @@ public class Program extends Application{
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
+        preferences.loadFromFile();
         model.set();
         view.init(primaryStage);
         setMenuController(view.setMenuView());
-        preferences.loadFromFile();
         stage = primaryStage;
+        setUpgradeController(view.setUpgradeView());
+        setGameController(view.setGameView());
+        gameController.setMapNumber(2);
+        gameController.drawMap();
+        gameController.gameLoopStart();
 
-        AnimationTimer gameLoop = new AnimationTimer() {
 
-            @Override
-            public void handle(long now) {
-
-                // add random enemies
+//        AnimationTimer gameLoop = new AnimationTimer() {
+//            @Override
+//            public void handle(long now) {
+//
+//                // add random enemies
 //                spawnEnemies( true);
 //
 //                // check if target is still valid
@@ -87,10 +92,50 @@ public class Program extends Application{
 //
 //                // update score, health, etc
 //                updateScore();
-            }
+//            }
+//
+//        };
+//        gameLoop.start();
 
-        };
-        gameLoop.start();
+        // create an animation (update & render loop)
+//        new AnimationTimer() {
+//            @Override
+//            public void handle(long now) {
+//                // update clocks
+//                blueClock.update(now);
+//                greenClock.update(now);
+//                redClock.update(now);
+//
+//                // clear screen
+//                gc.clearRect(0, 0, primaryStage.getWidth(),
+//                        primaryStage.getHeight());
+//
+//                // draw blue clock
+//                blueClock.draw(gc);
+//                // save the origin or the current state
+//                // of the Graphics Context.
+//                gc.save();
+//
+//                // shift x coord position the width of a clock plus 20 pixels
+//                gc.translate(blueClock.maxDiameter + 20, 0);
+//                greenClock.draw(gc);
+//
+//                // shift x coord position past the first clock
+//                gc.translate(blueClock.maxDiameter + 20, 0);
+//                redClock.draw(gc);
+//
+//                // reset Graphics Context to last saved point.
+//                // Translate x, y to (0,0)
+//                gc.restore();
+//
+//            }
+//        }.start();
+//
+//        // add the single node onto the scene graph
+//        root.getChildren().add(canvas);
+//        primaryStage.setScene(scene);
+//        primaryStage.show();
+//    }
     }
     public static void setMenuController(MenuController controller){
         menuController = controller;

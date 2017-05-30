@@ -65,6 +65,8 @@ public class Preferences {
     public static Integer Achievements_Number;
     public static Integer Game_Panel_Width;
     public static Integer Game_Panel_Height;
+    public static Integer Enemy_Max_Health;
+    public static Integer Enemy_Speed;
 
     public void loadFromFile() throws IOException {
             try(BufferedReader br = new BufferedReader(new FileReader("src"+File.separator+"preferences"+File.separator+"preferences.txt"))) {
@@ -91,6 +93,10 @@ public class Preferences {
             Game_Panel_Width = Integer.parseInt(line);
             line = br.readLine();
             Game_Panel_Height = Integer.parseInt(line);
+            line = br.readLine();
+            Enemy_Max_Health = Integer.parseInt(line);
+            line = br.readLine();
+            Enemy_Speed = Integer.parseInt(line);
 
         }
     }
