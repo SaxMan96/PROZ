@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.Enemy;
@@ -70,7 +71,7 @@ public class View {
 
         PrimaryStage.setMaximized(true);
         PrimaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        PrimaryStage.setFullScreen(true);
+        PrimaryStage.setFullScreen(false);
         PrimaryStage.setResizable(false);
 
         PrimaryStage.setScene(ActualScene);
@@ -87,7 +88,7 @@ public class View {
         ActualScene = new Scene(root);
 
         PrimaryStage.setScene(ActualScene);
-        PrimaryStage.setFullScreen(true);
+        PrimaryStage.setFullScreen(false);
 
         return controller;
     }
@@ -99,7 +100,7 @@ public class View {
         ActualScene = new Scene(root);
 
         PrimaryStage.setScene(ActualScene);
-        PrimaryStage.setFullScreen(true);
+        PrimaryStage.setFullScreen(false);
 
         return controller;
     }
@@ -128,7 +129,6 @@ public class View {
             Image image = new Image("file:Graphics/" + tileName);
             GraphicsContext gc = canvas.getGraphicsContext2D();
             gc.drawImage(image, tile.getXPosition(), tile.getYPosition());
-            canvas.setVisible(true);
             /*gc.setTextAlign(TextAlignment.CENTER);
             gc.setTextBaseline(VPos.CENTER);
             gc.fillText(i.toString(),tile.getXPosition()+24,tile.getYPosition()+24);
@@ -137,11 +137,14 @@ public class View {
         }
     }
 
+
+
     public static void drawEnemy(Canvas canvas, Enemy e){
+        System.out.println("drawEnemy");
         String fileName = "enemy.png";
         ImageView graphic = new ImageView("file:Graphics/" + fileName);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.drawImage(graphic.getImage(), 400,400);
+        gc.drawImage(graphic.getImage(), e.getxC(),e.getyC());
     }
 
     public static void gameWin() {

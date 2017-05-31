@@ -1,5 +1,6 @@
 package model;
 
+import javafx.scene.control.Alert;
 import javafx.util.Pair;
 
 import java.io.*;
@@ -33,7 +34,7 @@ public class Model{
     public void set() throws IOException {
         map = new Map();
         currentPlayer = new Player();
-        existingPlayers = new ArrayList<Pair<String, String>>();
+        existingPlayers = new ArrayList<>();
         loadPlayersFromFile();
     }
     public void loadPlayersFromFile() throws IOException {
@@ -41,8 +42,8 @@ public class Model{
         File folder = new File("Players");
         File[] listOfFiles = folder.listFiles();
         for (File file : listOfFiles) {
-            if (file.isFile() && file.toString().contains("player")) {
-                Scanner scan = new Scanner(new File("Players"+File.separator+file.getName()));
+            if (file.isFile() && file./*getName().*/toString().contains("player")) {
+                Scanner scan = new Scanner(new File("Players" +File.separator+file.getName()));
                 Pair<String,String> pair = new Pair(file.getName(),scan.nextLine());
                 existingPlayers.add(pair);
             }
@@ -54,19 +55,21 @@ public class Model{
     public void setExistingPlayer(String playerName) throws IOException {
         loadExactPlayer(findPlayerFileName(playerName));
     }
-    public String findPlayerFileName(String playerName){
+    private String findPlayerFileName(String playerName){
         Pair p = null;
-        for(Pair pair: existingPlayers) {
+        for(Pair pair: existingPlayers)
             if (pair.getValue() == playerName)
             {
                 p = pair;
                 break;
             }
-        }
-        return (String) p.getKey();
+        if(p != null)
+            return (String) p.getKey();
+        else
+            return null;
     }
     private void loadExactPlayer(String fileName) throws IOException {
-            try(BufferedReader br = new BufferedReader(new FileReader("Players"+File.separator+fileName))) {
+            try(BufferedReader br = new BufferedReader(new FileReader("/Players" +File.separator+fileName))) {
             String line;
             line = br.readLine();
             currentPlayer.setName(line);

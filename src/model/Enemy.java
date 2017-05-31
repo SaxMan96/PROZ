@@ -49,11 +49,13 @@ public class Enemy {
     public Enemy(Integer x, Integer y){
         xC = x;
         yC = y;
+//        xC -= Map.gridWidth/2;
+//        yC -= Map.gridHeight/2;
         maxHealth = Preferences.Enemy_Max_Health;
         currentHealth = maxHealth;
         speed = Preferences.Enemy_Speed;
         direction = Direction.RIGHT;
-        isAlive = true;
+        isAlive = false;
     }
     public void getHit(Integer hit){
         currentHealth -= hit;

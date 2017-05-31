@@ -20,19 +20,18 @@ public class Controller extends Application
     @Override
     public void init() throws IOException {
         model = new Model();
-        model.loadPlayers();
+        model.loadPlayersFromFile();
         view = new View();
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
 
         view.init(primaryStage);
-        view.setStartView();
+
     }
 
     public void startGame() throws IOException {
         menuController = new MenuController();
-        menuController.set();
 
 
 

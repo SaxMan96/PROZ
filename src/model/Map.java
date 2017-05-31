@@ -1,27 +1,20 @@
 package model;
-import javafx.geometry.VPos;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.text.TextAlignment;
-import javafx.util.Pair;
 import preferences.Preferences;
 
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
 import static model.Tile.TileType.*;
 
 public class Map{
-    public static Integer gridHeight = Preferences.getTiles_In_Column();
-    public static Integer gridWidth = Preferences.getTiles_In_Row();
-    public static Integer startRow;
-    public static Integer startColumn;
-    public static Integer startXPosition, startYPosition;
+    private static Integer gridHeight = Preferences.getTiles_In_Column();
+    private static Integer gridWidth = Preferences.getTiles_In_Row();
+    private static Integer startRow;
+    private static Integer startColumn;
+    private static Integer startXPosition, startYPosition;
 
-    public static Integer enemiesNr;
-    public static Integer enemiesSpawnTime;
+    private static int enemiesNr;
+    private static int enemiesSpawnTime;
 
 
     private static char _PATH = 'p';
@@ -30,10 +23,10 @@ public class Map{
     private static char _USABLE = '.' ;
     private static char _NOT_USABLE = 'x';
 
-    public static Integer getEnemiesNr() {
+    public static int getEnemiesNr() {
         return enemiesNr;
     }
-    public static Integer getEnemiesSpawnTime() {
+    public static int getEnemiesSpawnTime() {
         return enemiesSpawnTime;
     }
     public static Integer getGridHeight() {
@@ -82,7 +75,7 @@ public class Map{
 
     public void load(Integer fileNumber) throws IOException {
         grid = new ArrayList<Tile>(Preferences.getTiles_In_Column()*Preferences.getTiles_In_Row());
-        try(BufferedReader br = new BufferedReader(new FileReader("Maps"+File.separator+"map"+fileNumber+".txt" ))) {
+        try(BufferedReader br = new BufferedReader(new FileReader("Maps" +File.separator+"map"+fileNumber+".txt" ))) {
             Integer row = 1;
             for (String line; (line = br.readLine()) != null; row++) {
                 //if(line.length()==gridWidth && row <= gridHeight)
@@ -107,10 +100,10 @@ public class Map{
                             startColumn = col;
                             Integer width = Preferences.getGame_Panel_Width() / Preferences.getTiles_In_Row();
                             Integer height = Preferences.getGame_Panel_Height() / Preferences.getTiles_In_Column();
-                            Double halfWidth = width*0.5;
-                            Double halfHeight = height*0.5;
-                            startYPosition = width* startRow - halfWidth.intValue();
-                            startXPosition = height  * startColumn - halfHeight.intValue();
+                            startYPosition = width  * startRow;
+                            startXPosition = height * startColumn;
+                            startYPosition -= width;
+                            startXPosition -= height;
                         } else if (c == _USABLE)
                             setTileToGrid(row, col, USABLE);
                         else if (c == _NOT_USABLE)

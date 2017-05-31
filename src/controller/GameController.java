@@ -59,7 +59,7 @@ public class GameController {
 
     public void drawMap() {
         View.drawMap(model.getMap(), mainCanvas);
-        mainCanvas.setVisible(true);
+
 //        xd.setLayoutX(Map.startXPosition);
 //        xd.setLayoutY(Map.startYPosition);
 //
@@ -81,14 +81,12 @@ public class GameController {
 //        gameLoop = new GameLoop(mainCanvas, model);
 //        gameLoop.run();
         gameLoop = new GameLoop(mainCanvas, model);
-        gameLoop.run();
+        gameLoop.startGame();
     }
     /*private class Timer implements Runnable {
         final static long TIMEOUT = 10;
 
-        *//**
-         * Puts update model events into queue
-         *//*
+
         @Override
         public void run()
         {

@@ -14,30 +14,35 @@ import model.Player;
 import model.Model;
 import view.View;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static java.lang.Thread.sleep;
+
 public class GameLoop implements Runnable {
 
-    public Thread thread = new Thread(this);
+    private Thread thread;
 
-    public static double fps = 60.0;
+    private static double fps = 60.0;
 
-//    private Frame frame;
+    private Frame frame;
 //    public static Image[] tilesetGround = new Image[100];
 //    public static Image[] tilesetAir = new Image[100];
 //    public static Image[] tilesetRes = new Image[100];
 //    public static Image[] tilesetMob = new Image[100];
 
+    int counter = 0;
+
     public static int myWidth, myHeight;
     public static int coins = 10, life = 100;
-    public static int killed = 0, killsToWin = 0;
+    private static int killed = 0, killsToWin = 0;
     public static int level = 1, maxLevel = 3;
 
-    public static boolean gameWon = false;
+    private static boolean gameWon = false;
 
 //    public static Point mse = new Point(0, 0);
 //
@@ -49,7 +54,7 @@ public class GameLoop implements Runnable {
 
     private Canvas canvas;
     public Integer enemiesNr;
-    public Integer enemiesSpawnTime;
+    public Integer enemiesSpawnTime = 30;
     public Integer spawnedEnemies;
     private long lastSpawn;
     private ArrayList<Enemy> enemies;
@@ -74,15 +79,13 @@ public class GameLoop implements Runnable {
         map = model.getMap();
         canvas = mainCanvas;
         enemiesNr = map.getEnemiesNr();
-        enemiesSpawnTime = model.getMap().getEnemiesSpawnTime();
+        enemiesSpawnTime = 100;//model.getMap().getEnemiesSpawnTime();
         spawnedEnemies = 0;
         end = false;
         lastSpawn = System.currentTimeMillis();
-        thread = new Thread(this);
-        enemies = new ArrayList<>(enemiesNr);
-        for(int i=0; i < enemiesNr;i++)
+        enemies = new ArrayList<>();
+        for(int i=0; i < enemiesNr; i++)
             enemies.add(new Enemy(map.getStartXPosition(), map.getStartYPosition()));
-//        thread.start();
 
 
 //        this.blockingQueue = new LinkedBlockingQueue<QueueEvent>();
@@ -137,7 +140,12 @@ public class GameLoop implements Runnable {
 //        }
 //    }
 
-    public double spawnTime = 1 * (double) (fps),
+    public void startGame() {
+        thread = new Thread(this);
+        thread.start();
+    }
+
+    private double spawnTime = 1 * (fps),
                   spawnFrame = spawnTime - fps;
 
     public void enemiesSpawner() {
@@ -154,17 +162,16 @@ public class GameLoop implements Runnable {
         }
     }
 
-    public static double timera = 0;
+    private static double timera = 0;
 
     public static double winFrame = 1, winTime = 5 * (double) (fps);
 
     private void spawnEnemy() {
         if(spawnedEnemies >= enemiesNr){
-            end = true;
+            //end = true;
             return;
         }
-
-        System.out.println("1");
+        System.out.println("spawn" + (spawnedEnemies+1));
         enemies.get(spawnedEnemies).setAlive(true);
         View.drawEnemy(canvas, enemies.get(spawnedEnemies));
         spawnedEnemies++;
@@ -180,43 +187,49 @@ public class GameLoop implements Runnable {
             if(e.isAlive())
                 View.drawEnemy(canvas,e);
     }
-    private void update() {
-
-        //canvas.getGraphicsContext2D().restore();
-
+    private void updateView() {
         View.drawMap(map, canvas);
         drawEnemies();
     }
 
     @Override
     public void run(){
-//        long lastTime = System.nanoTime();
-//        long timer = System.currentTimeMillis();
-//        final double ns = 1000000000.0 / fps;
-//        double delta = 0;
-//        int updates = 0, frames = 0;
-
         System.out.println("run()");
 
-        thread.start();
-        //QueueEvent event = null;
+        long lastTime = System.nanoTime();
+        long timer = System.currentTimeMillis();
+        final double ns = 1000000000.0 / fps;
+        double delta = 0;
+        int updates = 0, frames = 0;
 
         while (!end){
-            System.out.println("while(!end)");
-            long now = System.currentTimeMillis();
 
-            enemyPhysics();
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    //Updateuje widok JavaFX
-                    System.out.println(" update()");
-                    update();
-                    if (now - lastSpawn > enemiesSpawnTime) {
-                        spawnEnemy();
-                    }
-                }
+            long now = System.nanoTime();
+            delta += (now - lastTime) / ns;
+            lastTime = now;
+            while(delta>= 1)
+            {
+                timera++;
+                updates++;
+                enemyPhysics();
+                delta--;
+            }
+            Platform.runLater( () -> {
+                //Updateuje widok JavaFX
+                System.out.println(" updateView() + spawn");
+                updateView();
+                spawnEnemy();
             });
+            try {
+//                if (timer - lastSpawn > enemiesSpawnTime) {
+//
+//                }
+                sleep(200);
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            frames++;
         }
 
 
@@ -264,10 +277,10 @@ public class GameLoop implements Runnable {
 //            repaint();
 //            frames++;
 //
-//            // Keep track of and display the game's ups and fps every second
+            // Keep track of and display the game's ups and fps every second
 //            if (System.currentTimeMillis() - timer >= 1000) {
 //                timer += 1000;
-//                frame.setTitle(Frame.title + " | ups: " + updates + " | fps: " + frames);
+//                frame.setTitle(frame.getTitle() + " | ups: " + updates + " | fps: " + frames);
 //                updates = 0;
 //                frames = 0;
 //            }
