@@ -28,6 +28,7 @@ import view.View;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static java.awt.Cursor.*;
 import static javafx.scene.Cursor.HAND;
@@ -120,48 +121,53 @@ public class GameController {
 
 
     private void setTowersShop() {
-        final Tower[] fireTower = new Tower[1];
-        ImageView iv = new ImageView(new Image("file:C:\\Users\\Mateusz\\Desktop\\PROZ\\Graphics\\tower.png"));
-        towersShopAnchorPane.getChildren().add(iv);
+        //final Tower[] fireTower = new Tower[1];
+        ArrayList<Tower> towerList = new ArrayList<>();
+
+        ImageView shopImage = new ImageView(new Image("file:C:\\Users\\Mateusz\\Desktop\\PROZ\\Graphics\\tower.png"));
+        towersShopAnchorPane.getChildren().add(shopImage);
         ImageView towerBasicImage = (ImageView)  towersShopAnchorPane.getChildren().get(0);
         towerBasicImage.setX(10);
         towerBasicImage.setY(10);
 
+        ImageView iv = new ImageView(new Image("file:C:\\Users\\Mateusz\\Desktop\\PROZ\\Graphics\\tower.png"));
+        mainStackPane.getChildren().add(iv);
 
-        ImageView iv2 = new ImageView(new Image("file:C:\\Users\\Mateusz\\Desktop\\PROZ\\Graphics\\tower.png"));
-        mainStackPane.getChildren().add(iv2);
-        ImageView towerImage = (ImageView)  mainStackPane.getChildren().get(mainStackPane.getChildren().size()-1);
-        towerImage.getParent().toFront();
+        ImageView moveableTowerImage = (ImageView)  mainStackPane.getChildren().get(mainStackPane.getChildren().size()-1);
+        moveableTowerImage.getParent().toFront();
         Bounds boundsInScene = towersShopAnchorPane.localToScene(towersShopAnchorPane.getBoundsInLocal());
-        towerImage.setX(boundsInScene.getMinX()+10);
-        towerImage.setY(boundsInScene.getMinY()+10);
+        moveableTowerImage.setX(boundsInScene.getMinX()+10);
+        moveableTowerImage.setY(boundsInScene.getMinY()+10);
+
         class Delta { double x, y; }
         final Delta dragDelta = new Delta();
         dragDelta.x = 0;
         dragDelta.y = 0;
-        towerImage.setOnMousePressed(mouseEvent -> {
+
+        moveableTowerImage.setOnMousePressed(mouseEvent -> {
             // record a delta distance for the drag and drop operation.
-            fireTower[0] = new Tower();
-            dragDelta.x = towerImage.getLayoutX() - mouseEvent.getSceneX();
-            dragDelta.y = towerImage.getLayoutY() - mouseEvent.getSceneY();
-            towerImage.setCursor(MOVE);
+            towerList.add(new Tower());
+            dragDelta.x = moveableTowerImage.getLayoutX() - mouseEvent.getSceneX();
+            dragDelta.y = moveableTowerImage.getLayoutY() - mouseEvent.getSceneY();
+            moveableTowerImage.setCursor(MOVE);
         });
-        towerImage.setOnMouseReleased(mouseEvent -> {
-            System.out.println((mouseEvent == null) + mouseEvent.toString());
-            System.out.println("x "+dragDelta.x + " y "+dragDelta.y);
-            System.out.println(map.getTileHeight());
-//            fireTower[0].set(10,10);
-            fireTower[0].set((int) (mouseEvent.getSceneX() - mouseEvent.getSceneX()%map.getTileWidth()),(int) (mouseEvent.getSceneY() - mouseEvent.getSceneY()%map.getTileWidth()));
-            View.drawTower(mainCanvas, fireTower[0]);
-            towerImage.setX(boundsInScene.getMinX()+10);
-            towerImage.setY(boundsInScene.getMinY()+10);
-            //towerImage.setCursor(HAND);
+        moveableTowerImage.setOnMouseReleased(mouseEvent -> {
+            int xCoor = (int) (mouseEvent.getSceneX() - mouseEvent.getSceneX()%map.getTileWidth());
+            int yCoor = (int) (mouseEvent.getSceneY() - mouseEvent.getSceneY()%map.getTileWidth());
+            Tile.TileType type = map.getTileTypeFromCoordinates(xCoor, yCoor);
+            if(type == Tile.TileType.TOWER_PLACE){
+                towerList.get(towerList.size()-1).set(xCoor,yCoor);
+                View.drawTower(mainCanvas, towerList.get(towerList.size()-1));
+            }
+            moveableTowerImage.setLayoutX(0);
+            moveableTowerImage.setLayoutY(0);
+            moveableTowerImage.setCursor(HAND);
         });
-        towerImage.setOnMouseDragged(mouseEvent -> {
-            towerImage.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
-            towerImage.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+        moveableTowerImage.setOnMouseDragged(mouseEvent -> {
+            moveableTowerImage.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
+            moveableTowerImage.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
         });
-        towerImage.setOnMouseEntered(mouseEvent -> towerImage.setCursor(HAND));
+        moveableTowerImage.setOnMouseEntered(mouseEvent -> moveableTowerImage.setCursor(HAND));
 
     }
 }

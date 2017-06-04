@@ -21,10 +21,11 @@ public class Map{
     private static char _START = 's';
     private static char _FINISH = 'f';
     private static char _USABLE = '.' ;
-    private static char _NOT_USABLE = 'x';
+    private static char _TOWER_PLACE = 'x';
 
     private int tileWidth;
     private int tileHeight;
+    public int fileNum;
 
     public int getTileWidth() {
         return tileWidth;
@@ -54,6 +55,7 @@ public class Map{
     public Map(){
         gridHeight = Preferences.getTiles_In_Column();
         gridWidth  = Preferences.getTiles_In_Row();
+        grid = new ArrayList<>(Preferences.getTiles_In_Column()*Preferences.getTiles_In_Row());
     }
 
     private ArrayList<Tile> grid;
@@ -73,17 +75,22 @@ public class Map{
     public ArrayList<Tile> getGrid() {
         return grid;
     }
-    public Tile.TileType getTileType(Integer row, Integer col) {
-        return grid.get(row*col) == null ? null : grid.get(row*col).getTileType();
+    public Tile.TileType getTileTypeFromGrid(Integer col, Integer row) {
+        return grid.get(findGridElement(col,row)) == null ? null : grid.get(findGridElement(col,row)).getTileType();
+    }
+    private int findGridElement(int col,int row){
+//        System.out.println("row: "+row+" col: "+col+ " ret: "+((row-1)*gridWidth+col-1));
+        return (row-1)*gridWidth+col-1;
     }
 
-    private void setTileToGrid(Integer row, Integer col, Tile.TileType value) {
-        Tile tile = new  Tile(value, row, col);
-        grid.add(tile);
+    private void setTileToGrid(Integer col, Integer row, Tile.TileType value) {
+        Tile tile = new  Tile(value, col, row);
+        //System.out.println("row "+row+" col "+col);
+        grid.add(findGridElement(col,row),tile);
     }
 
     public void load(Integer fileNumber) throws IOException {
-        grid = new ArrayList<Tile>(Preferences.getTiles_In_Column()*Preferences.getTiles_In_Row());
+//        fileNum = fileNumber;
         try(BufferedReader br = new BufferedReader(new FileReader("Maps" +File.separator+"map"+fileNumber+".txt" ))) {
             Integer row = 1;
             for (String line; (line = br.readLine()) != null; row++) {
@@ -100,11 +107,11 @@ public class Map{
                     else{
                         char c = line.charAt(col - 1);
                         if (c == _PATH)
-                            setTileToGrid(row, col, PATH);
+                            setTileToGrid(col, row, PATH);
                         else if (c == _FINISH)
-                            setTileToGrid(row, col, FINISH);
+                            setTileToGrid(col, row, FINISH);
                         else if (c == _START) {
-                            setTileToGrid(row, col, START);
+                            setTileToGrid(col, row, START);
                             startRow = row;
                             startColumn = col;
                             tileWidth = Preferences.getGame_Panel_Width() / Preferences.getTiles_In_Row();
@@ -114,13 +121,23 @@ public class Map{
                             startYPosition -= tileWidth;
                             startXPosition -= tileHeight;
                         } else if (c == _USABLE)
-                            setTileToGrid(row, col, USABLE);
-                        else if (c == _NOT_USABLE)
-                            setTileToGrid(row, col, NOT_USABLE);
+                            setTileToGrid(col, row, USABLE);
+                        else if (c == _TOWER_PLACE){
+                            setTileToGrid(col, row, TOWER_PLACE);
+                        }
                     }
                 }
             }
         }
+    }
+
+    public Tile.TileType getTileTypeFromCoordinates(int x, int y){
+//        System.out.print(fileNum);
+//        System.out.println("x: "+x+"y: "+y);
+//        System.out.println("x/: "+(x/getTileWidth()+1)+"y/: "+(y/getTileHeight()+1));
+//        System.out.println(getTileTypeFromGrid(x/getTileWidth()+1,y/getTileHeight()+1));
+
+        return getTileTypeFromGrid(x/getTileWidth()+1,y/getTileHeight()+1);
     }
 }
 

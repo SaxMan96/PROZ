@@ -118,8 +118,8 @@ public class View {
                 case USABLE:
                     tileName = "usableTile.png";
                     break;
-                case NOT_USABLE:
-                    tileName = "notUsableTile.png";
+                case TOWER_PLACE:
+                    tileName = "towerTile.png";
                     break;
                 case FINISH:
                     tileName = "finishTile.png";

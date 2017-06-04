@@ -16,7 +16,7 @@ import static model.Tile.TileType.*;
 public class Tile {
 
     public enum TileType {
-        PATH, START, FINISH, USABLE, NOT_USABLE
+        PATH, START, FINISH, USABLE, TOWER_PLACE
     }
     public enum Direction {
         LEFT , RIGHT, UP, DOWN, NODIRECTION
@@ -53,13 +53,13 @@ public class Tile {
     public TileType getTileType() {
         return tileType;
     }
-    public Tile(TileType type, Integer r, Integer c){
+    public Tile(TileType type, Integer c, Integer r){
         row = r;
         column = c;
         xPosition = (column-1) * width;
         yPosition = (row-1) * height;
-
         tileType = type;
+
         if(tileType == USABLE) {
             isUsable = true;
             hasDirection = false;
