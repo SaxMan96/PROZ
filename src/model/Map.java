@@ -91,7 +91,8 @@ public class Map{
     }
 
     public void load(Integer fileNumber) throws IOException {
-//        fileNum = fileNumber;
+        grid.clear();
+        fileNum = fileNumber;
         try(BufferedReader br = new BufferedReader(new FileReader("Maps" +File.separator+"map"+fileNumber+".txt" ))) {
             Integer row = 1;
             for (String line; (line = br.readLine()) != null; row++) {

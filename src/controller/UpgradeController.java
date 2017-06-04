@@ -106,7 +106,7 @@ public class UpgradeController {
     }
 
     private void setPlayerMissions() {
-        System.out.println(model.currentPlayer.getName()+ " missions    "+model.currentPlayer.missions.toString());
+        //System.out.println(model.currentPlayer.getName()+ " missions    "+model.currentPlayer.missions.toString());
         Integer missionNumber = 0;
         for(Integer val: model.currentPlayer.missions){
             if(val == 1)
@@ -164,7 +164,6 @@ public class UpgradeController {
         Program.setGameController(gameController);
         gameController.setMapNumber(mapSelected);
         gameController.drawMap();
-        gameController.gameLoopStart();
     }
     @FXML
     public void pressBackToMENUButton() throws IOException {

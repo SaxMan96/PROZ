@@ -106,7 +106,7 @@ public class Model{
     }
 
     public void loadMap(Integer mapNumber) throws IOException {
-        //System.out.println("Map number: "+mapNumber+"(model.loadMap)");
+        System.out.println("Map number: "+mapNumber+"(model.loadMap)");
         map.load(mapNumber);
     }
 

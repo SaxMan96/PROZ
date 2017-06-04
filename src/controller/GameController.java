@@ -66,22 +66,42 @@ public class GameController {
         currentPlayer = model.getCurrentPlayer();
     }
 
+
+
     public void pressMenuButton()throws IOException{
         if(gameLoop != null)
-            gameLoop.interrupt();
+            gameLoop.setPaused(true);
         PausedPane.toFront();
         PausedPane.setVisible(!PausedPane.isVisible());
     }
-    @FXML
     public void pressQuitButton() throws IOException {
         if(gameLoop!=null)
             gameLoop.endGame();
         upgradeController = view.setUpgradeView();
         Program.setUpgradeController(upgradeController);
     }
+    public void resumeButtonClicked(ActionEvent actionEvent) {
+        System.out.print("resume");
+        if(gameLoop != null) {
+            gameLoop.setPaused(false);
+            synchronized (gameLoop.getMonitor()) {
+                gameLoop.getMonitor().notifyAll();
+            }
+        }
+
+        PausedPane.setVisible(!PausedPane.isVisible());
+    }
+
+    public void restartButtonClicked(ActionEvent actionEvent) {
+        //save
+
+        PausedPane.setVisible(!PausedPane.isVisible());
+        gameLoop.restartGame();
+    }
 
     public void drawMap() {
         View.drawMap(model.getMap(), mainCanvas);
+        System.out.println("drawMap() GC Map: "+model.getMap().fileNum);
         setTowersShop();
 
 //        xd.setLayoutX(Map.startXPosition);
@@ -104,6 +124,7 @@ public class GameController {
 //        gameLoop = new GameLoop(mainCanvas, model);
 //        gameLoop.run();
         gameLoop = new GameLoop(mainCanvas, model);
+        System.out.println("drawMap()1 GC Map: "+model.getMap().fileNum);
         gameLoop.startGame();
 
     }
@@ -137,15 +158,5 @@ public class GameController {
         View.setTowerShop(towersShopAnchorPane, mainAnchorPane, towerList, map, mainCanvas, costTextField, livesTextField,scoreTextField,cashTextField);
     }
 
-    public void resumeButtonClicked(ActionEvent actionEvent) {
-        System.out.print("resume");
-        if(gameLoop != null)
-            gameLoop.nottify();
-        PausedPane.setVisible(!PausedPane.isVisible());
-    }
 
-    public void restartButtonClicked(ActionEvent actionEvent) {
-        PausedPane.setVisible(!PausedPane.isVisible());
-        gameLoop.restartGame();
-    }
 }

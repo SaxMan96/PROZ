@@ -61,9 +61,15 @@ public class GameLoop implements Runnable {
     private boolean firstPlay;
     private Model model;
     private Map map;
-    private boolean interrupted;
+    private boolean paused;
 
-//    /** Queue for events */
+    Object monitor = new Object();
+    public Object getMonitor() {
+        return monitor;
+    }
+
+
+    //    /** Queue for events */
 //    private final BlockingQueue<QueueEvent> blockingQueue;
 //    /** Sound things */
 //    private final SoundManager sound;
@@ -82,7 +88,7 @@ public class GameLoop implements Runnable {
         enemiesSpawnTime = model.getMap().getEnemiesSpawnTime();
         spawnedEnemies = 0;
         end = false;
-        interrupted = false;
+        paused = false;
         lastSpawn = System.currentTimeMillis();
         enemies = new ArrayList<>();
         towers = model.getTowerList();
@@ -110,9 +116,11 @@ public class GameLoop implements Runnable {
         }
     }
 
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
 
-
-//    public void paintComponent(Graphics g) {
+    //    public void paintComponent(Graphics g) {
 //        if (firstPlay) {
 //            myWidth = getWidth();
 //            myHeight = getHeight();
@@ -147,6 +155,7 @@ public class GameLoop implements Runnable {
     public void startGame() {
         thread = new Thread(this);
         thread.start();
+        System.out.println("drawMap2() GC Map: "+map.fileNum);
     }
     public void interrupt() {
         thread.interrupt();
@@ -160,7 +169,14 @@ public class GameLoop implements Runnable {
     public void restartGame() {
     }
     public void endGame() {
-        thread.interrupt();
+        canvas.getGraphicsContext2D().clearRect(0,0,768.0,1056.0);
+        enemies.clear();
+        towers.clear();
+        lasers.clear();
+        enemiesNr = 0;
+        spawnedEnemies = 0;
+        paused = false;
+        end = true;
     }
 
     private double spawnTime = 1 * (fps),
@@ -252,11 +268,14 @@ public class GameLoop implements Runnable {
             View.drawLaser(canvas, l);
     }
     private void updateView() {
+        System.out.println(map.fileNum);
         View.drawMap(map, canvas);
         drawEnemies();
         drawTowers();
         drawLasers();
     }
+
+
 
     @Override
     public void run(){
@@ -271,6 +290,15 @@ public class GameLoop implements Runnable {
         while (!end){
 //            if(Thread.currentThread().isInterrupted())
 //                break;
+            synchronized (monitor) {
+                while(paused)
+                    try {
+                        monitor.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+            }
+
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;

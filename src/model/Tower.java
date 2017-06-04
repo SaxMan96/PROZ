@@ -54,7 +54,7 @@ public class Tower {
         damage = 10;
         xC = Map.getStartXPosition();
         yC = Map.getStartYPosition();
-        range = Preferences.Tower_Range;
+        range = 100;
         isSet = false;
     }
     public void set(Integer x, Integer y){
