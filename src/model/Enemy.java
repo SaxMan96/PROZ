@@ -31,11 +31,17 @@ public class Enemy {
     public Direction getDirection() {
         return direction;
     }
-    public int getxC() {
+    public int getLayoutX() {
         return xC;
     }
-    public int getyC() {
+    public int getLayoutY() {
         return yC;
+    }
+    public Integer getCenterX(){
+        return xC+Map.getTileWidth()/2;
+    }
+    public Integer getCenterY(){
+        return yC+Map.getTileHeight()/2;
     }
 
     private Integer currentHealth, maxHealth;
@@ -45,14 +51,13 @@ public class Enemy {
     private int xC;
     private int yC; // Coordinates
     boolean isAlive;
+    boolean isUnderLaser;
 
     Polyline polyline;
     ObservableList<Double> points;
     int pointIndex;
 
-    public void setAlive(boolean alive) {
-        this.isAlive = alive;
-    }
+
 
     public enum Direction {
         LEFT , RIGHT, UP, DOWN
@@ -68,6 +73,7 @@ public class Enemy {
         speed = Preferences.Enemy_Speed;
         direction = Direction.RIGHT;
         isAlive = false;
+        isUnderLaser = false;
         Path path = new Path(GameController.model.getMap());
         path.generatePolyline();
         polyline = path.getPolyline();
@@ -85,17 +91,24 @@ public class Enemy {
 
     private void enemyDeath() {
         isAlive = false;
+        isUnderLaser = false;
         Model.currentPlayer.gainPoints(gamePoints);
     }
 
+    public void setAlive(boolean alive) {
+        this.isAlive = alive;
+    }
     public boolean isAlive() {
         return isAlive;
+    }
+    public boolean isUnderLaser() {
+        return isUnderLaser;
     }
 
     public void physics(int i) {
         //System.out.println("pointIndex: "+pointIndex+" xC: "+xC+" yC: "+yC+" xPositionOnPath: "+xPositionOnPath+" xPositionOnPath: "+yPositionOnPath+" DIRECTION: "+direction+" points.get(pointIndex): "+points.get(pointIndex));
-        if(pointIndex>=points.size()-2){
-            setAlive(false);
+        if(pointIndex >= points.size()-2){
+            this.enemyDeath();
             return;
         }
         if(i == 1){

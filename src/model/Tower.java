@@ -1,16 +1,17 @@
 package model;
 
 import javafx.scene.image.Image;
+import preferences.Preferences;
 
 /**
  * Created by Mateusz on 2017-05-28.
  */
 public class Tower {
-    private static Integer damage;
+    private static Integer damage = Preferences.Bullet_Power_MAX;
     private Integer xC;
     private Integer yC; // Coordinates
-    private Integer range;
-    private static Integer cost;
+    private static Integer range;
+    private static Integer cost = 100;
     private boolean isSet;
     private Integer width;
     private Integer height;
@@ -25,7 +26,13 @@ public class Tower {
     public Integer getLayoutY() {
         return yC;
     }
-    public Integer getRange() {
+    public Integer getCenterX(){
+        return xC+Map.getTileWidth()/2;
+    }
+    public Integer getCenterY(){
+        return yC+Map.getTileHeight()/2;
+    }
+    public static Integer getRange() {
         return range;
     }
     public static Integer getCost() {
@@ -43,10 +50,11 @@ public class Tower {
 
 
     public Tower(){
+        System.out.println("Created Tower");
         damage = 10;
         xC = Map.getStartXPosition();
         yC = Map.getStartYPosition();
-        range = 100;
+        range = Preferences.Tower_Range;
         isSet = false;
     }
     public void set(Integer x, Integer y){

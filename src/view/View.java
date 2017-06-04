@@ -4,10 +4,13 @@ import controller.GameController;
 import controller.MenuController;
 import controller.UpgradeController;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.*;
+import javafx.scene.control.*;
+import javafx.scene.control.TextField;
 import javafx.scene.image.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
@@ -17,15 +20,17 @@ import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import model.Enemy;
-import model.Map;
-import model.Tile;
+import model.*;
 import javafx.scene.canvas.Canvas;
-import model.Tower;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import static javafx.scene.Cursor.HAND;
+import static javafx.scene.Cursor.MOVE;
+import static model.Model.currentPlayer;
 
 /**
  * Created by Mateusz on 2017-03-31.
@@ -140,14 +145,12 @@ public class View {
         }
     }
 
-
-
     public static void drawEnemy(Canvas canvas, Enemy e){
         //System.out.println("drawEnemy");
         String fileName = "enemy.png";
         ImageView graphic = new ImageView("file:Graphics/" + fileName);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.drawImage(graphic.getImage(), e.getxC(),e.getyC());
+        gc.drawImage(graphic.getImage(), e.getLayoutX(),e.getLayoutY());
     }
 
     public static void drawTower(Canvas canvas, Tower t){
@@ -158,5 +161,87 @@ public class View {
     }
 
     public static void gameWin() {
+    }
+
+    public static void setTowerShop(AnchorPane towersShopAnchorPane, AnchorPane mainAnchorPane,
+                                    ArrayList<Tower> towerList, Map map, Canvas mainCanvas,
+                                    TextField costTextField, TextField livesTextField,
+                                    TextField scoreTextField, TextField cashTextField) {
+
+        updateViewToPlayerStatus(livesTextField, scoreTextField, cashTextField);
+
+        ImageView shopImage = new ImageView(new Image("file:C:\\Users\\Mateusz\\Desktop\\PROZ\\Graphics\\tower.png"));
+        towersShopAnchorPane.getChildren().add(shopImage);
+        ImageView towerBasicImage = (ImageView)  towersShopAnchorPane.getChildren().get(0);
+        towerBasicImage.setX(10);
+        towerBasicImage.setY(10);
+
+        ImageView iv = new ImageView(new Image("file:C:\\Users\\Mateusz\\Desktop\\PROZ\\Graphics\\tower.png"));
+        mainAnchorPane.getChildren().add(iv);
+
+        ImageView movableTowerImage = (ImageView)  mainAnchorPane.getChildren().get(mainAnchorPane.getChildren().size()-1);
+        movableTowerImage.getParent().toFront();
+        Bounds boundsInScene = towersShopAnchorPane.localToScene(towersShopAnchorPane.getBoundsInLocal());
+        movableTowerImage.setX(boundsInScene.getMinX()+10);
+        movableTowerImage.setY(boundsInScene.getMinY()+10);
+
+        class Delta { double x, y; }
+        final Delta dragDelta = new Delta();
+        dragDelta.x = 0;
+        dragDelta.y = 0;
+
+        movableTowerImage.setOnMousePressed(mouseEvent -> {
+            // record a delta distance for the drag and drop operation.
+
+            //costTextField.setText(Tower.getCost().toString());
+
+            dragDelta.x = movableTowerImage.getLayoutX() - mouseEvent.getSceneX();
+            dragDelta.y = movableTowerImage.getLayoutY() - mouseEvent.getSceneY();
+            movableTowerImage.setCursor(MOVE);
+        });
+        movableTowerImage.setOnMouseReleased(mouseEvent -> {
+            int xCoor = (int) (mouseEvent.getSceneX() - mouseEvent.getSceneX()%map.getTileWidth());
+            int yCoor = (int) (mouseEvent.getSceneY() - mouseEvent.getSceneY()%map.getTileWidth());
+            Tile.TileType type = map.getTileTypeFromCoordinates(xCoor, yCoor);
+            if(type == Tile.TileType.TOWER_PLACE && currentPlayer.getCoins()>=Tower.getCost()){
+                Tower t = new Tower();
+                t.set(xCoor,yCoor);
+                towerList.add(t);
+                View.drawTower(mainCanvas, towerList.get(towerList.size()-1));
+                currentPlayer.executeCost(Tower.getCost());
+                currentPlayer.gainPoints(Tower.getCost());
+
+                updateViewToPlayerStatus(livesTextField, scoreTextField, cashTextField);
+            }
+            costTextField.setText("");
+            movableTowerImage.setLayoutX(0);
+            movableTowerImage.setLayoutY(0);
+            movableTowerImage.setCursor(HAND);
+        });
+        movableTowerImage.setOnMouseDragged(mouseEvent -> {
+            movableTowerImage.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
+            movableTowerImage.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+        });
+        movableTowerImage.setOnMouseEntered(mouseEvent -> {
+            movableTowerImage.setCursor(HAND);
+            costTextField.setText(Tower.getCost().toString());
+        });
+        movableTowerImage.setOnMouseExited(mouseEvent->{
+            costTextField.setText("");
+        });
+    }
+
+    private static void updateViewToPlayerStatus(TextField livesTextField, TextField scoreTextField, TextField cashTextField) {
+        livesTextField.setText(String.valueOf(currentPlayer.getCurrentHealthPoints()));
+        scoreTextField.setText(String.valueOf(currentPlayer.getPoints()));
+        cashTextField.setText(String.valueOf(currentPlayer.getCoins()));
+    }
+
+    public static void drawLaser(Canvas canvas, Laser l) {
+
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setStroke(Color.BLUE);
+        gc.setLineWidth(5);
+        gc.strokeLine(l.getSourceLayoutX(),l.getSourceLayoutY(),l.getTargetLayoutX(),l.getTargetLayoutY());
     }
 }

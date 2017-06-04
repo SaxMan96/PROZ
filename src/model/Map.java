@@ -23,16 +23,17 @@ public class Map{
     private static char _USABLE = '.' ;
     private static char _TOWER_PLACE = 'x';
 
-    private int tileWidth;
-    private int tileHeight;
+    private static int tileWidth;
+    private static int tileHeight;
     public int fileNum;
 
-    public int getTileWidth() {
+    public static int getTileWidth() {
         return tileWidth;
     }
-    public int getTileHeight() {
+    public static int getTileHeight() {
         return tileHeight;
     }
+
     public static int getEnemiesNr() {
         return enemiesNr;
     }

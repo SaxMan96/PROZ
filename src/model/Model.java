@@ -16,23 +16,35 @@ public class Model{
     private static long isPased;
 
     private static Map map;
+
+
+
     /*
-       private MapLoader mapLoader
-       private CollisionDetector collisionDetector;
-       private BombCalculator bombCalculator;
-       public static SoundManager sound;
-    */
+           private MapLoader mapLoader
+           private CollisionDetector collisionDetector;
+           private BombCalculator bombCalculator;
+           public static SoundManager sound;
+        */
+    public static ArrayList<Tower> towerList;
+
+
+
     public static Player currentPlayer;
     public static ArrayList<Pair<String,String>> existingPlayers;
 
     public Map getMap() {
         return map;
     }
-    //                    Player, File
-
+    public static ArrayList<Tower> getTowerList() {
+        return towerList;
+    }
+    public static Player getCurrentPlayer() {
+        return currentPlayer;
+    }
 
     public void set() throws IOException {
         map = new Map();
+        towerList = new ArrayList<>();
         currentPlayer = new Player();
         existingPlayers = new ArrayList<>();
         loadPlayersFromFile();

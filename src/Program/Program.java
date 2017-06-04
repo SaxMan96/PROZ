@@ -55,7 +55,7 @@ public class Program extends Application{
         setGameController(view.setGameView());
         gameController.setMapNumber(2);
         gameController.drawMap();
-        gameController.gameLoopStart();
+        //gameController.gameLoopStart();
 
 
 //        AnimationTimer gameLoop = new AnimationTimer() {

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-
-<AnchorPane fx:id="mainStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
    <children>
       <AnchorPane fx:id="PausedPane" layoutX="246.0" layoutY="144.0" opacity="0.95" prefHeight="466.0" prefWidth="606.0" style="-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="514.0" AnchorPane.topAnchor="150.0">
          <children>
@@ -19,12 +18,12 @@
                         <Font size="35.0" />
                      </font>
                   </Label>
-                  <Button layoutX="315.0" layoutY="114.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="129.0" text="Resume">
+                  <Button onAction="#resumeButtonClicked" layoutX="315.0" layoutY="114.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="129.0" text="Resume">
                      <font>
                         <Font size="22.0" />
                      </font>
                   </Button>
-                  <Button layoutX="422.0" layoutY="114.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="129.0" text="Restart">
+                  <Button onAction="#restartButtonClicked" layoutX="422.0" layoutY="114.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="129.0" text="Restart">
                      <font>
                         <Font size="22.0" />
                      </font>
@@ -48,11 +47,11 @@
            </children></AnchorPane>
           <AnchorPane fx:id="rightPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="310.0">
                <children>
-                  <SplitPane dividerPositions="0.77306" layoutX="39.0" layoutY="213.0" orientation="VERTICAL" prefHeight="734.0" prefWidth="310.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.39054726368159204" layoutX="39.0" layoutY="213.0" orientation="VERTICAL" prefHeight="734.0" prefWidth="310.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
-                      <AnchorPane fx:id="rightUpperPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="226.0" prefWidth="310.0">
+                      <AnchorPane fx:id="rightUpperPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="260.0" prefWidth="310.0">
                            <children>
-                              <VBox fx:id="gameMenuBox" layoutX="28.0" layoutY="14.0" prefHeight="189.0" prefWidth="306.0" AnchorPane.bottomAnchor="-25.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+                              <VBox fx:id="gameMenuBox" alignment="CENTER" layoutX="28.0" layoutY="14.0" prefHeight="189.0" prefWidth="306.0" AnchorPane.bottomAnchor="-25.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                  <children>
                                     <HBox fx:id="livesPauseBox" layoutX="14.0" prefHeight="51.0" prefWidth="200.0">
                                        <children>
@@ -61,7 +60,7 @@
                                                 <Font size="22.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="livesTextField" editable="false" prefHeight="48.0" prefWidth="52.0" promptText="00">
+                                          <TextField fx:id="livesTextField" editable="false" prefHeight="48.0" prefWidth="67.0" promptText="00">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
@@ -79,16 +78,30 @@
                                           </Button>
                                        </children>
                                     </HBox>
+                                    <HBox fx:id="scoreBox" layoutX="14.0" layoutY="108.0" prefHeight="48.0" prefWidth="286.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                       <children>
+                                          <Label layoutX="45.0" layoutY="86.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="66.0" text="Score:">
+                                             <font>
+                                                <Font size="22.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="scoreTextField" alignment="CENTER_RIGHT" editable="false" prefHeight="48.0" prefWidth="221.0" promptText="000000">
+                                             <font>
+                                                <Font size="22.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </HBox>
                                     <HBox fx:id="cashBox" layoutX="14.0" layoutY="6.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                        <children>
-                                          <HBox layoutX="14.0" layoutY="6.0" prefHeight="48.0" prefWidth="192.0">
+                                          <HBox layoutX="14.0" layoutY="6.0" prefHeight="48.0" prefWidth="284.0">
                                              <children>
                                                 <Label layoutX="14.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="60.0" text="Cash: ">
                                                    <font>
                                                       <Font size="22.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="cashTextField" alignment="CENTER_RIGHT" editable="false" layoutX="69.0" layoutY="6.0" promptText="000000" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="cashTextField" alignment="CENTER_RIGHT" editable="false" layoutX="69.0" layoutY="6.0" prefHeight="48.0" prefWidth="144.0" promptText="000000" HBox.hgrow="ALWAYS">
                                                    <font>
                                                       <Font size="22.0" />
                                                    </font>
@@ -108,42 +121,41 @@
                                           </HBox>
                                        </children>
                                     </HBox>
-                                    <HBox fx:id="speedBox" layoutX="14.0" layoutY="62.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                    <HBox prefHeight="48.0" prefWidth="260.0">
                                        <children>
-                                          <Label layoutX="45.0" layoutY="86.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="66.0" text="Speed:">
-                                             <font>
-                                                <Font size="22.0" />
-                                             </font>
-                                             <HBox.margin>
-                                                <Insets bottom="10.0" top="10.0" />
-                                             </HBox.margin>
-                                          </Label>
-                                          <Slider fx:id="speedSlider" prefHeight="52.0" prefWidth="208.0">
-                                             <HBox.margin>
-                                                <Insets left="12.0" />
-                                             </HBox.margin>
-                                          </Slider>
-                                       </children>
-                                    </HBox>
-                                    <HBox fx:id="scoreBox" layoutX="14.0" layoutY="108.0" prefHeight="48.0" prefWidth="286.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
-                                       <children>
-                                          <Label layoutX="45.0" layoutY="86.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="66.0" text="Score:">
+                                          <Label layoutX="14.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="60.0" text="Cost:">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="scoreTextField" alignment="CENTER_RIGHT" editable="false" prefHeight="48.0" prefWidth="221.0" promptText="000000">
+                                          <TextField fx:id="costTextField" alignment="CENTER_RIGHT" editable="false" layoutX="69.0" layoutY="6.0" prefHeight="48.0" prefWidth="144.0" promptText="000000" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
+                                             <HBox.margin>
+                                                <Insets left="6.0" />
+                                             </HBox.margin>
                                           </TextField>
+                                          <Label layoutX="177.0" layoutY="15.0" prefHeight="48.0" prefWidth="12.0" text="\$" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font size="22.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets left="14.0" />
+                                             </padding>
+                                          </Label>
                                        </children>
                                     </HBox>
+                                    <Button fx:id="startGameButton" onAction="#gameLoopStart" mnemonicParsing="false" text="Start">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Button>
                                  </children>
                               </VBox>
                            </children>
                         </AnchorPane>
-                      <AnchorPane fx:id="rightBottomPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="280.0">
+                      <AnchorPane fx:id="rightBottomPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="308.0">
                            <children>
                               <ScrollPane layoutX="13.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="497.0" prefWidth="333.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
                                 <content>

@@ -8,14 +8,14 @@ import java.util.ArrayList;
 public class Player {
 
     private String name;
-    private Integer coins;
-    private Integer points;
-    private Integer bulletSpeed;
-    private Integer bulletPower;
-    private Integer bombRange;
-    private Integer bombPower;
-    private Integer healthPoints;
-    private Integer currentHealthPoints;
+    private int coins;
+    private int points;
+    private int bulletSpeed;
+    private int bulletPower;
+    private int bombRange;
+    private int bombPower;
+    private int healthPoints;
+    private int currentHealthPoints;
     public ArrayList<Integer> missions;
     public ArrayList<Integer> achievements;
 
@@ -61,60 +61,54 @@ public class Player {
     }
 
 
-    public Integer getCurrentHealthPoints() {
+    public int getCurrentHealthPoints() {
         return currentHealthPoints;
     }
-
     public void increaseCurrentHealthPoints(Integer i){
         currentHealthPoints += i;
     }
-
-    public Integer getBulletSpeed() {
+    public int getBulletSpeed() {
         return bulletSpeed;
     }
-
     public void setBulletSpeed(Integer bulletSpeed) {
         this.bulletSpeed = bulletSpeed;
     }
-
-    public Integer getBulletPower() {
+    public int getBulletPower() {
         return bulletPower;
     }
-
     public void setBulletPower(Integer bulletPower) {
         this.bulletPower = bulletPower;
     }
-
-    public Integer getBombRange() {
+    public int getBombRange() {
         return bombRange;
     }
-
     public void setBombRange(Integer bombRange) {
         this.bombRange = bombRange;
     }
-
-    public Integer getBombPower() {
+    public int getBombPower() {
         return bombPower;
     }
-
     public void setBombPower(Integer bombPower) {
         this.bombPower = bombPower;
     }
-
-    public Integer getHealthPoints() {
+    public int getHealthPoints() {
         return healthPoints;
     }
-
     public void setHealthPoints(Integer healthPoints) {
         this.healthPoints = healthPoints;
     }
-
-    public Integer getCoins() {
+    public int getCoins() {
         return coins;
     }
-
     public void setCoins(Integer coins) {
         this.coins = coins;
+    }
+
+    public void executeCost(int cost){
+        this.coins -= cost;
+    }
+    public void gainPoints(int p){
+        this.points += p;
     }
 
     public void clear() {
@@ -122,9 +116,5 @@ public class Player {
             missions.clear();
         if(achievements != null)
             achievements.clear();
-    }
-
-    public void gainPoints(Integer p) {
-        points += p;
     }
 }

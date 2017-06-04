@@ -8,10 +8,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
-import model.Enemy;
-import model.Map;
-import model.Player;
-import model.Model;
+import model.*;
 import view.View;
 
 import java.awt.*;
@@ -58,10 +55,13 @@ public class GameLoop implements Runnable {
     public Integer spawnedEnemies;
     private long lastSpawn;
     private ArrayList<Enemy> enemies;
+    private ArrayList<Tower> towers;
+    private ArrayList<Laser> lasers;
     private boolean end;
     private boolean firstPlay;
     private Model model;
     private Map map;
+    private boolean interrupted;
 
 //    /** Queue for events */
 //    private final BlockingQueue<QueueEvent> blockingQueue;
@@ -82,8 +82,11 @@ public class GameLoop implements Runnable {
         enemiesSpawnTime = model.getMap().getEnemiesSpawnTime();
         spawnedEnemies = 0;
         end = false;
+        interrupted = false;
         lastSpawn = System.currentTimeMillis();
         enemies = new ArrayList<>();
+        towers = model.getTowerList();
+        lasers = new ArrayList<>();
         //enemiesNr = 1;
         for(int i=0; i < enemiesNr; i++)
             enemies.add(new Enemy(map.getStartXPosition(), map.getStartYPosition()));
@@ -145,6 +148,20 @@ public class GameLoop implements Runnable {
         thread = new Thread(this);
         thread.start();
     }
+    public void interrupt() {
+        thread.interrupt();
+    }
+    public void nottify() {
+        thread.notify();
+//        interrupted = false;
+        System.out.print("nottify");
+
+    }
+    public void restartGame() {
+    }
+    public void endGame() {
+        thread.interrupt();
+    }
 
     private double spawnTime = 1 * (fps),
                   spawnFrame = spawnTime - fps;
@@ -165,6 +182,11 @@ public class GameLoop implements Runnable {
 
     public static double winFrame = 1, winTime = 5 * (double) (fps);
 
+    private void calculateEnemiesDamage() {
+        for(Enemy e: enemies)
+            if(e.isUnderLaser())
+                e.getHit(Laser.getDamage());
+    }
     private void spawnEnemy() {
         long now = System.currentTimeMillis();
         if(spawnedEnemies >= enemiesNr){
@@ -186,14 +208,54 @@ public class GameLoop implements Runnable {
             if(e.isAlive())
                 e.physics(1);
     }
+    private void laserPhysic() {
+        lasers.clear();
+        ArrayList<Enemy> inRange = new ArrayList<>();
+        Enemy closestEnemy = null;
+        int minDistance = Tower.getRange();
+        for(Tower t: towers) {
+            for (Enemy e : enemies) {
+                if (e.isAlive() && isInRange(t, e))
+                    inRange.add(e);
+            }
+            for(Enemy e: inRange){
+                int currentDistance = distance(t,e);
+                if(currentDistance< minDistance) {
+                    closestEnemy = e;
+                    minDistance  =currentDistance;
+                }
+            }
+            if(closestEnemy != null)
+                lasers.add(new Laser(t.getCenterX(), t.getCenterY(), closestEnemy.getCenterX(), closestEnemy.getCenterY()));
+        }
+
+    }
+
+    private int distance(Tower t, Enemy e) {
+        return (int) Math.sqrt((e.getCenterX() - t.getCenterX())*(e.getCenterX() - t.getCenterX()) + (e.getCenterY()- t.getCenterY())*(e.getCenterY()- t.getCenterY()));
+    }
+    private boolean isInRange(Tower t, Enemy e) {
+        return (e.getCenterX() - t.getCenterX())*(e.getCenterX() - t.getCenterX()) + (e.getCenterY()- t.getCenterY())*(e.getCenterY()- t.getCenterY()) < t.getRange()*t.getRange();
+    }
+
     private void drawEnemies(){
         for(Enemy e: enemies)
             if(e.isAlive())
                 View.drawEnemy(canvas,e);
     }
+    private void drawTowers(){
+        for(Tower t: towers)
+            View.drawTower(canvas, t);
+    }
+    private void drawLasers(){
+        for(Laser l: lasers)
+            View.drawLaser(canvas, l);
+    }
     private void updateView() {
         View.drawMap(map, canvas);
         drawEnemies();
+        drawTowers();
+        drawLasers();
     }
 
     @Override
@@ -207,16 +269,18 @@ public class GameLoop implements Runnable {
         int updates = 0, frames = 0;
 
         while (!end){
-
+//            if(Thread.currentThread().isInterrupted())
+//                break;
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
 
             enemyPhysics();
+            laserPhysic();
+            calculateEnemiesDamage();
 
             Platform.runLater( () -> {
                 //Updateuje widok JavaFX
-                System.out.println(" updateView() + spawn");
                 updateView();
                 spawnEnemy();
             });
@@ -286,4 +350,5 @@ public class GameLoop implements Runnable {
 //            }
 
     }
+
 }

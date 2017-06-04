@@ -2,6 +2,7 @@ package controller;
 
 import Program.Program;
 import javafx.animation.PathTransition;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
@@ -49,22 +50,32 @@ public class GameController {
     @FXML Canvas mainCanvas;
     @FXML Canvas secondCanvas;
     @FXML TextField livesTextField;
+    @FXML TextField scoreTextField;
+    @FXML TextField cashTextField;
+    @FXML TextField costTextField;
+
     @FXML CheckBox xd;
     @FXML AnchorPane towersShopAnchorPane;
     @FXML AnchorPane leftPane;
-    @FXML AnchorPane mainStackPane;
+    @FXML AnchorPane mainAnchorPane;
+    private Player currentPlayer;
 
     public void setMapNumber(Integer mapNumber) throws IOException {
         model.loadMap(mapNumber);
         map = model.getMap();
+        currentPlayer = model.getCurrentPlayer();
     }
 
     public void pressMenuButton()throws IOException{
+        if(gameLoop != null)
+            gameLoop.interrupt();
         PausedPane.toFront();
         PausedPane.setVisible(!PausedPane.isVisible());
     }
     @FXML
     public void pressQuitButton() throws IOException {
+        if(gameLoop!=null)
+            gameLoop.endGame();
         upgradeController = view.setUpgradeView();
         Program.setUpgradeController(upgradeController);
     }
@@ -93,7 +104,7 @@ public class GameController {
 //        gameLoop = new GameLoop(mainCanvas, model);
 //        gameLoop.run();
         gameLoop = new GameLoop(mainCanvas, model);
-        //gameLoop.startGame();
+        gameLoop.startGame();
 
     }
     /*private class Timer implements Runnable {
@@ -122,52 +133,19 @@ public class GameController {
 
     private void setTowersShop() {
         //final Tower[] fireTower = new Tower[1];
-        ArrayList<Tower> towerList = new ArrayList<>();
+        ArrayList<Tower> towerList = model.getTowerList();
+        View.setTowerShop(towersShopAnchorPane, mainAnchorPane, towerList, map, mainCanvas, costTextField, livesTextField,scoreTextField,cashTextField);
+    }
 
-        ImageView shopImage = new ImageView(new Image("file:C:\\Users\\Mateusz\\Desktop\\PROZ\\Graphics\\tower.png"));
-        towersShopAnchorPane.getChildren().add(shopImage);
-        ImageView towerBasicImage = (ImageView)  towersShopAnchorPane.getChildren().get(0);
-        towerBasicImage.setX(10);
-        towerBasicImage.setY(10);
+    public void resumeButtonClicked(ActionEvent actionEvent) {
+        System.out.print("resume");
+        if(gameLoop != null)
+            gameLoop.nottify();
+        PausedPane.setVisible(!PausedPane.isVisible());
+    }
 
-        ImageView iv = new ImageView(new Image("file:C:\\Users\\Mateusz\\Desktop\\PROZ\\Graphics\\tower.png"));
-        mainStackPane.getChildren().add(iv);
-
-        ImageView moveableTowerImage = (ImageView)  mainStackPane.getChildren().get(mainStackPane.getChildren().size()-1);
-        moveableTowerImage.getParent().toFront();
-        Bounds boundsInScene = towersShopAnchorPane.localToScene(towersShopAnchorPane.getBoundsInLocal());
-        moveableTowerImage.setX(boundsInScene.getMinX()+10);
-        moveableTowerImage.setY(boundsInScene.getMinY()+10);
-
-        class Delta { double x, y; }
-        final Delta dragDelta = new Delta();
-        dragDelta.x = 0;
-        dragDelta.y = 0;
-
-        moveableTowerImage.setOnMousePressed(mouseEvent -> {
-            // record a delta distance for the drag and drop operation.
-            towerList.add(new Tower());
-            dragDelta.x = moveableTowerImage.getLayoutX() - mouseEvent.getSceneX();
-            dragDelta.y = moveableTowerImage.getLayoutY() - mouseEvent.getSceneY();
-            moveableTowerImage.setCursor(MOVE);
-        });
-        moveableTowerImage.setOnMouseReleased(mouseEvent -> {
-            int xCoor = (int) (mouseEvent.getSceneX() - mouseEvent.getSceneX()%map.getTileWidth());
-            int yCoor = (int) (mouseEvent.getSceneY() - mouseEvent.getSceneY()%map.getTileWidth());
-            Tile.TileType type = map.getTileTypeFromCoordinates(xCoor, yCoor);
-            if(type == Tile.TileType.TOWER_PLACE){
-                towerList.get(towerList.size()-1).set(xCoor,yCoor);
-                View.drawTower(mainCanvas, towerList.get(towerList.size()-1));
-            }
-            moveableTowerImage.setLayoutX(0);
-            moveableTowerImage.setLayoutY(0);
-            moveableTowerImage.setCursor(HAND);
-        });
-        moveableTowerImage.setOnMouseDragged(mouseEvent -> {
-            moveableTowerImage.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
-            moveableTowerImage.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
-        });
-        moveableTowerImage.setOnMouseEntered(mouseEvent -> moveableTowerImage.setCursor(HAND));
-
+    public void restartButtonClicked(ActionEvent actionEvent) {
+        PausedPane.setVisible(!PausedPane.isVisible());
+        gameLoop.restartGame();
     }
 }

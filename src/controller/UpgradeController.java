@@ -133,13 +133,13 @@ public class UpgradeController {
     @FXML TextField coinsTextField;
 
     private void setPlayerSkills() {
-        bulletPowerPoints.setText(model.currentPlayer.getBulletPower().toString());
-        bulletSpeedPoints.setText(model.currentPlayer.getBulletSpeed().toString());
-        bombRangePoints.setText(model.currentPlayer.getBombRange().toString());
-        bombPowerPoints.setText(model.currentPlayer.getBombPower().toString());
-        healthPoints.setText(model.currentPlayer.getHealthPoints().toString());
+        bulletPowerPoints.setText(String.valueOf(model.currentPlayer.getBulletPower()));
+        bulletSpeedPoints.setText(String.valueOf(model.currentPlayer.getBulletSpeed()));
+        bombRangePoints.setText(String.valueOf(model.currentPlayer.getBombRange()));
+        bombPowerPoints.setText(String.valueOf(model.currentPlayer.getBombPower()));
+        healthPoints.setText(String.valueOf(model.currentPlayer.getHealthPoints()));
 
-        coinsTextField.setText(model.currentPlayer.getCoins().toString());
+        coinsTextField.setText(String.valueOf(model.currentPlayer.getCoins()));
 
         bulletPowerMaxPoints.setText(Program.preferences.getBullet_Power_MAX().toString());
         bulletSpeedMaxPoints.setText(Program.preferences.getBullet_Speed_MAX().toString());

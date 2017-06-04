@@ -10,4 +10,5 @@ Achievements_Number 10
 Game_Panel_Width 1056
 Game_Panel_Height 768
 Enemy_Max_Health 100
-Enemy_Speed 48
+Enemy_Speed 8
+Tower_Range 500

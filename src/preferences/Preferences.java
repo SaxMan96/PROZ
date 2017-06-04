@@ -67,6 +67,8 @@ public class Preferences {
     public static Integer Game_Panel_Height;
     public static Integer Enemy_Max_Health;
     public static Integer Enemy_Speed;
+    public static Integer Tower_Range;
+
 
     public void loadFromFile() throws IOException {
             try(BufferedReader br = new BufferedReader(new FileReader("src"+File.separator+"preferences"+File.separator+"preferences.txt"))) {
@@ -110,6 +112,9 @@ public class Preferences {
                 line = br.readLine();
                 line = line.replace("Enemy_Speed ","");
             Enemy_Speed = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("Tower_Range ","");
+            Tower_Range = Integer.parseInt(line);
         }
     }
 
