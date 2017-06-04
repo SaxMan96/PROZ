@@ -68,8 +68,9 @@ public class Model{
         else
             return null;
     }
+
     private void loadExactPlayer(String fileName) throws IOException {
-            try(BufferedReader br = new BufferedReader(new FileReader("/Players" +File.separator+fileName))) {
+            try(BufferedReader br = new BufferedReader(new FileReader("..\\Players" +File.separator+fileName))) {
             String line;
             line = br.readLine();
             currentPlayer.setName(line);
@@ -93,7 +94,7 @@ public class Model{
     }
 
     public void loadMap(Integer mapNumber) throws IOException {
-        System.out.println("Map number: "+mapNumber+"(model.loadMap)");
+        //System.out.println("Map number: "+mapNumber+"(model.loadMap)");
         map.load(mapNumber);
     }
 

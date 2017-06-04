@@ -11,6 +11,7 @@ import javafx.scene.canvas.*;
 import javafx.scene.image.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
@@ -20,6 +21,8 @@ import model.Enemy;
 import model.Map;
 import model.Tile;
 import javafx.scene.canvas.Canvas;
+import model.Tower;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -88,14 +91,14 @@ public class View {
         ActualScene = new Scene(root);
 
         PrimaryStage.setScene(ActualScene);
-        PrimaryStage.setFullScreen(false);
+        PrimaryStage.setFullScreen(true);
 
         return controller;
     }
     public GameController setGameView() throws IOException{
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(".." + File.separator + "view" + File.separator + "gameView.fxml"));
-        StackPane root = loader.load();
+        AnchorPane root = loader.load();
         GameController controller = loader.getController();
         ActualScene = new Scene(root);
 
@@ -140,11 +143,18 @@ public class View {
 
 
     public static void drawEnemy(Canvas canvas, Enemy e){
-        System.out.println("drawEnemy");
+        //System.out.println("drawEnemy");
         String fileName = "enemy.png";
         ImageView graphic = new ImageView("file:Graphics/" + fileName);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.drawImage(graphic.getImage(), e.getxC(),e.getyC());
+    }
+
+    public static void drawTower(Canvas canvas, Tower t){
+        String fileName = "tower.png";
+        ImageView graphic = new ImageView(new Image("file:Graphics/"+fileName ));
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.drawImage(graphic.getImage(), t.getLayoutX(),t.getLayoutY());
     }
 
     public static void gameWin() {

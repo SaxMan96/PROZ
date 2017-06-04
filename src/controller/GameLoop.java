@@ -79,11 +79,12 @@ public class GameLoop implements Runnable {
         map = model.getMap();
         canvas = mainCanvas;
         enemiesNr = map.getEnemiesNr();
-        enemiesSpawnTime = 100;//model.getMap().getEnemiesSpawnTime();
+        enemiesSpawnTime = model.getMap().getEnemiesSpawnTime();
         spawnedEnemies = 0;
         end = false;
         lastSpawn = System.currentTimeMillis();
         enemies = new ArrayList<>();
+        //enemiesNr = 1;
         for(int i=0; i < enemiesNr; i++)
             enemies.add(new Enemy(map.getStartXPosition(), map.getStartYPosition()));
 
@@ -162,22 +163,25 @@ public class GameLoop implements Runnable {
         }
     }
 
-    private static double timera = 0;
-
     public static double winFrame = 1, winTime = 5 * (double) (fps);
 
     private void spawnEnemy() {
+        long now = System.currentTimeMillis();
         if(spawnedEnemies >= enemiesNr){
             //end = true;
             return;
         }
-        System.out.println("spawn" + (spawnedEnemies+1));
-        enemies.get(spawnedEnemies).setAlive(true);
-        View.drawEnemy(canvas, enemies.get(spawnedEnemies));
-        spawnedEnemies++;
-        lastSpawn = System.currentTimeMillis();
+        //System.out.println("spawn" + (spawnedEnemies+1));
+        if(now-lastSpawn>enemiesSpawnTime){
+            enemies.get(spawnedEnemies).setAlive(true);
+            View.drawEnemy(canvas, enemies.get(spawnedEnemies));
+            spawnedEnemies++;
+            lastSpawn = System.currentTimeMillis();
+        }
+
     }
     private void enemyPhysics() {
+        System.out.println("enemyPhysics");
         for(Enemy e: enemies)
             if(e.isAlive())
                 e.physics(1);
@@ -207,13 +211,9 @@ public class GameLoop implements Runnable {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
-            while(delta>= 1)
-            {
-                timera++;
-                updates++;
-                enemyPhysics();
-                delta--;
-            }
+
+            enemyPhysics();
+
             Platform.runLater( () -> {
                 //Updateuje widok JavaFX
                 System.out.println(" updateView() + spawn");

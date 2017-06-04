@@ -19,10 +19,10 @@ public class Tower {
     public static Integer getDamage() {
         return damage;
     }
-    public Integer getxC() {
+    public Integer getLayoutX() {
         return xC;
     }
-    public Integer getyC() {
+    public Integer getLayoutY() {
         return yC;
     }
     public Integer getRange() {
@@ -48,7 +48,6 @@ public class Tower {
         yC = Map.getStartYPosition();
         range = 100;
         isSet = false;
-        graphic = new Image("file:Graphics/tower.png" );
     }
     public void set(Integer x, Integer y){
         xC = x;

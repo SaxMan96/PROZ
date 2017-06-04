@@ -71,33 +71,45 @@ public class Preferences {
     public void loadFromFile() throws IOException {
             try(BufferedReader br = new BufferedReader(new FileReader("src"+File.separator+"preferences"+File.separator+"preferences.txt"))) {
             String line;
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Tiles_In_Row ","");
             Tiles_In_Row = Integer.parseInt(line);
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Tiles_In_Column ","");
             Tiles_In_Column = Integer.parseInt(line);
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Bullet_Power_MAX ","");
             Bullet_Power_MAX = Integer.parseInt(line);
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Bullet_Speed_MAX ","");
             Bullet_Speed_MAX = Integer.parseInt(line);
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Bomb_Range_MAX ","");
             Bomb_Range_MAX = Integer.parseInt(line);
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Bomb_Power_MAX ","");
             Bomb_Power_MAX = Integer.parseInt(line);
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Health_Point_MAX ","");
             Health_Point_MAX = Integer.parseInt(line);
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Missions_Number ","");
             Missions_Number = Integer.parseInt(line);
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Achievements_Number ","");
             Achievements_Number = Integer.parseInt(line);
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Game_Panel_Width ","");
             Game_Panel_Width = Integer.parseInt(line);
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Game_Panel_Height ","");
             Game_Panel_Height = Integer.parseInt(line);
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Enemy_Max_Health ","");
             Enemy_Max_Health = Integer.parseInt(line);
-            line = br.readLine();
+                line = br.readLine();
+                line = line.replace("Enemy_Speed ","");
             Enemy_Speed = Integer.parseInt(line);
-
         }
     }
 

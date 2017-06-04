@@ -23,6 +23,15 @@ public class Map{
     private static char _USABLE = '.' ;
     private static char _NOT_USABLE = 'x';
 
+    private int tileWidth;
+    private int tileHeight;
+
+    public int getTileWidth() {
+        return tileWidth;
+    }
+    public int getTileHeight() {
+        return tileHeight;
+    }
     public static int getEnemiesNr() {
         return enemiesNr;
     }
@@ -98,12 +107,12 @@ public class Map{
                             setTileToGrid(row, col, START);
                             startRow = row;
                             startColumn = col;
-                            Integer width = Preferences.getGame_Panel_Width() / Preferences.getTiles_In_Row();
-                            Integer height = Preferences.getGame_Panel_Height() / Preferences.getTiles_In_Column();
-                            startYPosition = width  * startRow;
-                            startXPosition = height * startColumn;
-                            startYPosition -= width;
-                            startXPosition -= height;
+                            tileWidth = Preferences.getGame_Panel_Width() / Preferences.getTiles_In_Row();
+                            tileHeight = Preferences.getGame_Panel_Height() / Preferences.getTiles_In_Column();
+                            startYPosition = tileWidth  * startRow;
+                            startXPosition = tileHeight * startColumn;
+                            startYPosition -= tileWidth;
+                            startXPosition -= tileHeight;
                         } else if (c == _USABLE)
                             setTileToGrid(row, col, USABLE);
                         else if (c == _NOT_USABLE)

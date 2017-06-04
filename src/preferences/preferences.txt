@@ -1,13 +1,13 @@
-22
-16
-10
-10
-5
-5
-15
-10
-10
-1056
-768
-100
-1
+Tiles_In_Row 22
+Tiles_In_Column 16
+Bullet_Power_MAX 10
+Bullet_Speed_MAX 10
+Bomb_Range_MAX 5
+Bomb_Power_MAX 5
+Health_Point_MAX 15
+Missions_Number 10
+Achievements_Number 10
+Game_Panel_Width 1056
+Game_Panel_Height 768
+Enemy_Max_Health 100
+Enemy_Speed 48

@@ -27,7 +27,21 @@ public class Path {
         load((map.getStartRow()-1)*map.getGridWidth()+ (map.getStartColumn()-1)*map.getGridWidth(),Direction.END);
     }
         public void load(Integer position, Direction previous){
-        if (grid.get(position).getTileType() == Tile.TileType.START || grid.get(position).getTileType() == Tile.TileType.PATH) {
+        if(grid.get(position).getTileType() == Tile.TileType.START ){
+            if((grid.get(position+1).getTileType() == Tile.TileType.PATH || grid.get(position+1).getTileType() == Tile.TileType.FINISH) && previous != Direction.LEFT){
+                load(position+1, Direction.RIGHT);
+            }
+            else if((grid.get(position+map.getGridWidth()).getTileType() == Tile.TileType.PATH || grid.get(position+map.getGridWidth()).getTileType() == Tile.TileType.FINISH) && previous != Direction.UP){
+                load(position+map.getGridWidth(), Direction.DOWN);
+            }
+            else if((grid.get(position-1).getTileType() == Tile.TileType.PATH || grid.get(position-1).getTileType() == Tile.TileType.FINISH) && previous != Direction.RIGHT){
+                load(position-1, Direction.LEFT);
+            }
+            else if((grid.get(position-map.getGridWidth()).getTileType() == Tile.TileType.PATH || grid.get(position-map.getGridWidth()).getTileType() == Tile.TileType.FINISH) && previous != Direction.DOWN){
+                load(position-map.getGridWidth(), Direction.UP);
+            }
+        }
+        if (grid.get(position).getTileType() == Tile.TileType.PATH) {
             if((grid.get(position+1).getTileType() == Tile.TileType.PATH || grid.get(position+1).getTileType() == Tile.TileType.FINISH) && previous != Direction.LEFT){
                 directions.add(Direction.RIGHT);
                 load(position+1, Direction.RIGHT);
@@ -56,6 +70,8 @@ public class Path {
         currentPosition.add(0.0);
         currentPosition.add(0.0);
 
+        boolean first = true;
+
         ArrayList<Double> path = new ArrayList<>();
 
         Direction previousDirection = Direction.END;
@@ -74,8 +90,8 @@ public class Path {
             previousDirection = d;
             path.add(currentPosition.get(0));
             path.add(currentPosition.get(1));
-            for(Double s: path)
-                System.out.println(s);
+            //for(Double s: path)
+                //System.out.println(s);
         }
         polyline.getPoints().addAll(path);
 
