@@ -53,7 +53,7 @@ public class Program extends Application{
         stage = primaryStage;
         setUpgradeController(view.setUpgradeView());
         setGameController(view.setGameView());
-        gameController.setMapNumber(2);
+        gameController.setMapNumber(1);
         gameController.drawMap();
         //gameController.gameLoopStart();
 

@@ -18,14 +18,26 @@ import java.awt.*;
 public class Enemy {
     private int yPositionOnPath;
     private int xPositionOnPath;
+    private int currentHealth, maxHealth;
+    private int speed;
+    private int gamePoints;
+    private Direction direction;
+    private int xC;
+    private int yC; // Coordinates
+    boolean isAlive;
+    boolean isUnderLaser;
+    Polyline polyline;
+    ObservableList<Double> points;
+    int pointIndex;
+    private HealthBar healthBar;
 
-    public Integer getCurrentHealth() {
+    public int getCurrentHealth() {
         return currentHealth;
     }
-    public Integer getMaxHealth() {
+    public int getMaxHealth() {
         return maxHealth;
     }
-    public Integer getSpeed() {
+    public int getSpeed() {
         return speed;
     }
     public Direction getDirection() {
@@ -37,40 +49,27 @@ public class Enemy {
     public int getLayoutY() {
         return yC;
     }
-    public Integer getCenterX(){
+    public int getCenterX(){
         return xC+Map.getTileWidth()/2;
     }
-    public Integer getCenterY(){
+    public int getCenterY(){
         return yC+Map.getTileHeight()/2;
     }
 
-    private Integer currentHealth, maxHealth;
-    private Integer speed;
-    private int gamePoints;
-    private Direction direction;
-    private int xC;
-    private int yC; // Coordinates
-    boolean isAlive;
-    boolean isUnderLaser;
-
-    Polyline polyline;
-    ObservableList<Double> points;
-    int pointIndex;
-
-
+    public void setUnderLaser(boolean b) {
+        isUnderLaser = b;
+    }
 
     public enum Direction {
         LEFT , RIGHT, UP, DOWN
     }
 
-    public Enemy(Integer x, Integer y){
+    public Enemy(int x, int y){
         xC = x;
         yC = y;
-//        xC -= Map.gridWidth/2;
-//        yC -= Map.gridHeight/2;
-        maxHealth = Preferences.Enemy_Max_Health;
+        maxHealth = Map.getEnemy_Max_Health();
         currentHealth = maxHealth;
-        speed = Preferences.Enemy_Speed;
+        speed = Map.getEnemy_Speed();
         direction = Direction.RIGHT;
         isAlive = false;
         isUnderLaser = false;
@@ -81,9 +80,9 @@ public class Enemy {
         pointIndex = 0;
         xPositionOnPath = 0;
         yPositionOnPath = 0;
-
+        healthBar = new HealthBar(currentHealth, maxHealth);
     }
-    public void getHit(Integer hit){
+    public void getHit(int hit){
         currentHealth -= hit;
         if(currentHealth <= 0)
             enemyDeath();
@@ -111,17 +110,17 @@ public class Enemy {
             this.enemyDeath();
             return;
         }
-        if(i == 1){
-            if (direction == Direction.UP) {
-                yC -= speed;
-            } else if (direction == Direction.DOWN) {
-                yC += speed;
-            } else if (direction == Direction.RIGHT) {
-                xC += speed;
-            } else if (direction == Direction.LEFT) {
-                xC -= speed;
-            }
+
+        if (direction == Direction.UP) {
+            yC -= speed;
+        } else if (direction == Direction.DOWN) {
+            yC += speed;
+        } else if (direction == Direction.RIGHT) {
+            xC += speed;
+        } else if (direction == Direction.LEFT) {
+            xC -= speed;
         }
+
         if (direction == Direction.UP) {
             yPositionOnPath += speed;
         } else if (direction == Direction.DOWN) {
@@ -160,5 +159,22 @@ public class Enemy {
             r = (int) (points.get(pointIndex+p)-points.get(pointIndex-2+p));
         //System.out.println(r);
         return r;
+    }
+    
+    class HealthBar{
+        int max, min;
+        public HealthBar(int min, int max){
+            this.max = max;
+            this.min = min;
+        }
+        public int getMax() {
+            return max;
+        }
+        public int getMin() {
+            return min;
+        }
+        public void setMin(int min) {
+            this.min = min;
+        }
     }
 }

@@ -18,6 +18,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.*;
@@ -146,10 +147,13 @@ public class View {
     }
 
     public static void drawEnemy(Canvas canvas, Enemy e){
-        //System.out.println("drawEnemy");
         String fileName = "enemy.png";
         ImageView graphic = new ImageView("file:Graphics/" + fileName);
         GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setFill(Color.RED);
+        gc.fillRect(e.getLayoutX(), e.getLayoutY()- 9, Map.getTileWidth(), 7);
+        gc.setFill(Color.LIGHTGREEN);
+        gc.fillRect(e.getLayoutX(), e.getLayoutY()- 9,(double)Map.getTileWidth()*((double)e.getCurrentHealth()/e.getMaxHealth()),7);
         gc.drawImage(graphic.getImage(), e.getLayoutX(),e.getLayoutY());
     }
 

@@ -13,61 +13,52 @@ public class Preferences {
     public static Integer getTiles_In_Row() {
         return Tiles_In_Row;
     }
-
     public static Integer getTiles_In_Column() {
         return Tiles_In_Column;
     }
-
     public static Integer getBullet_Power_MAX() {
         return Bullet_Power_MAX;
     }
-
     public static Integer getBullet_Speed_MAX() {
         return Bullet_Speed_MAX;
     }
-
     public static Integer getBomb_Range_MAX() {
         return Bomb_Range_MAX;
     }
-
     public static Integer getBomb_Power_MAX() {
         return Bomb_Power_MAX;
     }
-
     public static Integer getHealth_Point_MAX() {
         return Health_Point_MAX;
     }
-
     public static Integer getMissions_Number() {
         return Missions_Number;
     }
-
     public static Integer getAchievements_Number() {
         return Achievements_Number;
     }
-
     public static Integer getGame_Panel_Width() {
         return Game_Panel_Width;
     }
-
     public static Integer getGame_Panel_Height() {
         return Game_Panel_Height;
     }
+    public static Integer getTower_Range() {
+        return Tower_Range;
+    }
 
-    public static Integer Tiles_In_Row;
-    public static Integer Tiles_In_Column;
-    public static Integer Bullet_Power_MAX;
-    public static Integer Bullet_Speed_MAX;
-    public static Integer Bomb_Range_MAX;
-    public static Integer Bomb_Power_MAX;
-    public static Integer Health_Point_MAX;
-    public static Integer Missions_Number;
-    public static Integer Achievements_Number;
-    public static Integer Game_Panel_Width;
-    public static Integer Game_Panel_Height;
-    public static Integer Enemy_Max_Health;
-    public static Integer Enemy_Speed;
-    public static Integer Tower_Range;
+    private static Integer Tiles_In_Row;
+    private static Integer Tiles_In_Column;
+    private static Integer Bullet_Power_MAX;
+    private static Integer Bullet_Speed_MAX;
+    private static Integer Bomb_Range_MAX;
+    private static Integer Bomb_Power_MAX;
+    private static Integer Health_Point_MAX;
+    private static Integer Missions_Number;
+    private static Integer Achievements_Number;
+    private static Integer Game_Panel_Width;
+    private static Integer Game_Panel_Height;
+    private static Integer Tower_Range;
 
 
     public void loadFromFile() throws IOException {
@@ -106,12 +97,6 @@ public class Preferences {
                 line = br.readLine();
                 line = line.replace("Game_Panel_Height ","");
             Game_Panel_Height = Integer.parseInt(line);
-                line = br.readLine();
-                line = line.replace("Enemy_Max_Health ","");
-            Enemy_Max_Health = Integer.parseInt(line);
-                line = br.readLine();
-                line = line.replace("Enemy_Speed ","");
-            Enemy_Speed = Integer.parseInt(line);
                 line = br.readLine();
                 line = line.replace("Tower_Range ","");
             Tower_Range = Integer.parseInt(line);

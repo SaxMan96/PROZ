@@ -25,7 +25,7 @@ public class Model{
            private BombCalculator bombCalculator;
            public static SoundManager sound;
         */
-    public static ArrayList<Tower> towerList;
+    public static ArrayList<Tower> towerList = null;
 
 
 

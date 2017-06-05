@@ -7,18 +7,23 @@ import preferences.Preferences;
  * Created by Mateusz on 2017-05-28.
  */
 public class Tower {
-    private static Integer damage = Preferences.Bullet_Power_MAX;
+    private static Integer damage = Preferences.getBullet_Power_MAX();
     private Integer xC;
     private Integer yC; // Coordinates
-    private static Integer range;
+    private static Integer range = null;
     private static Integer cost = 100;
     private boolean isSet;
+    private static long hitRateTime = Preferences.getBullet_Speed_MAX();;
     private Integer width;
     private Integer height;
     public static Image graphic;
 
     public static Integer getDamage() {
         return damage;
+    }
+
+    public static long getHitRateTime() {
+        return hitRateTime;
     }
     public Integer getLayoutX() {
         return xC;
@@ -54,8 +59,9 @@ public class Tower {
         damage = 10;
         xC = Map.getStartXPosition();
         yC = Map.getStartYPosition();
-        range = 100;
+        range = Preferences.getTower_Range();
         isSet = false;
+        hitRateTime = Preferences.getBullet_Speed_MAX();
     }
     public void set(Integer x, Integer y){
         xC = x;

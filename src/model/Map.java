@@ -26,6 +26,8 @@ public class Map{
     private static int tileWidth;
     private static int tileHeight;
     public int fileNum;
+    private static int Enemy_Speed;
+    private static int Enemy_Max_Health;
 
     public static int getTileWidth() {
         return tileWidth;
@@ -51,6 +53,12 @@ public class Map{
     }
     public static Integer getStartColumn() {
         return startColumn;
+    }
+    public static int getEnemy_Speed() {
+        return Enemy_Speed;
+    }
+    public static int getEnemy_Max_Health() {
+        return Enemy_Max_Health;
     }
 
     public Map(){
@@ -101,10 +109,15 @@ public class Map{
                     if(line.contains("Enemies ")){
                         line = line.replace("Enemies ","");
                         enemiesNr = Integer.parseInt(line);
-                    }
-                    else if(line.contains("EnemiesSpawnTime ")){
+                    }else if(line.contains("EnemiesSpawnTime ")){
                         line = line.replace("EnemiesSpawnTime ","");
                         enemiesSpawnTime = Integer.parseInt(line);
+                    }else if(line.contains("Enemy_Speed ")){
+                        line = line.replace("Enemy_Speed ","");
+                        Enemy_Speed = Integer.parseInt(line);
+                    }else if(line.contains("Enemy_Max_Health ")){
+                        line = line.replace("Enemy_Max_Health ","");
+                        Enemy_Max_Health = Integer.parseInt(line);
                     }
                     else{
                         char c = line.charAt(col - 1);

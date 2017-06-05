@@ -51,9 +51,11 @@ public class GameLoop implements Runnable {
 
     private Canvas canvas;
     public Integer enemiesNr;
-    public Integer enemiesSpawnTime = 30;
     public Integer spawnedEnemies;
+    public Integer enemiesSpawnTime;
     private long lastSpawn;
+    private long lastHit;
+    private long hitRateTime;
     private ArrayList<Enemy> enemies;
     private ArrayList<Tower> towers;
     private ArrayList<Laser> lasers;
@@ -63,7 +65,11 @@ public class GameLoop implements Runnable {
     private Map map;
     private boolean paused;
 
+    private double spawnTime = 1 * (fps);
+    private double spawnFrame = spawnTime - fps;
+
     Object monitor = new Object();
+
     public Object getMonitor() {
         return monitor;
     }
@@ -84,18 +90,22 @@ public class GameLoop implements Runnable {
         model = m;
         map = model.getMap();
         canvas = mainCanvas;
-        enemiesNr = map.getEnemiesNr();
-        enemiesSpawnTime = model.getMap().getEnemiesSpawnTime();
+        enemiesNr = Map.getEnemiesNr();
+        enemiesSpawnTime = Map.getEnemiesSpawnTime();
         spawnedEnemies = 0;
+        hitRateTime = Tower.getHitRateTime();
         end = false;
         paused = false;
         lastSpawn = System.currentTimeMillis();
+        lastHit = System.currentTimeMillis();
         enemies = new ArrayList<>();
         towers = model.getTowerList();
         lasers = new ArrayList<>();
+
         //enemiesNr = 1;
         for(int i=0; i < enemiesNr; i++)
             enemies.add(new Enemy(map.getStartXPosition(), map.getStartYPosition()));
+
 
 
 //        this.blockingQueue = new LinkedBlockingQueue<QueueEvent>();
@@ -155,7 +165,7 @@ public class GameLoop implements Runnable {
     public void startGame() {
         thread = new Thread(this);
         thread.start();
-        System.out.println("drawMap2() GC Map: "+map.fileNum);
+//        System.out.println("drawMap2() GC Map: "+map.fileNum);
     }
     public void interrupt() {
         thread.interrupt();
@@ -179,8 +189,7 @@ public class GameLoop implements Runnable {
         end = true;
     }
 
-    private double spawnTime = 1 * (fps),
-                  spawnFrame = spawnTime - fps;
+
 
     public void enemiesSpawner() {
         if (spawnFrame >= spawnTime) {
@@ -199,16 +208,25 @@ public class GameLoop implements Runnable {
     public static double winFrame = 1, winTime = 5 * (double) (fps);
 
     private void calculateEnemiesDamage() {
-        for(Enemy e: enemies)
-            if(e.isUnderLaser())
-                e.getHit(Laser.getDamage());
+        long now = System.currentTimeMillis();
+        if(now-lastHit > hitRateTime) {
+            for (Enemy e : enemies)
+                if (e.isUnderLaser() && e.isAlive()){
+                    e.getHit(Laser.getDamage());
+                    System.out.println("damage: " + Laser.getDamage());
+                    System.out.println("now-lastHit: " + (now-lastHit));
+                    System.out.println("current health: " + e.getCurrentHealth() +" max health: "+ e.getMaxHealth());
+
+                }
+            lastHit = System.currentTimeMillis();
+    }
     }
     private void spawnEnemy() {
-        long now = System.currentTimeMillis();
         if(spawnedEnemies >= enemiesNr){
             //end = true;
             return;
         }
+        long now = System.currentTimeMillis();
         //System.out.println("spawn" + (spawnedEnemies+1));
         if(now-lastSpawn>enemiesSpawnTime){
             enemies.get(spawnedEnemies).setAlive(true);
@@ -219,38 +237,43 @@ public class GameLoop implements Runnable {
 
     }
     private void enemyPhysics() {
-        System.out.println("enemyPhysics");
-        for(Enemy e: enemies)
-            if(e.isAlive())
+//        System.out.println("enemyPhysics");
+        for (Enemy e : enemies)
+            if (e.isAlive())
                 e.physics(1);
     }
     private void laserPhysic() {
         lasers.clear();
-        ArrayList<Enemy> inRange = new ArrayList<>();
+        ArrayList<Enemy> enemiesInRange = new ArrayList<>();
         Enemy closestEnemy = null;
-        int minDistance = Tower.getRange();
         for(Tower t: towers) {
+            int minDistance = t.getRange();
             for (Enemy e : enemies) {
+                e.setUnderLaser(false);
                 if (e.isAlive() && isInRange(t, e))
-                    inRange.add(e);
+                    enemiesInRange.add(e);
             }
-            for(Enemy e: inRange){
+            for(Enemy e: enemiesInRange){
                 int currentDistance = distance(t,e);
                 if(currentDistance< minDistance) {
                     closestEnemy = e;
-                    minDistance  =currentDistance;
+                    e.setUnderLaser(true);
+                    System.out.println("damage: " + t.getDamage() + "HRT: "+ hitRateTime);
+                    minDistance  = currentDistance;
                 }
             }
             if(closestEnemy != null)
                 lasers.add(new Laser(t.getCenterX(), t.getCenterY(), closestEnemy.getCenterX(), closestEnemy.getCenterY()));
+            closestEnemy = null;
+            enemiesInRange.clear();
         }
-
     }
 
     private int distance(Tower t, Enemy e) {
         return (int) Math.sqrt((e.getCenterX() - t.getCenterX())*(e.getCenterX() - t.getCenterX()) + (e.getCenterY()- t.getCenterY())*(e.getCenterY()- t.getCenterY()));
     }
     private boolean isInRange(Tower t, Enemy e) {
+//        System.out.println(" Range: "+t.getRange());
         return (e.getCenterX() - t.getCenterX())*(e.getCenterX() - t.getCenterX()) + (e.getCenterY()- t.getCenterY())*(e.getCenterY()- t.getCenterY()) < t.getRange()*t.getRange();
     }
 
@@ -268,7 +291,7 @@ public class GameLoop implements Runnable {
             View.drawLaser(canvas, l);
     }
     private void updateView() {
-        System.out.println(map.fileNum);
+//        System.out.println(map.fileNum);
         View.drawMap(map, canvas);
         drawEnemies();
         drawTowers();
