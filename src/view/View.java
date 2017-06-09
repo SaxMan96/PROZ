@@ -151,9 +151,9 @@ public class View {
         ImageView graphic = new ImageView("file:Graphics/" + fileName);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.RED);
-        gc.fillRect(e.getLayoutX(), e.getLayoutY()- 9, Map.getTileWidth(), 7);
+        gc.fillRoundRect(e.getLayoutX(), e.getLayoutY()- 9, Map.getTileWidth(), 7,7,7);
         gc.setFill(Color.LIGHTGREEN);
-        gc.fillRect(e.getLayoutX(), e.getLayoutY()- 9,(double)Map.getTileWidth()*((double)e.getCurrentHealth()/e.getMaxHealth()),7);
+        gc.fillRoundRect(e.getLayoutX(), e.getLayoutY()- 9,(double)Map.getTileWidth()*((double)e.getCurrentHealth()/e.getMaxHealth()),7,7,7);
         gc.drawImage(graphic.getImage(), e.getLayoutX(),e.getLayoutY());
     }
 

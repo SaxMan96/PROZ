@@ -51,10 +51,13 @@ public class Program extends Application{
         view.init(primaryStage);
         setMenuController(view.setMenuView());
         stage = primaryStage;
-        setUpgradeController(view.setUpgradeView());
-        setGameController(view.setGameView());
-        gameController.setMapNumber(1);
-        gameController.drawMap();
+
+//        setUpgradeController(view.setUpgradeView());
+//        setGameController(view.setGameView());
+//        gameController.setMapNumber(1);
+//        gameController.drawMap();
+
+
         //gameController.gameLoopStart();
 
 

@@ -7,13 +7,13 @@ import preferences.Preferences;
  * Created by Mateusz on 2017-05-28.
  */
 public class Tower {
-    private static Integer damage = Preferences.getBullet_Power_MAX();
+    private static Integer damage;
     private Integer xC;
     private Integer yC; // Coordinates
     private static Integer range = null;
     private static Integer cost = 100;
     private boolean isSet;
-    private static long hitRateTime = Preferences.getBullet_Speed_MAX();;
+    private static long hitRateTime;
     private Integer width;
     private Integer height;
     public static Image graphic;
@@ -56,12 +56,12 @@ public class Tower {
 
     public Tower(){
         System.out.println("Created Tower");
-        damage = 10;
+        damage = Model.currentPlayer.getBombDamage();
         xC = Map.getStartXPosition();
         yC = Map.getStartYPosition();
         range = Preferences.getTower_Range();
         isSet = false;
-        hitRateTime = Preferences.getBullet_Speed_MAX();
+        hitRateTime = Model.currentPlayer.getHitRateTime();
     }
     public void set(Integer x, Integer y){
         xC = x;

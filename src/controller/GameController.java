@@ -43,7 +43,7 @@ public class GameController {
     public static View view;
     public static UpgradeController upgradeController;
     public Map map;
-    public GameLoop  gameLoop;
+    public GameLoop2  gameLoop;
     public Stage primaryStage;
 
     @FXML Pane PausedPane;
@@ -91,7 +91,6 @@ public class GameController {
 
         PausedPane.setVisible(!PausedPane.isVisible());
     }
-
     public void restartButtonClicked(ActionEvent actionEvent) {
         //save
 
@@ -123,7 +122,7 @@ public class GameController {
     public void gameLoopStart() {
 //        gameLoop = new GameLoop(mainCanvas, model);
 //        gameLoop.run();
-        gameLoop = new GameLoop(mainCanvas, model);
+        gameLoop = new GameLoop2(mainCanvas, model);
         System.out.println("drawMap()1 GC Map: "+model.getMap().fileNum);
         gameLoop.startGame();
 

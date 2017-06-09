@@ -249,7 +249,6 @@ public class GameLoop implements Runnable {
         for(Tower t: towers) {
             int minDistance = t.getRange();
             for (Enemy e : enemies) {
-                e.setUnderLaser(false);
                 if (e.isAlive() && isInRange(t, e))
                     enemiesInRange.add(e);
             }
@@ -339,7 +338,7 @@ public class GameLoop implements Runnable {
 //                if (timer - lastSpawn > enemiesSpawnTime) {
 //
 //                }
-                sleep(200);
+                sleep(100);
             }
             catch (Exception ex) {
                 ex.printStackTrace();

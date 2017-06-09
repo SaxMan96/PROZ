@@ -1,6 +1,11 @@
-Mateusz
-1200
-7
-3
-1001001000
-1000100011
+Name Mateusz
+Coins 1200
+Points 12000
+Tower_Range 200
+Bullet_Damage 2
+Hit_Rate_Time 2000000000
+Bomb_Range 0
+Bomb_Damage 0
+Health_Points 3
+Achievements 1001001000
+Missions 1000100011

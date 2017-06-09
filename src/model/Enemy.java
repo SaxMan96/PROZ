@@ -26,6 +26,7 @@ public class Enemy {
     private int yC; // Coordinates
     boolean isAlive;
     boolean isUnderLaser;
+    int shootingLasersNo;
     Polyline polyline;
     ObservableList<Double> points;
     int pointIndex;
@@ -56,14 +57,6 @@ public class Enemy {
         return yC+Map.getTileHeight()/2;
     }
 
-    public void setUnderLaser(boolean b) {
-        isUnderLaser = b;
-    }
-
-    public enum Direction {
-        LEFT , RIGHT, UP, DOWN
-    }
-
     public Enemy(int x, int y){
         xC = x;
         yC = y;
@@ -73,6 +66,7 @@ public class Enemy {
         direction = Direction.RIGHT;
         isAlive = false;
         isUnderLaser = false;
+        shootingLasersNo = 0;
         Path path = new Path(GameController.model.getMap());
         path.generatePolyline();
         polyline = path.getPolyline();
@@ -82,8 +76,25 @@ public class Enemy {
         yPositionOnPath = 0;
         healthBar = new HealthBar(currentHealth, maxHealth);
     }
+
+    public void setUnderLaser(boolean b) {
+        isUnderLaser = b;
+        if(!b)
+            shootingLasersNo = 0;
+    }
+    public void increaseShootingLasersNo(boolean b){
+        if(b)
+            shootingLasersNo++;
+        else if(shootingLasersNo>0)
+            shootingLasersNo--;
+    }
+
+    public enum Direction {
+        LEFT , RIGHT, UP, DOWN
+    }
+
     public void getHit(int hit){
-        currentHealth -= hit;
+        currentHealth -= (shootingLasersNo*hit);
         if(currentHealth <= 0)
             enemyDeath();
     }

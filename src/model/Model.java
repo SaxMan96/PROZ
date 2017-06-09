@@ -82,26 +82,44 @@ public class Model{
     }
 
     private void loadExactPlayer(String fileName) throws IOException {
-            try(BufferedReader br = new BufferedReader(new FileReader("..\\Players" +File.separator+fileName))) {
+            try(BufferedReader br = new BufferedReader(new FileReader("file:\\Players" +File.separator+fileName))) {
+
             String line;
             line = br.readLine();
+            line = line.replace("Name ","");
+            System.out.println(line);
             currentPlayer.setName(line);
             line = br.readLine();
+            line = line.replace("Coins ","");
             currentPlayer.setCoins(Integer.parseInt(line));
             line = br.readLine();
-            currentPlayer.setBulletPower(Integer.parseInt(line));
+            line = line.replace("Points ","");
+            currentPlayer.setPoints(Integer.parseInt(line));
             line = br.readLine();
-            currentPlayer.setBulletSpeed(Integer.parseInt(line));
+            line = line.replace("Tower_Range ","");
+            currentPlayer.setTowerRange(Integer.parseInt(line));
             line = br.readLine();
+            line = line.replace("Bullet_Damage ","");
+            currentPlayer.setBulletDamage(Integer.parseInt(line));
+            line = br.readLine();
+            line = line.replace("Hit_Rate_Time ","");
+            currentPlayer.setHitRateTime(Integer.parseInt(line));
+            line = br.readLine();
+            line = line.replace("Bomb_Range ","");
             currentPlayer.setBombRange(Integer.parseInt(line));
             line = br.readLine();
-            currentPlayer.setBombPower(Integer.parseInt(line));
+            line = line.replace("Bomb_Damage ","");
+            currentPlayer.setBombDamage(Integer.parseInt(line));
             line = br.readLine();
+            line = line.replace("Health_Points ","");
             currentPlayer.setHealthPoints(Integer.parseInt(line));
             line = br.readLine();
+            line = line.replace("Achievements ","");
             currentPlayer.setAchievements(line);
             line = br.readLine();
+            line = line.replace("Missions ","");
             currentPlayer.setMissions(line);
+
             }
     }
 

@@ -1,6 +1,8 @@
 package controller;
 
 import Program.Program;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +33,7 @@ public class UpgradeController {
    /* @FXML */public ArrayList<RadioButton> AchievementsRadioButtons;
 
 
-    Integer mapSelected = 1;
+    Integer mapSelected;
 
     @FXML    RadioButton rb1;
     @FXML    RadioButton rb2;
@@ -89,6 +91,13 @@ public class UpgradeController {
         final ToggleGroup mtg = new ToggleGroup();
         for(RadioButton rb: MissionsRadioButtons)
             rb.setToggleGroup(mtg);
+        mtg.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+            public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+                if (mtg.getSelectedToggle() != null)
+                    mapSelected = Integer.parseInt(mtg.getSelectedToggle().getUserData().toString());
+                System.out.println("selectedMap: " + mapSelected);
+            }
+        });
 
         setPlayerAchievements();
         setPlayerMissions();
@@ -133,19 +142,19 @@ public class UpgradeController {
     @FXML TextField coinsTextField;
 
     private void setPlayerSkills() {
-        bulletPowerPoints.setText(String.valueOf(model.currentPlayer.getBulletPower()));
-        bulletSpeedPoints.setText(String.valueOf(model.currentPlayer.getBulletSpeed()));
+        bulletPowerPoints.setText(String.valueOf(model.currentPlayer.getBulletDamage()));
+        bulletSpeedPoints.setText(String.valueOf(model.currentPlayer.getHitRateTime()));
         bombRangePoints.setText(String.valueOf(model.currentPlayer.getBombRange()));
-        bombPowerPoints.setText(String.valueOf(model.currentPlayer.getBombPower()));
+        bombPowerPoints.setText(String.valueOf(model.currentPlayer.getBombDamage()));
         healthPoints.setText(String.valueOf(model.currentPlayer.getHealthPoints()));
 
         coinsTextField.setText(String.valueOf(model.currentPlayer.getCoins()));
 
-        bulletPowerMaxPoints.setText(Program.preferences.getBullet_Power_MAX().toString());
-        bulletSpeedMaxPoints.setText(Program.preferences.getBullet_Speed_MAX().toString());
-        bombRangeMaxPoints.setText(Program.preferences.getBomb_Range_MAX().toString());
-        bombPowerMaxPoints.setText(Program.preferences.getBomb_Power_MAX().toString());
-        healthMaxPoints.setText(Program.preferences.getHealth_Point_MAX().toString());
+        bulletPowerMaxPoints.setText(String.valueOf(Program.preferences.getMAX_Bomb_Power()));
+        bulletSpeedMaxPoints.setText(String.valueOf(Program.preferences.getMAX_Hit_Rate_Time()));
+        bombRangeMaxPoints.setText(String.valueOf(Program.preferences.getMAX_Bomb_Range()));
+        bombPowerMaxPoints.setText(String.valueOf(Program.preferences.getMAX_Bomb_Power()));
+        healthMaxPoints.setText(String.valueOf(Program.preferences.getMAX_Health_Point()));
 
     }
     @FXML
@@ -160,6 +169,7 @@ public class UpgradeController {
 
     @FXML
     public void pressPLAYButton() throws IOException {
+
         gameController = view.setGameView();
         Program.setGameController(gameController);
         gameController.setMapNumber(mapSelected);

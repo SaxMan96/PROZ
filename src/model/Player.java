@@ -10,22 +10,26 @@ public class Player {
     private String name;
     private int coins;
     private int points;
-    private int bulletSpeed;
-    private int bulletPower;
+    private int towerRange;
+    private int hitRateTime;
+    private int bulletDamage;
     private int bombRange;
-    private int bombPower;
+    private int bombDamage;
     private int healthPoints;
     private int currentHealthPoints;
     public ArrayList<Integer> missions;
     public ArrayList<Integer> achievements;
 
+
+
     public Player(){
         name = "Steve";
         coins = 500;
         points = 0;
-        bulletPower = 1;
-        bulletSpeed = 1;
-        bombPower = 1;
+        towerRange = 100;
+        hitRateTime = 1;
+        bulletDamage = 1;
+        bombDamage = 1;
         bombRange = 1;
         healthPoints = 1;
         currentHealthPoints = healthPoints;
@@ -60,24 +64,29 @@ public class Player {
             achievements.add(Character.getNumericValue(line.charAt(col)));
     }
 
-
+    public int getTowerRange() {
+        return towerRange;
+    }
+    public void setTowerRange(int towerRange) {
+        this.towerRange = towerRange;
+    }
     public int getCurrentHealthPoints() {
         return currentHealthPoints;
     }
     public void increaseCurrentHealthPoints(Integer i){
         currentHealthPoints += i;
     }
-    public int getBulletSpeed() {
-        return bulletSpeed;
+    public int getHitRateTime() {
+        return hitRateTime;
     }
-    public void setBulletSpeed(Integer bulletSpeed) {
-        this.bulletSpeed = bulletSpeed;
+    public void setHitRateTime(Integer hitRateTime) {
+        this.hitRateTime = hitRateTime;
     }
-    public int getBulletPower() {
-        return bulletPower;
+    public int getBulletDamage() {
+        return bulletDamage;
     }
-    public void setBulletPower(Integer bulletPower) {
-        this.bulletPower = bulletPower;
+    public void setBulletDamage(Integer bulletDamage) {
+        this.bulletDamage = bulletDamage;
     }
     public int getBombRange() {
         return bombRange;
@@ -85,11 +94,11 @@ public class Player {
     public void setBombRange(Integer bombRange) {
         this.bombRange = bombRange;
     }
-    public int getBombPower() {
-        return bombPower;
+    public int getBombDamage() {
+        return bombDamage;
     }
-    public void setBombPower(Integer bombPower) {
-        this.bombPower = bombPower;
+    public void setBombDamage(Integer bombPower) {
+        this.bombDamage = bombPower;
     }
     public int getHealthPoints() {
         return healthPoints;
@@ -102,6 +111,10 @@ public class Player {
     }
     public void setCoins(Integer coins) {
         this.coins = coins;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public void executeCost(int cost){
