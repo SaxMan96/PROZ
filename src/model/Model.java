@@ -4,17 +4,15 @@ import javafx.scene.control.Alert;
 import javafx.util.Pair;
 
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Created by Mateusz on 2017-03-31.
- */
 public class Model {
 
-    public static ArrayList<Tower> towerList = null;
     public static Player currentPlayer;
     public static ArrayList<Pair<String, String>> existingPlayers;
+    private static ArrayList<Tower> towerList = null;
     private static Map map;
 
     public static ArrayList<Tower> getTowerList() {
@@ -34,18 +32,32 @@ public class Model {
         towerList = new ArrayList<>();
         currentPlayer = new Player();
         existingPlayers = new ArrayList<>();
+
         loadPlayersFromFile();
     }
 
     public void loadPlayersFromFile() throws IOException {
         // File folder = new File("F:" + File.separator + "EiTI Infa" + File.separator + "Semestr 4" + File.separator + "PROZ - Programowanie Zdarzeniowe" + File.separator + "Project" + File.separator + "Players");
-        File folder = new File("Players");
-        File[] listOfFiles = folder.listFiles();
-        for (File file : listOfFiles) {
-            if (file.isFile() && file./*getName().*/toString().contains("player")) {
-                Scanner scan = new Scanner(new File("Players" + File.separator + file.getName()));
-                Pair<String, String> pair = new Pair(file.getName(), scan.nextLine().replace("Name ", ""));
-                existingPlayers.add(pair);
+        URL resource = Model.class.getClassLoader().getResource("Players");
+        String path = null;
+        if (resource != null) {
+            path = resource.toString().substring(resource.toString().indexOf("file:") + 6);
+        }
+        File folder = null;
+        if (path != null) {
+            folder = new File(path);
+        }
+        File[] listOfFiles = new File[0];
+        if (folder != null) {
+            listOfFiles = folder.listFiles();
+        }
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (file.isFile() && file.toString().contains("player")) {
+                    Scanner scan = new Scanner(new File(path + "/" + file.getName()));
+                    Pair<String, String> pair = new Pair(file.getName(), scan.nextLine().replace("Name ", ""));
+                    existingPlayers.add(pair);
+                }
             }
         }
     }
@@ -60,7 +72,12 @@ public class Model {
     }
 
     private void loadExactPlayer(String fileName) throws IOException {
-        try (BufferedReader br = new BufferedReader(new FileReader("Players" + File.separator + fileName))) {
+        URL resource = Model.class.getClassLoader().getResource("Players");
+        String path = null;
+        if (resource != null)
+            path = resource.toString().substring(resource.toString().indexOf("file:") + 6);
+
+        try (BufferedReader br = new BufferedReader(new FileReader(path + "/" + fileName))) {
             currentPlayer = new Player();
             String line;
             line = br.readLine();
@@ -115,6 +132,8 @@ public class Model {
             line = br.readLine();
             line = line.replace("HealthPointsLevel ", "");
             currentPlayer.setHealthPointsLevel(Integer.parseInt(line));
+            currentPlayer.setAsANewPlayer(false);
+            currentPlayer.setFileName(fileName);
 
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -122,7 +141,6 @@ public class Model {
             alert.setHeaderText(null);
             alert.setContentText("Corrupted preferences file");
             alert.showAndWait();
-            return;
         }
     }
 
@@ -144,26 +162,42 @@ public class Model {
     }
 
     public void saveCurrentPlayer() {
-        System.out.println("Saving...");
-        try{
-            PrintWriter writer = new PrintWriter("Players"+File.separator+"player"+(existingPlayers.size()+1)+".txt", "UTF-8");
-            writer.println("Name "+currentPlayer.getName());
-            writer.println("Coins "+currentPlayer.getCoins());
-            writer.println("Points "+currentPlayer.getPoints());
-            writer.println("Tower_Range "+currentPlayer.getTowerRange());
-            writer.println("Bullet_Damage "+currentPlayer.getBulletDamage());
-            writer.println("Hit_Rate_Time "+currentPlayer.getHitRateTime());
-            writer.println("Bomb_Range "+currentPlayer.getBombRange());
-            writer.println("Bomb_Damage "+currentPlayer.getBombDamage());
-            writer.println("Health_Points "+currentPlayer.getHealthPoints());
-            writer.println("Achievements "+currentPlayer.getAchievements());
-            writer.println("Missions "+currentPlayer.getMissions());
-            writer.println("TowerRangeLevel "+currentPlayer.getTowerRangeLevel());
-            writer.println("BulletDamageLevel "+currentPlayer.getBulletDamageLevel());
-            writer.println("HitRateTimeLevel "+currentPlayer.getHitRateTimeLevel());
-            writer.println("BombRangeLevel "+currentPlayer.getBombRangeLevel());
-            writer.println("BombPowerLevel "+currentPlayer.getBombPowerLevel());
-            writer.println("HealthPointsLevel "+currentPlayer.getHealthPointsLevel());
+        try {
+            PrintWriter writer;
+            String filePath = "";
+            URL resource;
+            if (currentPlayer.isNewPlayer()) {
+                resource = Model.class.getClassLoader().getResource("Players/player" + existingPlayers.size() + ".txt");
+                if (resource != null) {
+                    filePath = resource.toString().substring(resource.toString().indexOf("file:") + 6);
+                }
+                filePath = filePath.replace(String.valueOf(existingPlayers.size()), String.valueOf(existingPlayers.size() + 1));
+            } else {
+                resource = Model.class.getClassLoader().getResource("Players/" + currentPlayer.getFileName());
+                if (resource != null) {
+                    filePath = resource.toString().substring(resource.toString().indexOf("file:") + 6);
+                }
+            }
+
+            writer = new PrintWriter(filePath, "UTF-8");
+
+            writer.println("Name " + currentPlayer.getName());
+            writer.println("Coins " + currentPlayer.getCoins());
+            writer.println("Points " + currentPlayer.getPoints());
+            writer.println("Tower_Range " + currentPlayer.getTowerRange());
+            writer.println("Bullet_Damage " + currentPlayer.getBulletDamage());
+            writer.println("Hit_Rate_Time " + currentPlayer.getHitRateTime());
+            writer.println("Bomb_Range " + currentPlayer.getBombRange());
+            writer.println("Bomb_Damage " + currentPlayer.getBombDamage());
+            writer.println("Health_Points " + currentPlayer.getHealthPoints());
+            writer.println("Achievements " + currentPlayer.getAchievements());
+            writer.println("Missions " + currentPlayer.getMissions());
+            writer.println("TowerRangeLevel " + currentPlayer.getTowerRangeLevel());
+            writer.println("BulletDamageLevel " + currentPlayer.getBulletDamageLevel());
+            writer.println("HitRateTimeLevel " + currentPlayer.getHitRateTimeLevel());
+            writer.println("BombRangeLevel " + currentPlayer.getBombRangeLevel());
+            writer.println("BombPowerLevel " + currentPlayer.getBombPowerLevel());
+            writer.println("HealthPointsLevel " + currentPlayer.getHealthPointsLevel());
             writer.close();
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -171,9 +205,12 @@ public class Model {
             alert.setHeaderText(null);
             alert.setContentText("Cannot save player.");
             alert.showAndWait();
-            return;
         }
 
+    }
+
+    public void clearExistingPlayers() {
+        existingPlayers.clear();
     }
 }
 

@@ -1,0 +1,17 @@
+Name Michał
+Coins 1000
+Points 100
+Tower_Range 100
+Bullet_Damage 10
+Hit_Rate_Time 2500000000
+Bomb_Range 0
+Bomb_Damage 0
+Health_Points 5
+Achievements 00000
+Missions 00000
+TowerRangeLevel 1
+BulletDamageLevel 1
+HitRateTimeLevel 1
+BombRangeLevel 1
+BombPowerLevel 1
+HealthPointsLevel 5

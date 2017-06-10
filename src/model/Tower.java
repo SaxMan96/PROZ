@@ -1,12 +1,6 @@
 package model;
 
-import javafx.scene.image.Image;
-
-/**
- * Created by Mateusz on 2017-05-28.
- */
 public class Tower {
-    public static Image graphic;
     private static Integer damage;
     private static Integer range = null;
     private static Integer cost = 100;
@@ -26,7 +20,7 @@ public class Tower {
         hitRateTime = Model.currentPlayer.getHitRateTime();
     }
 
-    public static Integer getDamage() {
+    static Integer getDamage() {
         return damage;
     }
 

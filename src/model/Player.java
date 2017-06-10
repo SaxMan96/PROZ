@@ -2,9 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-/**
- * Created by Mateusz on 2017-05-02.
- */
 public class Player {
 
     public ArrayList<Integer> missions;
@@ -26,6 +23,8 @@ public class Player {
     private int bombRangeLevel;
     private int bombPowerLevel;
     private int healthPointsLevel;
+    private boolean isNewPlayer;
+    private String fileName;
 
     public Player() {
         name = "Steve";
@@ -41,7 +40,8 @@ public class Player {
         currentHealthPoints = healthPoints;
         missions = new ArrayList<>();
         achievements = new ArrayList<>(5);
-
+        isNewPlayer = true;
+        fileName = "";
         towerRangeLevel = 1;
         bulletDamageLevel = 1;
         hitRateTimeLevel = 1;
@@ -50,7 +50,6 @@ public class Player {
         healthPointsLevel = 1;
         for (int i = 0; i < 5; i++)
             missions.add(0);
-        System.out.println(missions);
         for (int i = 0; i < 5; i++)
             achievements.add(0);
     }
@@ -73,7 +72,7 @@ public class Player {
         return name;
     }
 
-    public void setName(String n) {
+    void setName(String n) {
         this.name = n;
     }
 
@@ -85,14 +84,13 @@ public class Player {
         this.points = points;
     }
 
-    public String getMissions() {
-        String ret = new String();
-        for(int i =0; i<missions.size();i++)
-            ret += String.valueOf(missions.get(i));
+    String getMissions() {
+        String ret = "";
+        for (Integer mission : missions) ret += String.valueOf(mission);
         return ret;
     }
 
-    public void setMissions(String line) {
+    void setMissions(String line) {
         /*missions = new ArrayList<>();
         if(missions != null)
             missions.clear();*/
@@ -100,15 +98,13 @@ public class Player {
             missions.add(Character.getNumericValue(line.charAt(col)));
     }
 
-    public String getAchievements() {
-        String ret = new String();
-        for(int i = 0; i<achievements.size();i++)
-            ret += String.valueOf(achievements.get(i));
-        System.out.println("ret "+ret);
+    String getAchievements() {
+        String ret = "";
+        for (Integer achievement : achievements) ret += String.valueOf(achievement);
         return ret;
     }
 
-    public void setAchievements(String line) {
+    void setAchievements(String line) {
         /*achievements = new ArrayList<>();*/
         if (achievements != null)
             achievements.clear();
@@ -116,7 +112,7 @@ public class Player {
             achievements.add(Character.getNumericValue(line.charAt(col)));
     }
 
-    public int getTowerRange() {
+    int getTowerRange() {
         return towerRange;
     }
 
@@ -133,7 +129,7 @@ public class Player {
         currentHealthPoints += i;
     }
 
-    public long getHitRateTime() {
+    long getHitRateTime() {
         return hitRateTime;
     }
 
@@ -142,7 +138,7 @@ public class Player {
         this.hitRateTime += hitRateTime;
     }
 
-    public int getBulletDamage() {
+    int getBulletDamage() {
         return bulletDamage;
     }
 
@@ -151,7 +147,7 @@ public class Player {
         this.bulletDamage += bulletDamage;
     }
 
-    public int getBombRange() {
+    int getBombRange() {
         return bombRange;
     }
 
@@ -160,7 +156,7 @@ public class Player {
         this.bombRange += bombRange;
     }
 
-    public int getBombDamage() {
+    int getBombDamage() {
         return bombDamage;
     }
 
@@ -204,7 +200,7 @@ public class Player {
         return towerRangeLevel;
     }
 
-    public void setTowerRangeLevel(int towerRangeLevel) {
+    void setTowerRangeLevel(int towerRangeLevel) {
         this.towerRangeLevel = towerRangeLevel;
     }
 
@@ -212,7 +208,7 @@ public class Player {
         return bulletDamageLevel;
     }
 
-    public void setBulletDamageLevel(int bulletDamageLevel) {
+    void setBulletDamageLevel(int bulletDamageLevel) {
         this.bulletDamageLevel = bulletDamageLevel;
     }
 
@@ -220,7 +216,7 @@ public class Player {
         return hitRateTimeLevel;
     }
 
-    public void setHitRateTimeLevel(int hitRateTimeLevel) {
+    void setHitRateTimeLevel(int hitRateTimeLevel) {
         this.hitRateTimeLevel = hitRateTimeLevel;
     }
 
@@ -228,7 +224,7 @@ public class Player {
         return bombRangeLevel;
     }
 
-    public void setBombRangeLevel(int bombRangeLevel) {
+    void setBombRangeLevel(int bombRangeLevel) {
         this.bombRangeLevel = bombRangeLevel;
     }
 
@@ -236,7 +232,7 @@ public class Player {
         return bombPowerLevel;
     }
 
-    public void setBombPowerLevel(int bombPowerLevel) {
+    void setBombPowerLevel(int bombPowerLevel) {
         this.bombPowerLevel = bombPowerLevel;
     }
 
@@ -244,7 +240,7 @@ public class Player {
         return healthPointsLevel;
     }
 
-    public void setHealthPointsLevel(int healthPointsLevel) {
+    void setHealthPointsLevel(int healthPointsLevel) {
         this.healthPointsLevel = healthPointsLevel;
     }
 
@@ -269,6 +265,22 @@ public class Player {
             missions.clear();
         if (achievements != null)
             achievements.clear();
+    }
+
+    boolean isNewPlayer() {
+        return isNewPlayer;
+    }
+
+    void setAsANewPlayer(boolean newPlayer) {
+        isNewPlayer = newPlayer;
+    }
+
+    String getFileName() {
+        return fileName;
+    }
+
+    void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public void missionCompleted(int mission) {

@@ -15,46 +15,53 @@ import view.View;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * Created by Mateusz on 2017-03-27.
- */
+
 public class GameController {
     public static Model model;
     public static View view;
-    public static UpgradeController upgradeController;
-    public Map map;
-    public GameLoop gameLoop;
+    private static UpgradeController upgradeController;
+    private Map map;
+    private GameLoop gameLoop;
     public Stage primaryStage;
 
     @FXML
+    private
     Pane PausedPane;
     @FXML
+    private
     Canvas mainCanvas;
     @FXML
     Canvas secondCanvas;
     @FXML
+    private
     TextField livesTextField;
     @FXML
+    private
     TextField scoreTextField;
     @FXML
+    private
     TextField cashTextField;
     @FXML
+    private
     TextField costTextField;
     @FXML
+    private
     Button pausedButton;
     @FXML
+    private
     AnchorPane towersShopAnchorPane;
     @FXML
     AnchorPane leftPane;
     @FXML
+    private
     AnchorPane mainAnchorPane;
 
-    public void setMapNumber(Integer mapNumber) throws IOException {
+    void setMapNumber(Integer mapNumber) throws IOException {
         model.loadMap(mapNumber);
         map = model.getMap();
     }
 
-    public void updateCoinsAndPoints() {
+    void updateCoinsAndPoints() {
         scoreTextField.setText(String.valueOf(Model.currentPlayer.getPoints() + gameLoop.getGamePoints()));
         cashTextField.setText(String.valueOf(Model.currentPlayer.getCoins()));
     }
@@ -69,7 +76,7 @@ public class GameController {
         PausedPane.setVisible(true);
     }
 
-    public void pressMenuButton(GameState state) throws IOException {
+    void pressMenuButton(GameState state) throws IOException {
         if (state == GameState.WIN) {
             if (gameLoop != null)
                 gameLoop.setPaused(true);
@@ -116,7 +123,7 @@ public class GameController {
         gameLoopStart();
     }
 
-    public void drawMap() {
+    void drawMap() {
         View.drawMap(model.getMap(), mainCanvas);
         setShop();
 //        xd.setLayoutX(Map.startXPosition);
@@ -143,11 +150,11 @@ public class GameController {
     }
 
     private void setShop() {
-        ArrayList<Tower> towerList = model.getTowerList();
-        View.setTowerShop(towersShopAnchorPane, mainAnchorPane, towerList, map, mainCanvas, costTextField, livesTextField, scoreTextField, cashTextField);
+        ArrayList<Tower> towerList = Model.getTowerList();
+        view.setTowerShop(towersShopAnchorPane, mainAnchorPane, towerList, map, mainCanvas, costTextField, livesTextField, scoreTextField, cashTextField);
     }
 
-    public void updateHealthPoints() {
+    void updateHealthPoints() {
         livesTextField.setText(String.valueOf(Model.currentPlayer.getCurrentHealthPoints()));
     }
 }

@@ -9,23 +9,25 @@ import model.Model;
 import preferences.Preferences;
 import view.View;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
 
-/**
- * Created by Mateusz on 2017-05-04.
- */
+
 public class Program extends Application {
     /*
     Timer
     QueueEvent
     */
-    public static MenuController menuController;
-    public static GameController gameController;
-    public static UpgradeController upgradeController;
+    private static MenuController menuController;
+    private static GameController gameController;
+    private static UpgradeController upgradeController;
     public static Model model;
-    public static View view;
-    public static Preferences preferences;
-    public static Stage stage;
+    private static View view;
+    private static Preferences preferences;
+    private static Stage stage;
 
     public static void main(String[] args) {
         launch(args);
@@ -33,20 +35,20 @@ public class Program extends Application {
 
     public static void setUpgradeController(UpgradeController controller) {
         upgradeController = controller;
-        upgradeController.model = model;
-        upgradeController.view = view;
+        UpgradeController.model = model;
+        UpgradeController.view = view;
         upgradeController.setPlayer();
     }
 
     public static void setGameController(GameController controller) {
         gameController = controller;
-        gameController.model = model;
-        gameController.view = view;
+        GameController.model = model;
+        GameController.view = view;
         gameController.primaryStage = stage;
     }
 
     @Override
-    public void init() throws IOException {
+    public void init(){
         model = new Model();
         view = new View();
         preferences = new Preferences();
@@ -54,23 +56,28 @@ public class Program extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        preferences.loadFromFile();
-        model.set();
-        view.init(primaryStage);
-        setMenuController(view.setMenuView());
+    public void start(Stage primaryStage) throws FileNotFoundException, UnsupportedEncodingException {
+        try {
+            preferences.loadFromFile();
+            model.set();
+            view.init(primaryStage);
+            setMenuController(view.setMenuView());
+        } catch (IOException e) {
+            PrintWriter writer;
+            String filePath = "";
+            URL resource = Model.class.getClassLoader().getResource("Errors/StackTrace.txt");
+            if (resource != null) {
+                filePath = resource.toString().substring(resource.toString().indexOf("file:") + 6);
+            }
+            writer = new PrintWriter(filePath, "UTF-8");
+            e.printStackTrace(writer);
+        }
         stage = primaryStage;
-
-//        setUpgradeController(view.setUpgradeView());
-//        setGameController(view.setGameView());
-//        gameController.setMapNumber(1);
-//        gameController.drawMap();
-
     }
 
     public static void setMenuController(MenuController controller) {
         menuController = controller;
-        menuController.model = model;
-        menuController.view = view;
+        MenuController.model = model;
+        MenuController.view = view;
     }
 }

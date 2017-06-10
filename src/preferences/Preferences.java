@@ -6,11 +6,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
-/**
- * Created by Mateusz on 2017-05-21.
- */
+
 public class Preferences {
 
     private static int Tiles_In_Row;
@@ -141,122 +140,129 @@ public class Preferences {
         BombPowerIncreaseCosts = new ArrayList<>();
         BombRangeIncreaseCosts = new ArrayList<>();
         HealthPointsIncreaseCosts = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("src" + File.separator + "preferences" + File.separator + "preferences.txt"))) {
-            String line;
-            line = br.readLine();
-            line = line.replace("Tiles_In_Row ", "");
-            Tiles_In_Row = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("Tiles_In_Column ", "");
-            Tiles_In_Column = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("MAX_Tower_Range ", "");
-            MAX_Tower_Range = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("MAX_Bullet_Damage ", "");
-            MAX_Bullet_Damage = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("MAX_Hit_Rate_Time ", "");
-            MAX_Hit_Rate_Time = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("MAX_Bomb_Range ", "");
-            MAX_Bomb_Range = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("MAX_Bomb_Power ", "");
-            MAX_Bomb_Power = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("MAX_Health_Point ", "");
-            MAX_Health_Point = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("Missions_Number ", "");
-            Missions_Number = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("Achievements_Number ", "");
-            Achievements_Number = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("Game_Panel_Width ", "");
-            Game_Panel_Width = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("Game_Panel_Height ", "");
-            Game_Panel_Height = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("TowerRangeLevels ", "");
-            TowerRangeLevels = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("BulletDamageLevels ", "");
-            BulletDamageLevels = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("HitRateTimeLevels ", "");
-            HitRateTimeLevels = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("BombRangeLevels ", "");
-            BombRangeLevels = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("BombPowerLevels ", "");
-            BombPowerLevels = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("HealthPointsLevels ", "");
-            HealthPointsLevels = Integer.parseInt(line);
-            line = br.readLine();
-            line = line.replace("TowerRangeIncreaseCosts ", "");
-            while (line.contains(", ")) {
-                String firstWord = line.substring(0, line.indexOf(", "));
-                TowerRangeIncreaseCosts.add(Integer.valueOf(firstWord));
-                line = line.substring(line.indexOf(", ") + 2, line.length());
+        URL resource = Preferences.class.getClassLoader().getResource("preferences/preferences.txt");
+        String path = null;
+        if (resource != null) {
+            path = resource.toString().substring(resource.toString().indexOf("file:") + 6);
+        }
+        if (path != null) {
+            try (BufferedReader br = new BufferedReader(new FileReader(path))){
+                String line;
+                line = br.readLine();
+                line = line.replace("Tiles_In_Row ", "");
+                Tiles_In_Row = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("Tiles_In_Column ", "");
+                Tiles_In_Column = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("MAX_Tower_Range ", "");
+                MAX_Tower_Range = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("MAX_Bullet_Damage ", "");
+                MAX_Bullet_Damage = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("MAX_Hit_Rate_Time ", "");
+                MAX_Hit_Rate_Time = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("MAX_Bomb_Range ", "");
+                MAX_Bomb_Range = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("MAX_Bomb_Power ", "");
+                MAX_Bomb_Power = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("MAX_Health_Point ", "");
+                MAX_Health_Point = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("Missions_Number ", "");
+                Missions_Number = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("Achievements_Number ", "");
+                Achievements_Number = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("Game_Panel_Width ", "");
+                Game_Panel_Width = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("Game_Panel_Height ", "");
+                Game_Panel_Height = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("TowerRangeLevels ", "");
+                TowerRangeLevels = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("BulletDamageLevels ", "");
+                BulletDamageLevels = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("HitRateTimeLevels ", "");
+                HitRateTimeLevels = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("BombRangeLevels ", "");
+                BombRangeLevels = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("BombPowerLevels ", "");
+                BombPowerLevels = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("HealthPointsLevels ", "");
+                HealthPointsLevels = Integer.parseInt(line);
+                line = br.readLine();
+                line = line.replace("TowerRangeIncreaseCosts ", "");
+                while (line.contains(", ")) {
+                    String firstWord = line.substring(0, line.indexOf(", "));
+                    TowerRangeIncreaseCosts.add(Integer.valueOf(firstWord));
+                    line = line.substring(line.indexOf(", ") + 2, line.length());
+                }
+                TowerRangeIncreaseCosts.add(Integer.valueOf(line));
+
+                line = br.readLine();
+                line = line.replace("BulletDamageIncreaseCosts ", "");
+                while (line.contains(", ")) {
+                    String firstWord = line.substring(0, line.indexOf(", "));
+                    BulletDamageIncreaseCosts.add(Integer.valueOf(firstWord));
+                    line = line.substring(line.indexOf(", ") + 2, line.length());
+                }
+                BulletDamageIncreaseCosts.add(Integer.valueOf(line));
+
+                line = br.readLine();
+                line = line.replace("HitRateTimeIncreaseCosts ", "");
+                while (line.contains(", ")) {
+                    String firstWord = line.substring(0, line.indexOf(", "));
+                    HitRateTimeIncreaseCosts.add(Integer.valueOf(firstWord));
+                    line = line.substring(line.indexOf(", ") + 2, line.length());
+                }
+                HitRateTimeIncreaseCosts.add(Integer.valueOf(line));
+
+                line = br.readLine();
+                line = line.replace("BombRangeIncreaseCosts ", "");
+                while (line.contains(", ")) {
+                    String firstWord = line.substring(0, line.indexOf(", "));
+                    BombRangeIncreaseCosts.add(Integer.valueOf(firstWord));
+                    line = line.substring(line.indexOf(", ") + 2, line.length());
+                }
+                BombRangeIncreaseCosts.add(Integer.valueOf(line));
+
+                line = br.readLine();
+                line = line.replace("BombPowerIncreaseCosts ", "");
+                while (line.contains(", ")) {
+                    String firstWord = line.substring(0, line.indexOf(", "));
+                    BombPowerIncreaseCosts.add(Integer.valueOf(firstWord));
+                    line = line.substring(line.indexOf(", ") + 2, line.length());
+                }
+                BombPowerIncreaseCosts.add(Integer.valueOf(line));
+
+                line = br.readLine();
+                line = line.replace("HealthPointsIncreaseCosts ", "");
+                while (line.contains(", ")) {
+
+                    String firstWord = line.substring(0, line.indexOf(", "));
+                    HealthPointsIncreaseCosts.add(Integer.valueOf(firstWord));
+                    line = line.substring(line.indexOf(", ") + 2, line.length());
+                }
+                HealthPointsIncreaseCosts.add(Integer.valueOf(line));
+
+            } catch (NullPointerException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Error.");
+                alert.setContentText("Wrong preferences file.");
+                alert.showAndWait();
             }
-            TowerRangeIncreaseCosts.add(Integer.valueOf(line));
-
-            line = br.readLine();
-            line = line.replace("BulletDamageIncreaseCosts ", "");
-            while (line.contains(", ")) {
-                String firstWord = line.substring(0, line.indexOf(", "));
-                BulletDamageIncreaseCosts.add(Integer.valueOf(firstWord));
-                line = line.substring(line.indexOf(", ") + 2, line.length());
-            }
-            BulletDamageIncreaseCosts.add(Integer.valueOf(line));
-
-            line = br.readLine();
-            line = line.replace("HitRateTimeIncreaseCosts ", "");
-            while (line.contains(", ")) {
-                String firstWord = line.substring(0, line.indexOf(", "));
-                HitRateTimeIncreaseCosts.add(Integer.valueOf(firstWord));
-                line = line.substring(line.indexOf(", ") + 2, line.length());
-            }
-            HitRateTimeIncreaseCosts.add(Integer.valueOf(line));
-
-            line = br.readLine();
-            line = line.replace("BombRangeIncreaseCosts ", "");
-            while (line.contains(", ")) {
-                String firstWord = line.substring(0, line.indexOf(", "));
-                BombRangeIncreaseCosts.add(Integer.valueOf(firstWord));
-                line = line.substring(line.indexOf(", ") + 2, line.length());
-            }
-            BombRangeIncreaseCosts.add(Integer.valueOf(line));
-
-            line = br.readLine();
-            line = line.replace("BombPowerIncreaseCosts ", "");
-            while (line.contains(", ")) {
-                String firstWord = line.substring(0, line.indexOf(", "));
-                BombPowerIncreaseCosts.add(Integer.valueOf(firstWord));
-                line = line.substring(line.indexOf(", ") + 2, line.length());
-            }
-            BombPowerIncreaseCosts.add(Integer.valueOf(line));
-
-            line = br.readLine();
-            line = line.replace("HealthPointsIncreaseCosts ", "");
-            while (line.contains(", ")) {
-
-                String firstWord = line.substring(0, line.indexOf(", "));
-                HealthPointsIncreaseCosts.add(Integer.valueOf(firstWord));
-                line = line.substring(line.indexOf(", ") + 2, line.length());
-            }
-            HealthPointsIncreaseCosts.add(Integer.valueOf(line));
-
-        } catch (NullPointerException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Error.");
-            alert.setContentText("Wrong preferences file.");
-            alert.showAndWait();
         }
     }
 
