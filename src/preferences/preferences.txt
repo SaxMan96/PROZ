@@ -1,12 +1,24 @@
 Tiles_In_Row 22
 Tiles_In_Column 16
 MAX_Tower_Range 500
-MAX_Bullet_Damage 2
-MAX_Hit_Rate_Time 500
+MAX_Bullet_Damage 100
+MAX_Hit_Rate_Time 250000000
 MAX_Bomb_Range 5
 MAX_Bomb_Power 5
 MAX_Health_Point 15
-Missions_Number 10
-Achievements_Number 10
+Missions_Number 5
+Achievements_Number 5
 Game_Panel_Width 1056
 Game_Panel_Height 768
+TowerRangeLevels 5
+BulletDamageLevels 10
+HitRateTimeLevels 5
+BombRangeLevels 5
+BombPowerLevels 5
+HealthPointsLevels 10
+TowerRangeIncreaseCosts 100, 300, 600, 1000, 1500
+BulletDamageIncreaseCosts 50, 80, 120, 170, 230, 300, 380, 470, 570, 680
+HitRateTimeIncreaseCosts 150, 400, 800, 1250, 2000
+BombRangeIncreaseCosts 200, 500, 1000, 1500, 2500
+BombPowerIncreaseCosts 200, 500, 1000, 1500, 2500
+HealthPointsIncreaseCosts 100, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800

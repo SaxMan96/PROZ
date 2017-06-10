@@ -14,7 +14,7 @@ public class Map{
     private static Integer startXPosition, startYPosition;
 
     private static int enemiesNr;
-    private static int enemiesSpawnTime;
+    private static long enemiesSpawnTime;
 
 
     private static char _PATH = 'p';
@@ -39,7 +39,7 @@ public class Map{
     public static int getEnemiesNr() {
         return enemiesNr;
     }
-    public static int getEnemiesSpawnTime() {
+    public static long getEnemiesSpawnTime() {
         return enemiesSpawnTime;
     }
     public static Integer getGridHeight() {
@@ -88,13 +88,11 @@ public class Map{
         return grid.get(findGridElement(col,row)) == null ? null : grid.get(findGridElement(col,row)).getTileType();
     }
     private int findGridElement(int col,int row){
-//        System.out.println("row: "+row+" col: "+col+ " ret: "+((row-1)*gridWidth+col-1));
         return (row-1)*gridWidth+col-1;
     }
 
     private void setTileToGrid(Integer col, Integer row, Tile.TileType value) {
         Tile tile = new  Tile(value, col, row);
-        //System.out.println("row "+row+" col "+col);
         grid.add(findGridElement(col,row),tile);
     }
 
@@ -104,14 +102,13 @@ public class Map{
         try(BufferedReader br = new BufferedReader(new FileReader("Maps" +File.separator+"map"+fileNumber+".txt" ))) {
             Integer row = 1;
             for (String line; (line = br.readLine()) != null; row++) {
-                //if(line.length()==gridWidth && row <= gridHeight)
                 for (int col = 1; col < line.length()+1; col++) {
                     if(line.contains("Enemies ")){
                         line = line.replace("Enemies ","");
                         enemiesNr = Integer.parseInt(line);
                     }else if(line.contains("EnemiesSpawnTime ")){
                         line = line.replace("EnemiesSpawnTime ","");
-                        enemiesSpawnTime = Integer.parseInt(line);
+                        enemiesSpawnTime = Long.parseLong(line);
                     }else if(line.contains("Enemy_Speed ")){
                         line = line.replace("Enemy_Speed ","");
                         Enemy_Speed = Integer.parseInt(line);
@@ -147,11 +144,6 @@ public class Map{
     }
 
     public Tile.TileType getTileTypeFromCoordinates(int x, int y){
-//        System.out.print(fileNum);
-//        System.out.println("x: "+x+"y: "+y);
-//        System.out.println("x/: "+(x/getTileWidth()+1)+"y/: "+(y/getTileHeight()+1));
-//        System.out.println(getTileTypeFromGrid(x/getTileWidth()+1,y/getTileHeight()+1));
-
         return getTileTypeFromGrid(x/getTileWidth()+1,y/getTileHeight()+1);
     }
 }

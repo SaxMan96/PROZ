@@ -15,6 +15,6 @@ spp.........px.ppp....
 ....ppppppppppp.......
 ......x....x..........
 Enemies 10
-Enemy_Speed 8
-Enemy_Max_Health 250
-EnemiesSpawnTime 2000000000
+Enemy_Speed 4
+Enemy_Max_Health 150
+EnemiesSpawnTime 3000000000

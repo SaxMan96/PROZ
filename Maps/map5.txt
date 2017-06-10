@@ -1,0 +1,20 @@
+...x.........x........
+.....ppppppppppp.x....
+....xp..x...x..px.....
+.....pppppppp..px.....
+sppp....x...p..p.x..x.
+...p....x..xp..p.ppppf
+...p..x...x.p..pxp..x.
+.x.pppppppppp..p.ppp..
+....x..xx...x..p...px.
+..ppppppppppppppx..p..
+x.p.x..xx..x...x...px.
+..p.x.x.x.pppppp.x.p..
+.xpx...x..px..xp..xpx.
+..p..x..x.p.x..ppppp..
+.xppppppppp...x.x...x.
+....x....x............
+Enemies 100
+Enemy_Speed 12
+Enemy_Max_Health 1000
+EnemiesSpawnTime 500000000

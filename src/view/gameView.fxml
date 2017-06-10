@@ -9,7 +9,7 @@
 
 <AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
    <children>
-      <AnchorPane fx:id="PausedPane" layoutX="246.0" layoutY="144.0" opacity="0.95" prefHeight="466.0" prefWidth="606.0" style="-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="514.0" AnchorPane.topAnchor="150.0">
+      <AnchorPane fx:id="PausedPane" layoutX="246.0" layoutY="144.0" opacity="0.90" prefHeight="466.0" prefWidth="606.0" style="-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="514.0" AnchorPane.topAnchor="150.0">
          <children>
             <VBox alignment="CENTER" layoutX="402.0" layoutY="102.0" prefHeight="468.0" prefWidth="606.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -41,7 +41,6 @@
         <items>
            <AnchorPane fx:id="leftPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1056.0" style="-fx-border-color: black;">
            <children>
-              <CheckBox layoutX="24.0" layoutY="28.0" mnemonicParsing="false" text="CheckBox" fx:id="xd" />
               <Canvas fx:id="mainCanvas" height="768.0" width="1056.0" />
               <Canvas fx:id="secondCanvas" height="768.0" layoutX="-176.0" layoutY="4.0" width="1056.0" />
            </children></AnchorPane>
@@ -68,7 +67,7 @@
                                                 <Insets />
                                              </HBox.margin>
                                           </TextField>
-                                          <Button fx:id="pauseButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressMenuButton" prefHeight="48.0" prefWidth="114.0" text="Pause">
+                                          <Button disable="true" fx:id="pausedButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressMenuButton" prefHeight="48.0" prefWidth="114.0" text="Pause">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
