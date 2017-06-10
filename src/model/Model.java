@@ -166,7 +166,12 @@ public class Model {
             writer.println("HealthPointsLevel "+currentPlayer.getHealthPointsLevel());
             writer.close();
         } catch (IOException e) {
-            // do something
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("File Saving Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Cannot save player.");
+            alert.showAndWait();
+            return;
         }
 
     }
