@@ -59,6 +59,7 @@ public class MenuController {
         Button button;
         for (Pair pair : Model.existingPlayers) {
             button = new Button((String) pair.getValue());
+            button.setStyle("-fx-font: 22 arial;");
             buttons.add(button);
             vbox.getChildren().add(button);
         }

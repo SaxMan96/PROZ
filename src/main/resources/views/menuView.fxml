@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 
 <StackPane prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.MenuController">
     <children>
@@ -33,8 +33,14 @@
                     <children>
                         <HBox fx:id="newPalyerBox" alignment="CENTER">
                             <children>
-                                <TextField fx:id="newPlayerNameTextField" alignment="CENTER" promptText="Player Name" />
-                                <Button fx:id="newPlayerSelected" onAction="#setNewPlayer" text="New Player" />
+                                <TextField fx:id="newPlayerNameTextField" alignment="CENTER" promptText="Player Name">
+                           <font>
+                              <Font size="22.0" />
+                           </font></TextField>
+                                <Button fx:id="newPlayerSelected" onAction="#setNewPlayer" text="New Player">
+                           <font>
+                              <Font size="22.0" />
+                           </font></Button>
                             </children>
                         </HBox>
                     </children>
