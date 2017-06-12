@@ -3,12 +3,12 @@ Coins 400
 Points 20000
 Tower_Range 300
 Bullet_Damage 30
-Hit_Rate_Time 6500000000
+Hit_Rate_Time 1000000000
 Bomb_Range 10
 Bomb_Damage 100
 Health_Points 4
 Achievements 00000
-Missions 000000000000000
+Missions 00000
 TowerRangeLevel 1
 BulletDamageLevel 1
 HitRateTimeLevel 3

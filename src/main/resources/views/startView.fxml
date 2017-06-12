@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="CENTER" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+<GridPane alignment="CENTER" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.Controller">
    <children>
       <Button fx:id="startBtn" alignment="CENTER" layoutX="274.0" layoutY="175.0" mnemonicParsing="false" onAction="#startGame" prefHeight="85.0" prefWidth="174.0" text="START" />
    </children>

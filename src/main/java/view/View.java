@@ -1,8 +1,5 @@
-package view;
+package main.java.view;
 
-import controller.GameController;
-import controller.MenuController;
-import controller.UpgradeController;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
@@ -18,16 +15,21 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import model.*;
+import main.java.controller.GameController;
+import main.java.controller.MenuController;
+import main.java.controller.UpgradeController;
+import main.java.model.*;
+import main.java.Program.Program;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import static javafx.scene.Cursor.HAND;
 import static javafx.scene.Cursor.MOVE;
-import static model.Model.currentPlayer;
+import static main.java.model.Model.currentPlayer;
 
 public class View {
 
@@ -36,7 +38,15 @@ public class View {
     private static double Width;
     private static double Height;
 
-    public static void drawMap(Map map, Canvas canvas) {
+    public static void drawLaser(Canvas canvas, Laser l) {
+
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setStroke(Color.BLUE);
+        gc.setLineWidth(5);
+        gc.strokeLine(l.getSourceLayoutX(), l.getSourceLayoutY(), l.getTargetLayoutX(), l.getTargetLayoutY());
+    }
+
+    public void drawMap(Map map, Canvas canvas) {
         String tileName = null;
         for (Tile tile : map.getGrid()) {
             switch (tile.getTileType()) {
@@ -56,7 +66,8 @@ public class View {
                     tileName = "pathTile.png";
                     break;
             }
-            URL resource = View.class.getClassLoader().getResource("Graphics/" + tileName);
+            URL resource = getClass().getResource("/main/resources/Graphics/" + tileName);
+            //URL resource = View.class.getClassLoader().getResource("/main.resources/Graphics" + File.separator  + tileName);
             Image image = null;
             if (resource != null) {
                 image = new Image(resource.toExternalForm());
@@ -66,9 +77,10 @@ public class View {
         }
     }
 
-    public static void drawEnemy(Canvas canvas, Enemy e) {
+    public void drawEnemy(Canvas canvas, Enemy e) {
         String fileName = "enemy.png";
-        URL resource = View.class.getClassLoader().getResource("Graphics/" + fileName);
+
+        URL resource = getClass().getResource("/main/resources/Graphics" + File.separator + fileName);
         Image graphic = null;
         if (resource != null) {
             graphic = new Image(resource.toExternalForm());
@@ -81,10 +93,10 @@ public class View {
         gc.drawImage(graphic, e.getLayoutX(), e.getLayoutY());
     }
 
-    public static void gameWin(int points, Canvas canvas, Pane pausedPane) {
+    public void gameWin(int points, Canvas canvas, Pane pausedPane) {
         Model.currentPlayer.gainPoints(points);
         String fileName = "win.png";
-        URL resource = View.class.getClassLoader().getResource("Graphics/" + fileName);
+        URL resource = getClass().getResource("/main/resources/Graphics" + File.separator + fileName);
         ImageView graphic = null;
         if (resource != null) {
             graphic = new ImageView(resource.toExternalForm());
@@ -93,23 +105,15 @@ public class View {
         pausedPane.getChildren().add(graphic);
     }
 
-    public static void gameLoose(Canvas canvas, Pane pausedPane) {
+    public void gameLoose(Canvas canvas, Pane pausedPane) {
         String fileName = "loose.png";
-        URL resource = View.class.getClassLoader().getResource("Graphics/" + fileName);
+        URL resource = getClass().getResource("/main/resources/Graphics" + File.separator + fileName);
         ImageView graphic = null;
         if (resource != null) {
             graphic = new ImageView(resource.toExternalForm());
             graphic.relocate(44, 18);
         }
         pausedPane.getChildren().add(graphic);
-    }
-
-    public static void drawLaser(Canvas canvas, Laser l) {
-
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setStroke(Color.BLUE);
-        gc.setLineWidth(5);
-        gc.strokeLine(l.getSourceLayoutX(), l.getSourceLayoutY(), l.getTargetLayoutX(), l.getTargetLayoutY());
     }
 
     public void setTowerShop(AnchorPane towersShopAnchorPane, AnchorPane mainAnchorPane,
@@ -119,9 +123,11 @@ public class View {
 
         updateViewToPlayerStatus(livesTextField, scoreTextField, cashTextField);
 
-        URL resource = View.class.getClassLoader().getResource("Graphics/tower.png");
+        URL resource = getClass().getResource("/main/resources/Graphics/tower.png");
         ImageView shopImage = null;
+
         if (resource != null) {
+
             shopImage = new ImageView(new Image(resource.toExternalForm()));
         }
         towersShopAnchorPane.getChildren().add(shopImage);
@@ -129,10 +135,10 @@ public class View {
         towerBasicImage.setX(10);
         towerBasicImage.setY(10);
 
-        resource = View.class.getClassLoader().getResource("Graphics/tower.png");
+        resource = getClass().getResource("/main/resources/Graphics/tower.png");
         ImageView iv = null;
         if (resource != null) {
-            iv = new ImageView(new Image(resource.toExternalForm()));
+            iv = new ImageView(String.valueOf(resource));
         }
         mainAnchorPane.getChildren().add(iv);
 
@@ -163,7 +169,7 @@ public class View {
                 Tower t = new Tower();
                 t.set(xCoor, yCoor);
                 towerList.add(t);
-                View.drawTower(mainCanvas, towerList.get(towerList.size() - 1));
+                drawTower(mainCanvas, towerList.get(towerList.size() - 1));
                 currentPlayer.executeCoinsCost(Tower.getCost());
                 updateViewToPlayerStatus(livesTextField, scoreTextField, cashTextField);
             }
@@ -189,8 +195,8 @@ public class View {
         cashTextField.setText(String.valueOf(Model.currentPlayer.getCoins()));
     }
 
-    public static void drawTower(Canvas canvas, Tower t) {
-        URL resource = View.class.getClassLoader().getResource("Graphics/tower.png");
+    public void drawTower(Canvas canvas, Tower t) {
+        URL resource = getClass().getResource("/main/resources/Graphics" + File.separator + "tower.png");
         Image graphic = null;
         if (resource != null) {
             graphic = new Image(resource.toExternalForm());
@@ -210,16 +216,15 @@ public class View {
     public MenuController setMenuView() throws IOException {
         PrimaryStage.setTitle("Tower Defence");
         FXMLLoader loader = new FXMLLoader();
-        URL resource = View.class.getClassLoader().getResource("view/menuView.fxml");
+        URL resource = Program.class.getResource("../../resources/views/menuView.fxml");
+
         loader.setLocation(resource);
         Parent root = loader.load();
         MenuController controller = loader.getController();
         ActualScene = new Scene(root);
         PrimaryStage.setScene(ActualScene);
-
         PrimaryStage.setMinHeight(Height);
         PrimaryStage.setMinWidth(Width);
-
         PrimaryStage.setMaximized(true);
         PrimaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         PrimaryStage.setFullScreen(false);
@@ -234,7 +239,7 @@ public class View {
 
     public UpgradeController setUpgradeView() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        URL resource = View.class.getClassLoader().getResource("view/upgradeView.fxml");
+        URL resource = Program.class.getResource("../../resources/views/upgradeView.fxml");
         loader.setLocation(resource);
         Parent root = loader.load();
         UpgradeController controller = loader.getController();
@@ -248,7 +253,7 @@ public class View {
 
     public GameController setGameView() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        URL resource = View.class.getClassLoader().getResource("view/gameView.fxml");
+        URL resource = Program.class.getResource("../../resources/views/gameView.fxml");
         loader.setLocation(resource);
         AnchorPane root = loader.load();
         GameController controller = loader.getController();

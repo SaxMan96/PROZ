@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.GameController">
    <children>
       <AnchorPane fx:id="PausedPane" layoutX="246.0" layoutY="144.0" opacity="0.90" prefHeight="466.0" prefWidth="606.0" style="-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="514.0" AnchorPane.topAnchor="150.0">
          <children>

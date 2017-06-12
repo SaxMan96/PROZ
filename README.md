@@ -1,2 +1,0 @@
-# PROZ
-Programowanie Zdarzeniowe - JAVA

@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpgradeController">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.UpgradeController">
    <children>
       <HBox fx:id="coinsInfoPanel" alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="48.0" prefWidth="305.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
          <children>
