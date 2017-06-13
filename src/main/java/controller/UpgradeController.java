@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import main.java.model.Model;
 import main.java.Program.Preferences;
+import main.java.model.Player;
 import main.java.view.View;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class UpgradeController {
     public static View view;
     public static MenuController menuController;
     public static GameController gameController;
+    public Player currentPlayer = model.currentPlayer;
 
     public ArrayList<RadioButton> MissionsRadioButtons;
     public ArrayList<RadioButton> AchievementsRadioButtons;
@@ -121,7 +123,7 @@ public class UpgradeController {
     }
 
     private void setPlayerNameLabel() {
-        playerNameLabel.setText(Model.currentPlayer.getName());
+        playerNameLabel.setText(currentPlayer.getName());
     }
 
     private void setToggleGroup() {
@@ -141,7 +143,7 @@ public class UpgradeController {
 
     private void setPlayerAchievements() {
         Integer achievementNumber = 0;
-        for (Integer val : model.currentPlayer.achievements) {
+        for (Integer val : currentPlayer.achievements) {
             if (val == 1)
                 selectRadioButtonAchievements(achievementNumber);
             achievementNumber++;
@@ -150,7 +152,7 @@ public class UpgradeController {
 
     private void setPlayerMissions() {
         Integer missionNumber = 0;
-        for (Integer val : model.currentPlayer.missions) {
+        for (Integer val : currentPlayer.missions) {
             if (val == 1)
                 selectRadioButtonMissions(missionNumber);
             missionNumber++;
@@ -158,14 +160,14 @@ public class UpgradeController {
     }
 
     private void setPlayerSkills() {
-        towerRangePoints.setText(String.valueOf(Model.currentPlayer.getTowerRangeLevel()));
-        bulletPowerPoints.setText(String.valueOf(Model.currentPlayer.getBulletDamageLevel()));
-        bulletSpeedPoints.setText(String.valueOf(Model.currentPlayer.getHitRateTimeLevel()));
-        bombRangePoints.setText(String.valueOf(Model.currentPlayer.getBombRangeLevel()));
-        bombPowerPoints.setText(String.valueOf(Model.currentPlayer.getBombPowerLevel()));
-        healthPoints.setText(String.valueOf(Model.currentPlayer.getHealthPointsLevel()));
+        towerRangePoints.setText(String.valueOf(currentPlayer.getTowerRangeLevel()));
+        bulletPowerPoints.setText(String.valueOf(currentPlayer.getBulletDamageLevel()));
+        bulletSpeedPoints.setText(String.valueOf(currentPlayer.getHitRateTimeLevel()));
+        bombRangePoints.setText(String.valueOf(currentPlayer.getBombRangeLevel()));
+        bombPowerPoints.setText(String.valueOf(currentPlayer.getBombPowerLevel()));
+        healthPoints.setText(String.valueOf(currentPlayer.getHealthPointsLevel()));
 
-        pointsTextField.setText(String.valueOf(Model.currentPlayer.getPoints()));
+        pointsTextField.setText(String.valueOf(currentPlayer.getPoints()));
 
         towerRangePointsMax.setText(String.valueOf(Preferences.getTowerRangeLevels()));
         bulletPowerMaxPoints.setText(String.valueOf(Preferences.getBulletDamageLevels()));
@@ -207,78 +209,78 @@ public class UpgradeController {
         model.saveCurrentPlayer();
         menuController = view.setMenuView();
         Program.setMenuController(menuController);
-        model.currentPlayer.clear();
+        currentPlayer.clear();
     }
 
 
     public void checkIncreaseButtons() {
-        if (Model.currentPlayer.getTowerRangeLevel() >= Preferences.getTowerRangeLevels())
+        if (currentPlayer.getTowerRangeLevel() >= Preferences.getTowerRangeLevels())
             towerRangeIncreaseButton.setDisable(true);
-        if (Model.currentPlayer.getBulletDamageLevel() >= Preferences.getBulletDamageLevels())
+        if (currentPlayer.getBulletDamageLevel() >= Preferences.getBulletDamageLevels())
             bulletPowerIncreaseButton.setDisable(true);
-        if (Model.currentPlayer.getHitRateTimeLevel() >= Preferences.getHitRateTimeLevels())
+        if (currentPlayer.getHitRateTimeLevel() >= Preferences.getHitRateTimeLevels())
             bulletSpeedIncreaseButton.setDisable(true);
-        if (Model.currentPlayer.getBombPowerLevel() >= Preferences.getBombPowerLevels())
+        if (currentPlayer.getBombPowerLevel() >= Preferences.getBombPowerLevels())
             bombPowerIncreaseButton.setDisable(true);
-        if (Model.currentPlayer.getBombRangeLevel() >= Preferences.getBombRangeLevels())
+        if (currentPlayer.getBombRangeLevel() >= Preferences.getBombRangeLevels())
             bombRangeIncreaseButton.setDisable(true);
-        if (Model.currentPlayer.getHealthPointsLevel() >= Preferences.getHealthPointsLevels())
+        if (currentPlayer.getHealthPointsLevel() >= Preferences.getHealthPointsLevels())
             healthIncreaseButton.setDisable(true);
         setPlayerSkills();
         updateCostTextFieldState();
     }
 
     public void increaseTowerRange(ActionEvent actionEvent) {
-        int cost = Preferences.getTowerRangeIncreaseCosts(Model.currentPlayer.getTowerRangeLevel() - 1);
-        if (Model.currentPlayer.getPoints() - cost < 0)
+        int cost = Preferences.getTowerRangeIncreaseCosts(currentPlayer.getTowerRangeLevel() - 1);
+        if (currentPlayer.getPoints() - cost < 0)
             return;
-        Model.currentPlayer.setTowerRange(50);
-        Model.currentPlayer.executePointsCost(cost);
+        currentPlayer.setTowerRange(50);
+        currentPlayer.executePointsCost(cost);
         checkIncreaseButtons();
     }
 
     public void increaseBulletDamage(ActionEvent actionEvent) {
-        int cost = Preferences.getBulletDamageIncreaseCosts(Model.currentPlayer.getBulletDamageLevel() - 1);
-        if (Model.currentPlayer.getPoints() - cost < 0)
+        int cost = Preferences.getBulletDamageIncreaseCosts(currentPlayer.getBulletDamageLevel() - 1);
+        if (currentPlayer.getPoints() - cost < 0)
             return;
-        Model.currentPlayer.setBulletDamage(10);
-        Model.currentPlayer.executePointsCost(cost);
+        currentPlayer.setBulletDamage(10);
+        currentPlayer.executePointsCost(cost);
         checkIncreaseButtons();
     }
 
     public void increaseBulletSpeed(ActionEvent actionEvent) {
-        int cost = Preferences.getHitRateTimeIncreaseCosts(Model.currentPlayer.getHitRateTimeLevel() - 1);
-        if (Model.currentPlayer.getPoints() - cost < 0)
+        int cost = Preferences.getHitRateTimeIncreaseCosts(currentPlayer.getHitRateTimeLevel() - 1);
+        if (currentPlayer.getPoints() - cost < 0)
             return;
-        Model.currentPlayer.setHitRateTime(-200000000);
-        Model.currentPlayer.executePointsCost(cost);
+        currentPlayer.setHitRateTime(-200000000);
+        currentPlayer.executePointsCost(cost);
         checkIncreaseButtons();
     }
 
     public void increaseBombRange(ActionEvent actionEvent) {
-        int cost = Preferences.getBombRangeIncreaseCosts(Model.currentPlayer.getBombRangeLevel() - 1);
-        if (Model.currentPlayer.getPoints() - cost < 0)
+        int cost = Preferences.getBombRangeIncreaseCosts(currentPlayer.getBombRangeLevel() - 1);
+        if (currentPlayer.getPoints() - cost < 0)
             return;
-        Model.currentPlayer.setBombRange(50);
-        Model.currentPlayer.executePointsCost(cost);
+        currentPlayer.increaseBombRange(50);
+        currentPlayer.executePointsCost(cost);
         checkIncreaseButtons();
     }
 
     public void increaseBombPower(ActionEvent actionEvent) {
-        int cost = Preferences.getBombDamageIncreaseCosts(Model.currentPlayer.getBombPowerLevel() - 1);
-        if (Model.currentPlayer.getPoints() - cost < 0)
+        int cost = Preferences.getBombDamageIncreaseCosts(currentPlayer.getBombPowerLevel() - 1);
+        if (currentPlayer.getPoints() - cost < 0)
             return;
-        Model.currentPlayer.setBombDamage(50);
-        Model.currentPlayer.executePointsCost(cost);
+        currentPlayer.increaseBombDamage(50);
+        currentPlayer.executePointsCost(cost);
         checkIncreaseButtons();
     }
 
     public void increaseHealthPoints(ActionEvent actionEvent) {
-        int cost = Preferences.getHealthPointsIncreaseCosts(Model.currentPlayer.getHealthPointsLevel() - 1);
-        if (Model.currentPlayer.getPoints() - cost < 0)
+        int cost = Preferences.getHealthPointsIncreaseCosts(currentPlayer.getHealthPointsLevel() - 1);
+        if (currentPlayer.getPoints() - cost < 0)
             return;
-        Model.currentPlayer.increaseHealthPoints(1);
-        Model.currentPlayer.executePointsCost(cost);
+        currentPlayer.increaseHealthPoints(1);
+        currentPlayer.executePointsCost(cost);
         checkIncreaseButtons();
     }
 
@@ -292,31 +294,31 @@ public class UpgradeController {
     }
 
     public void towerRangeIncreaseButtonMouseAction() {
-        costTextField.setText(String.valueOf(Preferences.getTowerRangeIncreaseCosts(Model.currentPlayer.getTowerRangeLevel() - 1)));
+        costTextField.setText(String.valueOf(Preferences.getTowerRangeIncreaseCosts(currentPlayer.getTowerRangeLevel() - 1)));
     }
 
     public void bulletDamageIncreaseButtonMouseAction() {
-        costTextField.setText(String.valueOf(Preferences.getBulletDamageIncreaseCosts(Model.currentPlayer.getBulletDamageLevel() - 1)));
+        costTextField.setText(String.valueOf(Preferences.getBulletDamageIncreaseCosts(currentPlayer.getBulletDamageLevel() - 1)));
 
     }
 
     public void bulletSpeedIncreaseButtonMouseAction() {
-        costTextField.setText(String.valueOf(Preferences.getHitRateTimeIncreaseCosts(Model.currentPlayer.getHitRateTimeLevel() - 1)));
+        costTextField.setText(String.valueOf(Preferences.getHitRateTimeIncreaseCosts(currentPlayer.getHitRateTimeLevel() - 1)));
 
     }
 
     public void bombRangeIncreaseButtonMouseAction() {
-        costTextField.setText(String.valueOf(Preferences.getBombRangeIncreaseCosts(Model.currentPlayer.getBombRangeLevel() - 1)));
+        costTextField.setText(String.valueOf(Preferences.getBombRangeIncreaseCosts(currentPlayer.getBombRangeLevel() - 1)));
 
     }
 
     public void bombPowerIncreaseButtonMouseAction() {
-        costTextField.setText(String.valueOf(Preferences.getBombDamageIncreaseCosts(Model.currentPlayer.getBombPowerLevel() - 1)));
+        costTextField.setText(String.valueOf(Preferences.getBombDamageIncreaseCosts(currentPlayer.getBombPowerLevel() - 1)));
 
     }
 
     public void healthPointsIncreaseButtonMouseAction() {
-        costTextField.setText(String.valueOf(Preferences.getHealthPointsIncreaseCosts(Model.currentPlayer.getHealthPointsLevel() - 1)));
+        costTextField.setText(String.valueOf(Preferences.getHealthPointsIncreaseCosts(currentPlayer.getHealthPointsLevel() - 1)));
 
     }
 }

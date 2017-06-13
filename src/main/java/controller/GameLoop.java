@@ -47,14 +47,14 @@ class GameLoop {
         hitRateTime = Tower.getHitRateTime();
         bombShowTime = 1000000000;
         gamePoints = 0;
-        Model.currentPlayer.setCoins(Model.currentPlayer.getBasicCoins());
+        model.currentPlayer.setCoins(model.currentPlayer.getBasicCoins());
         paused = false;
         lastSpawn = System.nanoTime();
         lastLaserHit = System.nanoTime();
         lastBombHit = System.nanoTime();
         enemies = new ArrayList<>();
-        towers = Model.getTowerList();
-        bombs = Model.getBombList();
+        towers = model.getTowerList();
+        bombs = model.getBombList();
         lasers = new ArrayList<>();
         for (int i = 0; i < enemiesNr; i++)
             enemies.add(new Enemy(Map.getStartXPosition(), Map.getStartYPosition()));
@@ -72,7 +72,7 @@ class GameLoop {
     }
 
     void startGame() {
-        Model.currentPlayer.setCoins(Model.currentPlayer.getBasicCoins());
+        model.currentPlayer.setCoins(model.currentPlayer.getBasicCoins());
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long currentNanoTime) {
@@ -163,12 +163,12 @@ class GameLoop {
     private void calculateCastleDamage() {
         for (Enemy e : enemies)
             if (e.isInCastle() && e.isAlive()) {
-                Model.currentPlayer.increaseCurrentHealthPoints(-1);
+                model.currentPlayer.increaseCurrentHealthPoints(-1);
                 controller.updateHealthPoints();
                 e.enemyDeath();
                 killedEnemies++;
             }
-        if (Model.currentPlayer.getCurrentHealthPoints() <= 0)
+        if (model.currentPlayer.getCurrentHealthPoints() <= 0)
             gameLoose();
     }
 
@@ -181,7 +181,7 @@ class GameLoop {
     }
 
     private void gameWon() {
-        Model.currentPlayer.setPoints(Model.currentPlayer.getPoints() + gamePoints);
+        model.currentPlayer.setPoints(model.currentPlayer.getPoints() + gamePoints);
         animationTimer.stop();
         enemies.clear();
         towers.clear();
@@ -245,7 +245,7 @@ class GameLoop {
     }
 
     private void gameLoose() {
-        Model.currentPlayer.setPoints((int) (Model.currentPlayer.getPoints() + 0.5 * gamePoints));
+        model.currentPlayer.setPoints((int) (model.currentPlayer.getPoints() + 0.5 * gamePoints));
         animationTimer.stop();
         enemies.clear();
         towers.clear();
@@ -284,7 +284,7 @@ class GameLoop {
     private void updateAfterDeath(Enemy e) {
         killedEnemies++;
         gamePoints += e.getMaxHealth() / 10;
-        Model.currentPlayer.gainCoins(e.getMaxHealth() / 5);
+        model.currentPlayer.gainCoins(e.getMaxHealth() / 5);
         controller.updateCoinsAndPoints();
     }
 
@@ -293,7 +293,7 @@ class GameLoop {
     }
 
     void restartGame() {
-        Model.getTowerList().clear();
+        model.getTowerList().clear();
         enemies = null;
         towers = null;
         lasers = null;

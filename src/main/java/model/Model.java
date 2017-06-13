@@ -15,21 +15,21 @@ import java.util.zip.ZipInputStream;
 
 public class Model {
 
-    public static Player currentPlayer;
+    public Player currentPlayer;
     public static ArrayList<Pair<String, String>> existingPlayers;
-    private static ArrayList<Tower> towerList = null;
-    private static Map map;
-    private static ArrayList<Bomb> bombList = null;
+    private ArrayList<Tower> towerList = null;
+    private Map map;
+    private ArrayList<Bomb> bombList = null;
 
-    public static ArrayList<Tower> getTowerList() {
+    public ArrayList<Tower> getTowerList() {
         return towerList;
     }
 
-    public static Player getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public static ArrayList<Bomb> getBombList() {
+    public ArrayList<Bomb> getBombList() {
         return bombList;
     }
 
@@ -49,92 +49,6 @@ public class Model {
 
     public void loadPlayersFromFile() throws IOException {
 
-//        InputStream resource = getClass().getResourceAsStream("/Players");
-
-//        URL resource = getClass().getResource("/main/resources/Maps/map" +fileNumber+".txt");
-//
-//        InputStream in = getClass().getResourceAsStream("/Maps/map" +fileNumber+".txt");
-//        BufferedReader br = new BufferedReader(new InputStreamReader(in))
-//
-//        InputStream in = getClass().getResourceAsStream("/Players");
-//
-//        BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/Players/"+fileName)))
-
-//        InputStream input = this.getClass().getClassLoader().getResourceAsStream("preferences/preferences.properties");
-
-//        CodeSource src = this.getClass().getClassLoader().getResourceAsStream("/Players");
-//        if (src != null) {
-//            URL txt = src.getLocation();
-
-//        Properties prop = new Properties();
-//        InputStream stream = new InputStream(txt.openStream());
-//        try {
-//            prop.load(stream);
-//        } finally {
-//            stream.close();
-//        }
-
-//            InputStream input = new InputStream(txt.openStream());
-//            while(true) {
-//                ZipEntry e = input.getNextEntry();
-//                if (e == null)
-//                    break;
-//                String name = e.getName();
-//                if (name.startsWith("path/to/your/dir/")) {
-//                      /* Do something with this entry. */
-//                      ...
-//                }
-//            }
-//        }
-//        else {
-//            /* Fail... */
-//        }
-//        InputStream listFiles
-//        InputStream in = getClass().getResourceAsStream("/1.txt");
-//        BufferedReader input = new BufferedReader(new InputStreamReader(in));
-//        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
-//        try(
-//                final InputStream is = loader.getResourceAsStream("text");
-//                final InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
-//                final BufferedReader br = new BufferedReader(isr)) {
-//            br.lines().forEach(System.out::println);
-//        }
-//        final BufferedReader br = new BufferedReader(new InputStreamReader(isr)){
-//            br.lines().forEach(System.out::println);
-//        }
-
-//        InputStream is = getClass().getResourceAsStream("champdata.txt");
-//        Scanner read = new Scanner(is);
-//        read.useDelimiter("%");
-//        CodeSource src = Program.class.getProtectionDomain().getCodeSource();
-//        if (src != null) {
-//            URL jar = src.getLocation();
-//            ZipInputStream zip = new ZipInputStream(jar.openStream());
-//            while(true) {
-//                ZipEntry e = zip.getNextEntry();
-//                if (e == null)
-//                    break;
-//                String name = e.getName();
-//                if (name.startsWith("/main/resources/Players/")) {
-//                  /* Do something with this entry. */
-//                  //...
-//                }
-//            }
-//        }
-//        else {
-//             /* Fail... */
-//        }
-//        --------------
-//        Enumeration<URL> en=getClass().getClassLoader().getResources("META-INF");
-//        if (en.hasMoreElements()) {
-//            URL metaInf=en.nextElement();
-//            File fileMetaInf=new File(metaInf.toURI());
-//
-//            File[] files=fileMetaInf.listFiles();
-//            //or
-//            String[] filenames=fileMetaInf.list();
-//        }
-
         URL resource = getClass().getResource("/main/resources/Players");
         String path = null;
         if (resource != null) {
@@ -144,14 +58,12 @@ public class Model {
         if (path != null) {
             folder = new File(path);
         }
-        System.out.println("Path: "+path);
         File[] listOfFiles = new File[0];
         if (folder != null) {
             listOfFiles = folder.listFiles();
         }
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
-                System.out.println("file: "+file);
                 if (file.isFile() && file.toString().contains("player")) {
                     Scanner scan = new Scanner(new File(path + "/" + file.getName()));
                     Pair<String, String> pair = new Pair(file.getName(), scan.nextLine().replace("Name ", ""));
@@ -239,7 +151,7 @@ public class Model {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error File");
             alert.setHeaderText(null);
-            alert.setContentText("Corrupted main.resources.preferences file");
+            alert.setContentText("Corrupted preferences file");
             alert.showAndWait();
         }
     }
@@ -267,13 +179,13 @@ public class Model {
             String filePath = "";
             URL resource;
             if (currentPlayer.isNewPlayer()) {
-                resource = getClass().getResource("/main/resources/Players/player" + existingPlayers.size() + ".txt");
+                resource = getClass().getResource("/Players/player" + existingPlayers.size() + ".txt");
                 if (resource != null) {
                     filePath = resource.toString().substring(resource.toString().indexOf("file:") + 6);
                 }
                 filePath = filePath.replace(String.valueOf(existingPlayers.size()), String.valueOf(existingPlayers.size() + 1));
             } else {
-                resource = getClass().getResource("/main/resources/Players/" +  currentPlayer.getFileName());
+                resource = getClass().getResource("/Players/" +  currentPlayer.getFileName());
                 if (resource != null) {
                     filePath = resource.toString().substring(resource.toString().indexOf("file:") + 6);
                 }
@@ -307,7 +219,6 @@ public class Model {
             alert.setContentText("Cannot save player.");
             alert.showAndWait();
         }
-
     }
 
     public void clearExistingPlayers() {

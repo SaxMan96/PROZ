@@ -29,7 +29,6 @@ import java.util.ArrayList;
 
 import static javafx.scene.Cursor.HAND;
 import static javafx.scene.Cursor.MOVE;
-import static main.java.model.Model.currentPlayer;
 
 public class View {
 
@@ -37,6 +36,8 @@ public class View {
     private static Scene ActualScene;
     private static double Width;
     private static double Height;
+    private static Model model = Program.model;
+    private static Player currentPlayer = model.currentPlayer;
 
     public static void drawLaser(Canvas canvas, Laser l) {
 
@@ -67,7 +68,6 @@ public class View {
                     break;
             }
             URL resource = getClass().getResource("/main/resources/Graphics/" + tileName);
-            //URL resource = View.class.getClassLoader().getResource("/main.resources/Graphics" + File.separator  + tileName);
             Image image = null;
             if (resource != null) {
                 image = new Image(resource.toExternalForm());
@@ -94,9 +94,9 @@ public class View {
     }
 
     public void gameWin(int points, Canvas canvas, Pane pausedPane) {
-        Model.currentPlayer.gainPoints(points);
+        model.currentPlayer.gainPoints(points);
         String fileName = "win.png";
-        URL resource = getClass().getResource("/main/resources/Graphics" + File.separator + fileName);
+        URL resource = getClass().getResource("/main/resources/Graphics/" + fileName);
         ImageView graphic = null;
         if (resource != null) {
             graphic = new ImageView(resource.toExternalForm());
@@ -107,7 +107,7 @@ public class View {
 
     public void gameLoose(Canvas canvas, Pane pausedPane) {
         String fileName = "loose.png";
-        URL resource = getClass().getResource("/main/resources/Graphics" + File.separator + fileName);
+        URL resource = getClass().getResource("/main/resources/Graphics/" + fileName);
         ImageView graphic = null;
         if (resource != null) {
             graphic = new ImageView(resource.toExternalForm());
@@ -126,11 +126,7 @@ public class View {
 
     public MenuController setMenuView() throws IOException {
         PrimaryStage.setTitle("Tower Defence");
-//        FXMLLoader loader = new FXMLLoader();
-//        URL resource = Program.class.getResource("../../resources/views/menuView.fxml");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/menuView.fxml"));
-
-//        loader.setLocation(resource);
         Parent root = loader.load();
         MenuController controller = loader.getController();
         ActualScene = new Scene(root);
@@ -150,12 +146,8 @@ public class View {
     }
 
     public UpgradeController setUpgradeView() throws IOException {
-//        FXMLLoader loader = new FXMLLoader();
-//        URL resource = Program.class.getResource("../../resources/views/upgradeView.fxml");
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/upgradeView.fxml"));
-
-//        loader.setLocation(resource);
         Parent root = loader.load();
         UpgradeController controller = loader.getController();
         ActualScene = new Scene(root);
@@ -181,9 +173,9 @@ public class View {
     }
 
     private static void updateViewToPlayerStatus(TextField livesTextField, TextField scoreTextField, TextField cashTextField) {
-        livesTextField.setText(String.valueOf(Model.currentPlayer.getCurrentHealthPoints()));
-        scoreTextField.setText(String.valueOf(Model.currentPlayer.getPoints()));
-        cashTextField.setText(String.valueOf(Model.currentPlayer.getCoins()));
+        livesTextField.setText(String.valueOf(model.currentPlayer.getCurrentHealthPoints()));
+        scoreTextField.setText(String.valueOf(model.currentPlayer.getPoints()));
+        cashTextField.setText(String.valueOf(model.currentPlayer.getCoins()));
     }
 
     public void drawTower(Canvas canvas, Tower t) {

@@ -21,7 +21,8 @@ import java.util.ArrayList;
 public class GameController {
     public static Model model;
     public static View view;
-    private static UpgradeController upgradeController;
+    private UpgradeController upgradeController;
+    private Player currentPlayer = model.currentPlayer;
     private Map map;
     private GameLoop gameLoop;
     public Stage primaryStage;
@@ -71,8 +72,8 @@ public class GameController {
     }
 
     void updateCoinsAndPoints() {
-        scoreTextField.setText(String.valueOf(Model.currentPlayer.getPoints() + gameLoop.getGamePoints()));
-        cashTextField.setText(String.valueOf(Model.currentPlayer.getCoins()));
+        scoreTextField.setText(String.valueOf(currentPlayer.getPoints() + gameLoop.getGamePoints()));
+        cashTextField.setText(String.valueOf(currentPlayer.getCoins()));
     }
 
     public enum GameState {WIN, LOOSE}
@@ -91,10 +92,10 @@ public class GameController {
             PausedPane.toFront();
             PausedPane.setVisible(true);
             view.gameWin(gameLoop.getGamePoints(), mainCanvas, PausedPane);
-            Model.currentPlayer.missionCompleted(map.fileNum);
-            Model.currentPlayer.setBasicCoins(Model.currentPlayer.getBasicCoins() + 400);
-            Model.currentPlayer.setCoins(Model.currentPlayer.getBasicCoins());
-            Model.currentPlayer.setHealthPoints(Model.currentPlayer.getHealthPoints());
+            currentPlayer.missionCompleted(map.fileNum);
+            currentPlayer.setBasicCoins(currentPlayer.getBasicCoins() + 400);
+            currentPlayer.setCoins(currentPlayer.getBasicCoins());
+            currentPlayer.setHealthPoints(currentPlayer.getHealthPoints());
         } else if (state == GameState.LOOSE) {
             if (gameLoop != null)
                 gameLoop.setPaused(true);
@@ -102,8 +103,8 @@ public class GameController {
             PausedPane.toFront();
             PausedPane.setVisible(true);
             view.gameLoose(mainCanvas, PausedPane);
-            Model.currentPlayer.setCoins(Model.currentPlayer.getBasicCoins());
-            Model.currentPlayer.setHealthPoints(Model.currentPlayer.getHealthPoints());
+            currentPlayer.setCoins(currentPlayer.getBasicCoins());
+            currentPlayer.setHealthPoints(currentPlayer.getHealthPoints());
         }
     }
 
@@ -144,13 +145,13 @@ public class GameController {
     }
 
     private void setShop() {
-        ArrayList<Tower> towerList = Model.getTowerList();
-        ArrayList<Bomb> bombList = Model.getBombList();
+        ArrayList<Tower> towerList = model.getTowerList();
+        ArrayList<Bomb> bombList = model.getBombList();
         view.setTowerShop(towersShopAnchorPane, mainAnchorPane, towerList, map, mainCanvas, costTextField, livesTextField, scoreTextField, cashTextField);
         view.setBombShop(towersShopAnchorPane, mainAnchorPane, bombList, map, mainCanvas, costTextField, livesTextField, scoreTextField, cashTextField);
     }
 
     void updateHealthPoints() {
-        livesTextField.setText(String.valueOf(Model.currentPlayer.getCurrentHealthPoints()));
+        livesTextField.setText(String.valueOf(currentPlayer.getCurrentHealthPoints()));
     }
 }

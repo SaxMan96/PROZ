@@ -1,5 +1,7 @@
 package main.java.model;
 
+import main.java.Program.Program;
+
 public class Tower {
     private static Integer damage;
     private static Integer range = null;
@@ -8,16 +10,15 @@ public class Tower {
     private Integer xC;
     private Integer yC; // Coordinates
     private boolean isSet;
-    private Integer width;
-    private Integer height;
+    private Player currentPlayer = Program.model.currentPlayer;
 
     public Tower() {
-        damage = Model.currentPlayer.getBulletDamage();
+        damage = currentPlayer.getBulletDamage();
         xC = Map.getStartXPosition();
         yC = Map.getStartYPosition();
-        range = Model.currentPlayer.getTowerRange();
+        range = currentPlayer.getTowerRange();
         isSet = false;
-        hitRateTime = Model.currentPlayer.getHitRateTime();
+        hitRateTime = currentPlayer.getHitRateTime();
     }
 
     static Integer getDamage() {
@@ -54,14 +55,6 @@ public class Tower {
 
     public boolean isSet() {
         return isSet;
-    }
-
-    public Integer getWidth() {
-        return width;
-    }
-
-    public Integer getHeight() {
-        return height;
     }
 
     public void set(Integer x, Integer y) {

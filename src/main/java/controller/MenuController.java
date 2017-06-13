@@ -59,7 +59,7 @@ public class MenuController {
         vbox.setMaxWidth(2 * newPlayerSelected.getWidth());
         ArrayList<Button> buttons = new ArrayList<>();
         Button button;
-        for (Pair pair : Model.existingPlayers) {
+        for (Pair pair : model.existingPlayers) {
             button = new Button((String) pair.getValue());
             button.setStyle("-fx-font: 22 arial;");
             buttons.add(button);

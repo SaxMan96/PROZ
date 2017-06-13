@@ -1,5 +1,7 @@
 package main.java.model;
 
+import main.java.Program.Program;
+
 public class Bomb {
     private static Integer damage;
     private static Integer range = null;
@@ -8,10 +10,11 @@ public class Bomb {
     private Integer yC;
     private boolean isActive;
     private long explodeNanoTime;
+    private Player currentPlayer = Program.model.currentPlayer;
 
     public Bomb() {
-        damage = Model.currentPlayer.getBombDamage();
-        range = Model.currentPlayer.getBombRange();
+        damage = currentPlayer.getBombDamage();
+        range = currentPlayer.getBombRange();
         isActive = false;
     }
 

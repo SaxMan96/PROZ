@@ -2,6 +2,7 @@ package main.java.model;
 
 import javafx.collections.ObservableList;
 import javafx.scene.shape.Polyline;
+import main.java.Program.Program;
 import main.java.controller.GameController;
 
 public class Enemy {
@@ -17,11 +18,12 @@ public class Enemy {
     private int xPositionOnPath;
     private int currentHealth, maxHealth;
     private int speed;
-    private int gamePoints;
+    private Player currentPlayer = Program.model.currentPlayer;
     private Direction direction;
     private int xC;
     private int yC; // Coordinates
     private HealthBar healthBar;
+//    private int gamePoints;
 
     public Enemy(int x, int y) {
         xC = x;
@@ -35,7 +37,7 @@ public class Enemy {
         isUnderBomb = false;
         inCastle = false;
         shootingLasersNo = 0;
-        Path path = new Path(GameController.model.getMap());
+        Path path = new Path(Program.model.getMap());
         path.generatePolyline();
         polyline = path.getPolyline();
         points = polyline.getPoints();
@@ -98,7 +100,6 @@ public class Enemy {
     public void enemyDeath() {
         isAlive = false;
         isUnderLaser = false;
-        Model.currentPlayer.gainPoints(gamePoints);
     }
 
     public boolean isAlive() {

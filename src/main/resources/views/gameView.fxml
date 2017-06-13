@@ -18,12 +18,12 @@
                         <Font size="35.0" />
                      </font>
                   </Label>
-                  <Button onAction="#resumeButtonClicked" layoutX="315.0" layoutY="114.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="129.0" text="Resume">
+                  <Button layoutX="315.0" layoutY="114.0" mnemonicParsing="false" onAction="#resumeButtonClicked" prefHeight="48.0" prefWidth="129.0" text="Resume">
                      <font>
                         <Font size="22.0" />
                      </font>
                   </Button>
-                  <Button onAction="#restartButtonClicked" layoutX="422.0" layoutY="114.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="129.0" text="Restart">
+                  <Button layoutX="422.0" layoutY="114.0" mnemonicParsing="false" onAction="#restartButtonClicked" prefHeight="48.0" prefWidth="129.0" text="Restart">
                      <font>
                         <Font size="22.0" />
                      </font>
@@ -67,7 +67,7 @@
                                                 <Insets />
                                              </HBox.margin>
                                           </TextField>
-                                          <Button disable="true" fx:id="pausedButton" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressMenuButton" prefHeight="48.0" prefWidth="114.0" text="Pause">
+                                          <Button fx:id="pausedButton" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#pressMenuButton" prefHeight="48.0" prefWidth="114.0" text="Pause">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
@@ -79,12 +79,12 @@
                                     </HBox>
                                     <HBox fx:id="scoreBox" layoutX="14.0" layoutY="108.0" prefHeight="48.0" prefWidth="286.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                        <children>
-                                          <Label layoutX="45.0" layoutY="86.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="66.0" text="Score:">
+                                          <Label layoutX="45.0" layoutY="86.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="89.0" text="Points: ">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="scoreTextField" alignment="CENTER_RIGHT" editable="false" prefHeight="48.0" prefWidth="221.0" promptText="000000">
+                                          <TextField fx:id="scoreTextField" alignment="CENTER_RIGHT" editable="false" prefHeight="48.0" prefWidth="194.0" promptText="000000">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
@@ -145,7 +145,7 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <Button fx:id="startGameButton" onAction="#gameLoopStart" mnemonicParsing="false" text="Start">
+                                    <Button fx:id="startGameButton" mnemonicParsing="false" onAction="#gameLoopStart" text="Start">
                                        <font>
                                           <Font size="22.0" />
                                        </font>

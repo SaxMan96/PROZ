@@ -25,7 +25,7 @@ public class Controller extends Application {
     }
 
     public void startGame() throws IOException {
-        menuController = new MenuController();
+//        menuController = new MenuController();
     }
 
     public static void main(String[] args) {
