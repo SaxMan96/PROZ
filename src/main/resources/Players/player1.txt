@@ -1,10 +1,10 @@
 Name Mateusz
-Coins 400
+Coins 400000
 Points 20000
 Tower_Range 300
 Bullet_Damage 30
 Hit_Rate_Time 1000000000
-Bomb_Range 10
+Bomb_Range 100
 Bomb_Damage 100
 Health_Points 4
 Achievements 00000

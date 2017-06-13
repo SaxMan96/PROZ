@@ -7,36 +7,34 @@ import main.java.view.View;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
+class GameLoop {
 
-public class GameLoop {
-
+    private final Object monitor = new Object();
     private Canvas canvas;
-    public Integer enemiesNr;
-    public Integer spawnedEnemies;
-    public long enemiesSpawnTime;
+    private Integer enemiesNr;
+    private Integer spawnedEnemies;
+    private long enemiesSpawnTime;
     private long lastSpawn;
-    private long lastHit;
+    private long lastLaserHit;
+    private long lastBombHit;
     private long hitRateTime;
+    private long bombShowTime;
     private ArrayList<Enemy> enemies;
     private ArrayList<Tower> towers;
     private ArrayList<Laser> lasers;
+    private ArrayList<Bomb> bombs;
     private Model model;
     private Map map;
     private boolean paused;
     private int killedEnemies;
     private int gamePoints;
     private GameController controller;
-
-    Object monitor = new Object();
     private AnimationTimer animationTimer;
     private View view;
 
-    public Object getMonitor() {
-        return monitor;
-    }
-
-    public GameLoop(Canvas mainCanvas, Model m, GameController gameController) {
+    GameLoop(Canvas mainCanvas, Model m, GameController gameController) {
         controller = gameController;
         view = gameController.getView();
         model = m;
@@ -47,26 +45,33 @@ public class GameLoop {
         spawnedEnemies = 0;
         killedEnemies = 0;
         hitRateTime = Tower.getHitRateTime();
+        bombShowTime = 1000000000;
         gamePoints = 0;
         Model.currentPlayer.setCoins(Model.currentPlayer.getBasicCoins());
         paused = false;
         lastSpawn = System.nanoTime();
-        lastHit = System.nanoTime();
+        lastLaserHit = System.nanoTime();
+        lastBombHit = System.nanoTime();
         enemies = new ArrayList<>();
-        towers = model.getTowerList();
+        towers = Model.getTowerList();
+        bombs = Model.getBombList();
         lasers = new ArrayList<>();
         for (int i = 0; i < enemiesNr; i++)
-            enemies.add(new Enemy(map.getStartXPosition(), map.getStartYPosition()));
+            enemies.add(new Enemy(Map.getStartXPosition(), Map.getStartYPosition()));
     }
 
-    public void setPaused(boolean paused) {
+    Object getMonitor() {
+        return monitor;
+    }
+
+    void setPaused(boolean paused) {
         if (paused)
             animationTimer.stop();
         else
             animationTimer.start();
     }
 
-    public void startGame() {
+    void startGame() {
         Model.currentPlayer.setCoins(Model.currentPlayer.getBasicCoins());
         animationTimer = new AnimationTimer() {
             @Override
@@ -82,6 +87,7 @@ public class GameLoop {
                 spawnEnemy(currentNanoTime);
                 enemyPhysics();
                 laserPhysic();
+                bombPhysic();
                 calculateEnemiesDamage();
                 calculateCastleDamage();
                 updateView();
@@ -90,92 +96,6 @@ public class GameLoop {
             }
         };
         animationTimer.start();
-    }
-
-
-    public int getGamePoints() {
-        return gamePoints;
-    }
-
-    public void restartGame() {
-        model.getTowerList().clear();
-        enemies = null;
-        towers = null;
-        lasers = null;
-        enemiesNr = 0;
-        spawnedEnemies = 0;
-        paused = false;
-    }
-
-    public void endGame() {
-        enemies.clear();
-        towers.clear();
-        lasers.clear();
-        enemiesNr = 0;
-        spawnedEnemies = 0;
-        paused = false;
-    }
-
-    private void gameWon() {
-        Model.currentPlayer.setPoints(Model.currentPlayer.getPoints() + gamePoints);
-        animationTimer.stop();
-        enemies.clear();
-        towers.clear();
-        lasers.clear();
-        enemiesNr = 0;
-        spawnedEnemies = 0;
-        paused = false;
-        killedEnemies = 0;
-        try {
-            controller.pressMenuButton(GameController.GameState.WIN);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void gameLoose() {
-        Model.currentPlayer.setPoints((int) (Model.currentPlayer.getPoints() + 0.5 * gamePoints));
-        animationTimer.stop();
-        enemies.clear();
-        towers.clear();
-        lasers.clear();
-        enemiesNr = 0;
-        spawnedEnemies = 0;
-        paused = false;
-        try {
-            controller.pressMenuButton(GameController.GameState.LOOSE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void calculateEnemiesDamage() {
-        long now = System.nanoTime();
-        if (now - lastHit > hitRateTime) {
-            for (Enemy e : enemies)
-                if (e.isUnderLaser() & e.isAlive()) {
-                    e.getHit(Laser.getDamage());
-                    if (!e.isAlive()) {
-                        killedEnemies++;
-                        gamePoints += e.getMaxHealth() / 10;
-                        Model.currentPlayer.gainCoins(e.getMaxHealth() / 5);
-                        controller.updateCoinsAndPoints();
-                    }
-                }
-            lastHit = System.nanoTime();
-        }
-    }
-
-    private void calculateCastleDamage() {
-        for (Enemy e : enemies)
-            if (e.isInCastle() && e.isAlive()) {
-                Model.currentPlayer.increaseCurrentHealthPoints(-1);
-                controller.updateHealthPoints();
-                e.enemyDeath();
-                killedEnemies++;
-            }
-        if (Model.currentPlayer.getCurrentHealthPoints() <= 0)
-            gameLoose();
     }
 
     private void spawnEnemy(long now) {
@@ -223,12 +143,121 @@ public class GameLoop {
         }
     }
 
-    private int distance(Tower t, Enemy e) {
-        return (int) Math.sqrt((e.getCenterX() - t.getCenterX()) * (e.getCenterX() - t.getCenterX()) + (e.getCenterY() - t.getCenterY()) * (e.getCenterY() - t.getCenterY()));
+    private void bombPhysic() {
+        for (Bomb b : bombs) {
+            if (b.isActive()) {
+                for (Enemy e : enemies)
+                    if (e.isAlive() && isInRange(b, e)) {
+                        e.setUnderBomb(true);
+                    }
+                b.setActive(false);
+            }
+        }
+    }
+
+    private void calculateEnemiesDamage() {
+        calculateLaserDamage();
+        calculateBombDamage();
+    }
+
+    private void calculateCastleDamage() {
+        for (Enemy e : enemies)
+            if (e.isInCastle() && e.isAlive()) {
+                Model.currentPlayer.increaseCurrentHealthPoints(-1);
+                controller.updateHealthPoints();
+                e.enemyDeath();
+                killedEnemies++;
+            }
+        if (Model.currentPlayer.getCurrentHealthPoints() <= 0)
+            gameLoose();
+    }
+
+    private void updateView() {
+        view.drawMap(map, canvas);
+        drawEnemies();
+        drawTowers();
+        drawLasers();
+        drawBombs();
+    }
+
+    private void gameWon() {
+        Model.currentPlayer.setPoints(Model.currentPlayer.getPoints() + gamePoints);
+        animationTimer.stop();
+        enemies.clear();
+        towers.clear();
+        lasers.clear();
+        enemiesNr = 0;
+        spawnedEnemies = 0;
+        paused = false;
+        killedEnemies = 0;
+        try {
+            controller.pressMenuButton(GameController.GameState.WIN);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean isInRange(Tower t, Enemy e) {
         return (e.getCenterX() - t.getCenterX()) * (e.getCenterX() - t.getCenterX()) + (e.getCenterY() - t.getCenterY()) * (e.getCenterY() - t.getCenterY()) < t.getRange() * t.getRange();
+    }
+
+    private int distance(Tower t, Enemy e) {
+        return (int) Math.sqrt((e.getCenterX() - t.getCenterX()) * (e.getCenterX() - t.getCenterX()) + (e.getCenterY() - t.getCenterY()) * (e.getCenterY() - t.getCenterY()));
+    }
+
+    private boolean isInRange(Bomb b, Enemy e) {
+        return (e.getCenterX() - b.getCenterX()) * (e.getCenterX() - b.getCenterX()) + (e.getCenterY() - b.getCenterY()) * (e.getCenterY() - b.getCenterY()) < b.getRange() * b.getRange();
+    }
+
+    private void calculateLaserDamage() {
+        long now = System.nanoTime();
+        if (now - lastLaserHit > hitRateTime) {
+            for (Enemy e : enemies)
+                if (e.isUnderLaser() & e.isAlive()) {
+                    e.getHit(Laser.getDamage());
+                    if (!e.isAlive())
+                        updateAfterDeath(e);
+                }
+            lastLaserHit = System.nanoTime();
+        }
+    }
+
+    private void calculateBombDamage() {
+        long now = System.nanoTime();
+        Iterator bomb = bombs.iterator();
+        while (bomb.hasNext()) {
+            Bomb b = (Bomb) bomb.next();
+            if (now - b.getExplodeNanoTime() < bombShowTime) {
+                for (Enemy e : enemies)
+                    if (e.isUnderBomb() & e.isAlive()) {
+                        System.out.println("bombs: " + b.getDamage());
+                        System.out.println("enemy: " + e.isUnderBomb());
+                        e.getBombHit(b.getDamage());
+                        e.setUnderBomb(false);
+                        if (!e.isAlive())
+                            updateAfterDeath(e);
+                    }
+                lastBombHit = System.nanoTime();
+            } else
+                bomb.remove();
+        }
+
+    }
+
+    private void gameLoose() {
+        Model.currentPlayer.setPoints((int) (Model.currentPlayer.getPoints() + 0.5 * gamePoints));
+        animationTimer.stop();
+        enemies.clear();
+        towers.clear();
+        lasers.clear();
+        enemiesNr = 0;
+        spawnedEnemies = 0;
+        paused = false;
+        try {
+            controller.pressMenuButton(GameController.GameState.LOOSE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void drawEnemies() {
@@ -247,10 +276,38 @@ public class GameLoop {
             view.drawLaser(canvas, l);
     }
 
-    private void updateView() {
-        view.drawMap(map, canvas);
-        drawEnemies();
-        drawTowers();
-        drawLasers();
+    private void drawBombs() {
+        for (Bomb b : bombs)
+            view.drawBombs(canvas, b);
+    }
+
+    private void updateAfterDeath(Enemy e) {
+        killedEnemies++;
+        gamePoints += e.getMaxHealth() / 10;
+        Model.currentPlayer.gainCoins(e.getMaxHealth() / 5);
+        controller.updateCoinsAndPoints();
+    }
+
+    int getGamePoints() {
+        return gamePoints;
+    }
+
+    void restartGame() {
+        Model.getTowerList().clear();
+        enemies = null;
+        towers = null;
+        lasers = null;
+        enemiesNr = 0;
+        spawnedEnemies = 0;
+        paused = false;
+    }
+
+    public void endGame() {
+        enemies.clear();
+        towers.clear();
+        lasers.clear();
+        enemiesNr = 0;
+        spawnedEnemies = 0;
+        paused = false;
     }
 }

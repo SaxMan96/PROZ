@@ -1,5 +1,7 @@
 package main.java.controller;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import main.java.Program.Program;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +14,7 @@ import main.java.model.*;
 import main.java.view.View;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 
@@ -58,7 +61,7 @@ public class GameController {
     private
     Button startGameButton;
 
-    public View getView() {
+    View getView() {
         return view;
     }
 
@@ -142,7 +145,9 @@ public class GameController {
 
     private void setShop() {
         ArrayList<Tower> towerList = Model.getTowerList();
+        ArrayList<Bomb> bombList = Model.getBombList();
         view.setTowerShop(towersShopAnchorPane, mainAnchorPane, towerList, map, mainCanvas, costTextField, livesTextField, scoreTextField, cashTextField);
+        view.setBombShop(towersShopAnchorPane, mainAnchorPane, bombList, map, mainCanvas, costTextField, livesTextField, scoreTextField, cashTextField);
     }
 
     void updateHealthPoints() {

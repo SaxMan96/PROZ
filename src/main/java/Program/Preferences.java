@@ -2,7 +2,9 @@ package main.java.Program;
 
 import javafx.scene.control.Alert;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -273,9 +275,7 @@ public class Preferences extends Properties {
         BombPowerIncreaseCosts = new ArrayList<>();
         BombRangeIncreaseCosts = new ArrayList<>();
         HealthPointsIncreaseCosts = new ArrayList<>();
-//        InputStream input = getClass().getResourceAsStream("/classpath/to/my/file");
-//        InputStream input = getClass().getResourceAsStream("../../main/resources/preferences/preferences.properties");
-        InputStream input = new FileInputStream("../../main/resources/preferences/preferences.properties");
+        InputStream input = this.getClass().getClassLoader().getResourceAsStream("preferences/preferences.properties");
         load(input);
         try {
             Tiles_In_Row = Integer.parseInt(getProperty("Tiles_In_Row"));

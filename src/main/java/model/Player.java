@@ -34,8 +34,8 @@ public class Player {
         towerRange = 100;
         hitRateTime = 1000000000L;
         bulletDamage = 10;
-        bombDamage = 0;
-        bombRange = 0;
+        bombDamage = 100;
+        bombRange = 400;
         healthPoints = 1;
         currentHealthPoints = healthPoints;
         missions = new ArrayList<>(5);
@@ -145,20 +145,26 @@ public class Player {
         this.bulletDamage += bulletDamage;
     }
 
+
+
+    public void setBombRange(int bombRange){
+        this.bombRange = bombRange;
+    }
     int getBombRange() {
         return bombRange;
     }
-
-    public void setBombRange(Integer bombRange) {
+    public void increaseBombRange(Integer bombRange) {
         this.bombRangeLevel += 1;
         this.bombRange += bombRange;
     }
 
+    public void setBombDamage(int bombDamage){
+        this.bombDamage = bombDamage;
+    }
     int getBombDamage() {
         return bombDamage;
     }
-
-    public void setBombDamage(Integer bombPower) {
+    public void increaseBombDamage(Integer bombPower) {
         this.bombPowerLevel += 1;
         this.bombDamage += bombPower;
     }

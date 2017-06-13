@@ -15,11 +15,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import main.java.Program.Program;
 import main.java.controller.GameController;
 import main.java.controller.MenuController;
 import main.java.controller.UpgradeController;
 import main.java.model.*;
-import main.java.Program.Program;
 
 import java.awt.*;
 import java.io.File;
@@ -80,7 +80,7 @@ public class View {
     public void drawEnemy(Canvas canvas, Enemy e) {
         String fileName = "enemy.png";
 
-        URL resource = getClass().getResource("/main/resources/Graphics" + File.separator + fileName);
+        URL resource = getClass().getResource("/main/resources/Graphics/" + fileName);
         Image graphic = null;
         if (resource != null) {
             graphic = new Image(resource.toExternalForm());
@@ -116,6 +116,86 @@ public class View {
         pausedPane.getChildren().add(graphic);
     }
 
+    public void init(Stage stage) {
+        PrimaryStage = stage;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Width = screenSize.getWidth();
+        Height = screenSize.getHeight();
+        PrimaryStage.initStyle(StageStyle.UNDECORATED);
+    }
+
+    public MenuController setMenuView() throws IOException {
+        PrimaryStage.setTitle("Tower Defence");
+//        FXMLLoader loader = new FXMLLoader();
+//        URL resource = Program.class.getResource("../../resources/views/menuView.fxml");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/menuView.fxml"));
+
+//        loader.setLocation(resource);
+        Parent root = loader.load();
+        MenuController controller = loader.getController();
+        ActualScene = new Scene(root);
+        PrimaryStage.setScene(ActualScene);
+        PrimaryStage.setMinHeight(Height);
+        PrimaryStage.setMinWidth(Width);
+        PrimaryStage.setMaximized(true);
+        PrimaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        PrimaryStage.setFullScreen(false);
+        PrimaryStage.setResizable(false);
+
+        PrimaryStage.setScene(ActualScene);
+        PrimaryStage.sizeToScene();
+        PrimaryStage.show();
+
+        return controller;
+    }
+
+    public UpgradeController setUpgradeView() throws IOException {
+//        FXMLLoader loader = new FXMLLoader();
+//        URL resource = Program.class.getResource("../../resources/views/upgradeView.fxml");
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/upgradeView.fxml"));
+
+//        loader.setLocation(resource);
+        Parent root = loader.load();
+        UpgradeController controller = loader.getController();
+        ActualScene = new Scene(root);
+
+        PrimaryStage.setScene(ActualScene);
+        PrimaryStage.setFullScreen(true);
+
+        return controller;
+    }
+
+    public GameController setGameView() throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/gameView.fxml"));
+
+        AnchorPane root = loader.load();
+        GameController controller = loader.getController();
+        ActualScene = new Scene(root);
+
+        PrimaryStage.setScene(ActualScene);
+        PrimaryStage.setFullScreen(false);
+
+        return controller;
+    }
+
+    private static void updateViewToPlayerStatus(TextField livesTextField, TextField scoreTextField, TextField cashTextField) {
+        livesTextField.setText(String.valueOf(Model.currentPlayer.getCurrentHealthPoints()));
+        scoreTextField.setText(String.valueOf(Model.currentPlayer.getPoints()));
+        cashTextField.setText(String.valueOf(Model.currentPlayer.getCoins()));
+    }
+
+    public void drawTower(Canvas canvas, Tower t) {
+        URL resource = getClass().getResource("/main/resources/Graphics/tower.png");
+        Image graphic = null;
+        if (resource != null) {
+            graphic = new Image(resource.toExternalForm());
+        }
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.drawImage(graphic, t.getLayoutX(), t.getLayoutY());
+    }
+
     public void setTowerShop(AnchorPane towersShopAnchorPane, AnchorPane mainAnchorPane,
                              ArrayList<Tower> towerList, Map map, Canvas mainCanvas,
                              TextField costTextField, TextField livesTextField,
@@ -130,8 +210,9 @@ public class View {
 
             shopImage = new ImageView(new Image(resource.toExternalForm()));
         }
-        towersShopAnchorPane.getChildren().add(shopImage);
-        ImageView towerBasicImage = (ImageView) towersShopAnchorPane.getChildren().get(0);
+        towersShopAnchorPane.getChildren().addAll(shopImage);
+        ImageView towerBasicImage = (ImageView) towersShopAnchorPane.getChildren().get(towersShopAnchorPane.getChildren().size()-1);
+
         towerBasicImage.setX(10);
         towerBasicImage.setY(10);
 
@@ -145,6 +226,7 @@ public class View {
         ImageView movableTowerImage = (ImageView) mainAnchorPane.getChildren().get(mainAnchorPane.getChildren().size() - 1);
         movableTowerImage.getParent().toFront();
         Bounds boundsInScene = towersShopAnchorPane.localToScene(towersShopAnchorPane.getBoundsInLocal());
+
         movableTowerImage.setX(boundsInScene.getMinX() + 10);
         movableTowerImage.setY(boundsInScene.getMinY() + 10);
 
@@ -189,79 +271,83 @@ public class View {
         movableTowerImage.setOnMouseExited(mouseEvent -> costTextField.setText(""));
     }
 
-    private static void updateViewToPlayerStatus(TextField livesTextField, TextField scoreTextField, TextField cashTextField) {
-        livesTextField.setText(String.valueOf(Model.currentPlayer.getCurrentHealthPoints()));
-        scoreTextField.setText(String.valueOf(Model.currentPlayer.getPoints()));
-        cashTextField.setText(String.valueOf(Model.currentPlayer.getCoins()));
-    }
 
-    public void drawTower(Canvas canvas, Tower t) {
-        URL resource = getClass().getResource("/main/resources/Graphics" + File.separator + "tower.png");
-        Image graphic = null;
+
+    public void setBombShop(AnchorPane bombsShopAnchorPane, AnchorPane mainAnchorPane,
+                            ArrayList<Bomb> bombList, Map map, Canvas mainCanvas, TextField costTextField, TextField livesTextField,
+                            TextField scoreTextField, TextField cashTextField) {
+
+        updateViewToPlayerStatus(livesTextField, scoreTextField, cashTextField);
+
+        URL resource = getClass().getResource("/main/resources/Graphics/bomb.png");
+        ImageView shopImage = null;
+
         if (resource != null) {
-            graphic = new Image(resource.toExternalForm());
+            shopImage = new ImageView(new Image(resource.toExternalForm()));
         }
+        bombsShopAnchorPane.getChildren().addAll(shopImage);
+        ImageView bombBasicImage = (ImageView) bombsShopAnchorPane.getChildren().get(bombsShopAnchorPane.getChildren().size()-1);
+        bombBasicImage.setX(68);
+        bombBasicImage.setY(10);
+
+        resource = getClass().getResource("/main/resources/Graphics/bomb.png");
+        ImageView iv = null;
+        if (resource != null) {
+            iv = new ImageView(String.valueOf(resource));
+        }
+        mainAnchorPane.getChildren().add(iv);
+
+        ImageView movableBombImage = (ImageView) mainAnchorPane.getChildren().get(mainAnchorPane.getChildren().size() - 1);
+        movableBombImage.getParent().toFront();
+        Bounds boundsInScene = bombsShopAnchorPane.localToScene(bombsShopAnchorPane.getBoundsInLocal());
+        movableBombImage.setX(boundsInScene.getMinX() + 68);
+        movableBombImage.setY(boundsInScene.getMinY() + 10);
+
+        class Delta {
+            private double x, y;
+        }
+        final Delta dragDelta = new Delta();
+        dragDelta.x = 0;
+        dragDelta.y = 0;
+
+        movableBombImage.setOnMousePressed(mouseEvent -> {
+
+            dragDelta.x = movableBombImage.getLayoutX() - mouseEvent.getSceneX();
+            dragDelta.y = movableBombImage.getLayoutY() - mouseEvent.getSceneY();
+            movableBombImage.setCursor(MOVE);
+        });
+        movableBombImage.setOnMouseReleased(mouseEvent -> {
+            int xCoor = (int) (mouseEvent.getSceneX());
+            int yCoor = (int) (mouseEvent.getSceneY());
+            if ( currentPlayer.getCoins() >= Bomb.getCost()) {
+                Bomb bomb = new Bomb();
+                bomb.set(xCoor, yCoor);
+                bomb.setExplodeNanoTime(System.nanoTime());
+                bomb.setActive(true);
+                bombList.add(bomb);
+                drawBombs(mainCanvas, bombList.get(bombList.size() - 1));
+                currentPlayer.executeCoinsCost(Bomb.getCost());
+                updateViewToPlayerStatus(livesTextField, scoreTextField, cashTextField);
+            }
+            costTextField.setText("");
+            movableBombImage.setLayoutX(0);
+            movableBombImage.setLayoutY(0);
+            movableBombImage.setCursor(HAND);
+        });
+        movableBombImage.setOnMouseDragged(mouseEvent -> {
+            movableBombImage.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
+            movableBombImage.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+        });
+        movableBombImage.setOnMouseEntered(mouseEvent -> {
+            movableBombImage.setCursor(HAND);
+            costTextField.setText(Bomb.getCost().toString());
+        });
+        movableBombImage.setOnMouseExited(mouseEvent -> costTextField.setText(""));
+    }
+
+    public void drawBombs(Canvas canvas, Bomb bomb) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.drawImage(graphic, t.getLayoutX(), t.getLayoutY());
-    }
-
-    public void init(Stage stage) {
-        PrimaryStage = stage;
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Width = screenSize.getWidth();
-        Height = screenSize.getHeight();
-        PrimaryStage.initStyle(StageStyle.UNDECORATED);
-    }
-
-    public MenuController setMenuView() throws IOException {
-        PrimaryStage.setTitle("Tower Defence");
-        FXMLLoader loader = new FXMLLoader();
-        URL resource = Program.class.getResource("../../resources/views/menuView.fxml");
-
-        loader.setLocation(resource);
-        Parent root = loader.load();
-        MenuController controller = loader.getController();
-        ActualScene = new Scene(root);
-        PrimaryStage.setScene(ActualScene);
-        PrimaryStage.setMinHeight(Height);
-        PrimaryStage.setMinWidth(Width);
-        PrimaryStage.setMaximized(true);
-        PrimaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        PrimaryStage.setFullScreen(false);
-        PrimaryStage.setResizable(false);
-
-        PrimaryStage.setScene(ActualScene);
-        PrimaryStage.sizeToScene();
-        PrimaryStage.show();
-
-        return controller;
-    }
-
-    public UpgradeController setUpgradeView() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        URL resource = Program.class.getResource("../../resources/views/upgradeView.fxml");
-        loader.setLocation(resource);
-        Parent root = loader.load();
-        UpgradeController controller = loader.getController();
-        ActualScene = new Scene(root);
-
-        PrimaryStage.setScene(ActualScene);
-        PrimaryStage.setFullScreen(true);
-
-        return controller;
-    }
-
-    public GameController setGameView() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        URL resource = Program.class.getResource("../../resources/views/gameView.fxml");
-        loader.setLocation(resource);
-        AnchorPane root = loader.load();
-        GameController controller = loader.getController();
-        ActualScene = new Scene(root);
-
-        PrimaryStage.setScene(ActualScene);
-        PrimaryStage.setFullScreen(false);
-
-        return controller;
+        gc.setFill(Color.RED);
+        gc.fillOval(bomb.getLayoutX()-bomb.getRange(), bomb.getLayoutY()-bomb.getRange(), 2*bomb.getRange(),2*bomb.getRange());
     }
 }

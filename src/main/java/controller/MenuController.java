@@ -14,6 +14,7 @@ import main.java.model.Model;
 import main.java.view.View;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class MenuController {
@@ -53,6 +54,7 @@ public class MenuController {
             return;
         model.clearExistingPlayers();
         model.loadPlayersFromFile();
+
         VBox vbox = new VBox(14);
         vbox.setMaxWidth(2 * newPlayerSelected.getWidth());
         ArrayList<Button> buttons = new ArrayList<>();

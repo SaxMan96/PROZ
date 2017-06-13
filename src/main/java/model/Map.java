@@ -97,11 +97,68 @@ public class Map{
         grid.add(findGridElement(col,row),tile);
     }
 
+//    void load(Integer fileNumber) throws IOException {
+//        grid.clear();
+//        fileNum = fileNumber;
+//        URL resource = getClass().getResource("/main/resources/Maps/map" +fileNumber+".txt");
+////        URL resource = Map.class.getClass().getResource("/main.resources/Maps" + File.separator +"map"+fileNumber+".txt");
+//        InputStream in = getClass().getResourceAsStream("/Maps/map" +fileNumber+".txt");
+//        String path = null;
+//        if (resource != null) {
+//            path = resource.toString().substring(resource.toString().indexOf("file:") + 6);
+//        }
+//
+//        if (path != null) {
+//            try(BufferedReader br = new BufferedReader(new FileReader(path))) {
+//                Integer row = 1;
+//                for (String line; (line = br.readLine()) != null; row++) {
+//                    for (int col = 1; col < line.length()+1; col++) {
+//                        if(line.contains("Enemies ")){
+//                            line = line.replace("Enemies ","");
+//                            enemiesNr = Integer.parseInt(line);
+//                        }else if(line.contains("EnemiesSpawnTime ")){
+//                            line = line.replace("EnemiesSpawnTime ","");
+//                            enemiesSpawnTime = Long.parseLong(line);
+//                        }else if(line.contains("Enemy_Speed ")){
+//                            line = line.replace("Enemy_Speed ","");
+//                            Enemy_Speed = Integer.parseInt(line);
+//                        }else if(line.contains("Enemy_Max_Health ")){
+//                            line = line.replace("Enemy_Max_Health ","");
+//                            Enemy_Max_Health = Integer.parseInt(line);
+//                        }
+//                        else{
+//                            char c = line.charAt(col - 1);
+//                            if (c == _PATH)
+//                                setTileToGrid(col, row, PATH);
+//                            else if (c == _FINISH)
+//                                setTileToGrid(col, row, FINISH);
+//                            else if (c == _START) {
+//                                setTileToGrid(col, row, START);
+//                                startRow = row;
+//                                startColumn = col;
+//                                tileWidth = Preferences.getGame_Panel_Width() / Preferences.getTiles_In_Row();
+//                                tileHeight = Preferences.getGame_Panel_Height() / Preferences.getTiles_In_Column();
+//                                startYPosition = tileWidth  * startRow;
+//                                startXPosition = tileHeight * startColumn;
+//                                startYPosition -= tileWidth;
+//                                startXPosition -= tileHeight;
+//                            } else if (c == _USABLE)
+//                                setTileToGrid(col, row, USABLE);
+//                            else if (c == _TOWER_PLACE){
+//                                setTileToGrid(col, row, TOWER_PLACE);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
     void load(Integer fileNumber) throws IOException {
         grid.clear();
         fileNum = fileNumber;
         URL resource = getClass().getResource("/main/resources/Maps/map" +fileNumber+".txt");
-//        URL resource = Map.class.getClass().getResource("/main.resources/Maps" + File.separator +"map"+fileNumber+".txt");
+
+        InputStream in = getClass().getResourceAsStream("/Maps/map" +fileNumber+".txt");
 
         String path = null;
         if (resource != null) {
@@ -109,7 +166,7 @@ public class Map{
         }
 
         if (path != null) {
-            try(BufferedReader br = new BufferedReader(new FileReader(path))) {
+            try(BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
                 Integer row = 1;
                 for (String line; (line = br.readLine()) != null; row++) {
                     for (int col = 1; col < line.length()+1; col++) {

@@ -5,11 +5,12 @@ import javafx.stage.Stage;
 import main.java.model.Model;
 import main.java.view.View;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class Controller extends Application {
-    public static MenuController menuController;
+    private static MenuController menuController;
     public static Model model = new Model();
-    public static View view = new View();
+    private static View view = new View();
 
     @Override
     public void init() throws IOException {

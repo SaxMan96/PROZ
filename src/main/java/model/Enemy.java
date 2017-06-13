@@ -1,13 +1,13 @@
 package main.java.model;
 
-import main.java.controller.GameController;
 import javafx.collections.ObservableList;
 import javafx.scene.shape.Polyline;
-
+import main.java.controller.GameController;
 
 public class Enemy {
     private boolean isAlive;
     private boolean isUnderLaser;
+    private boolean isUnderBomb;
     private int shootingLasersNo;
     private Polyline polyline;
     private ObservableList<Double> points;
@@ -32,6 +32,7 @@ public class Enemy {
         direction = Direction.RIGHT;
         isAlive = false;
         isUnderLaser = false;
+        isUnderBomb = false;
         inCastle = false;
         shootingLasersNo = 0;
         Path path = new Path(GameController.model.getMap());
@@ -88,6 +89,11 @@ public class Enemy {
         if (currentHealth <= 0)
             enemyDeath();
     }
+    public void getBombHit(int hit) {
+        currentHealth -=  hit;
+        if (currentHealth <= 0)
+            enemyDeath();
+    }
 
     public void enemyDeath() {
         isAlive = false;
@@ -111,6 +117,14 @@ public class Enemy {
         isUnderLaser = b;
         if (!b)
             shootingLasersNo = 0;
+    }
+
+    public boolean isUnderBomb() {
+        return isUnderBomb;
+    }
+
+    public void setUnderBomb(boolean b) {
+        isUnderBomb = b;
     }
 
     public boolean isInCastle() {

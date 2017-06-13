@@ -4,8 +4,8 @@ Points 100
 Tower_Range 100
 Bullet_Damage 10
 Hit_Rate_Time 1000000000
-Bomb_Range 0
-Bomb_Damage 0
+Bomb_Range 20
+Bomb_Damage 20
 Health_Points 5
 Achievements 00000
 Missions 00000
